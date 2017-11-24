@@ -1,12 +1,13 @@
 const common = require("common-display-module");
+const config = require("./config");
 const logger = require("./logger");
 
 // So we ensure it will only be sent once.
 let watchMessageAlreadySent = false
 
 /**
- * We check the client list until local storage is available to send a
- * WATCH message.
+ * We check the client list until local storage is available before we can
+ * send a WATCH message.
  * @param {Object} message the client-list message object as received from
  * local messaging.
  */
@@ -25,11 +26,14 @@ function receiveClientList(message) {
 }
 
 function sendWatchMessage() {
-  // currently common.broadcastMessage() does not return promises; so broadcasting errors may not be thrown here and thus are not handled.
-  common.broadcastMessage({});
+  // currently common.broadcastMessage() does not return promises; so any broadcasting errors won't be propagated here and thus can't be handled.
+  common.broadcastMessage({
+    from: config.moduleName,
+    topic: "watch",
+    filePath: ""
+  });
 }
 
 module.exports = {
-  receiveClientList,
-  sendWatchMessage
+  receiveClientList
 };

@@ -16,7 +16,7 @@ describe("Watch - Unit", ()=>
 
   afterEach(()=> simple.restore());
 
-  it("should wait until local-storage module is available before sending the watch message", () =>
+  it("should wait until local-storage module is available before sending the WATCH message", () =>
   {
     watch.receiveClientList({clients: []});
     // no clients, so WATCH message shouldn't have been sent
@@ -31,6 +31,15 @@ describe("Watch - Unit", ()=>
     watch.receiveClientList({clients: ["logging", "system-metrics", "local-storage"]});
     // so WATCH message should have been sent
     assert(common.broadcastMessage.called);
+
+    // this is the actual event object sent to the local storage module
+    const event = common.broadcastMessage.lastCall.args[0]
+
+    assert(event)
+    // check we sent it
+    assert.equal(event.from, "display-control")
+    // check it's a WATCH event
+    assert.equal(event.topic, "watch")
   });
 
 });
