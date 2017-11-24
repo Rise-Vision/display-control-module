@@ -1,8 +1,18 @@
 const commonConfig = require("common-display-module");
+const config = require("./config");
+const logger = require("./logger");
 
-commonConfig.receiveMessages("logger").then((receiver) => {
-  receiver.on("message", (message) => {
-    // remove - soley for initial setup
-    console.log(`message received: ${message}`);
+config.loadDisplayId().then(() =>
+{
+  commonConfig.receiveMessages(config.moduleName).then(receiver =>
+  {
+    receiver.on("message", message => {
+      switch (message.topic) {
+        case "xxxxxxxxxxxxxxxxxxxx":
+          logger.debug(JSON.stringify(message.data));
+
+          break;
+      }
+    });
   });
 });
