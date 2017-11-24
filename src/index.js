@@ -1,6 +1,6 @@
 const commonConfig = require("common-display-module");
 const config = require("./config");
-const logger = require("./logger");
+const watch = require("./watch");
 
 config.loadDisplayId().then(() =>
 {
@@ -8,10 +8,7 @@ config.loadDisplayId().then(() =>
   {
     receiver.on("message", message => {
       switch (message.topic) {
-        case "xxxxxxxxxxxxxxxxxxxx":
-          logger.debug(JSON.stringify(message.data));
-
-          break;
+        case "client-list": return watch.receiveClientList(message);
       }
     });
   });
