@@ -11,13 +11,17 @@ describe("Watch - Unit", ()=>
 
   beforeEach(()=>
   {
-    const settings = Promise.resolve({displayid: "DIS123"});
+    const settings = {displayid: "DIS123"};
 
     simple.mock(common, "broadcastMessage").returnWith();
-    simple.mock(common, "getDisplaySettings").returnWith(settings);
+    simple.mock(common, "getDisplaySettings").resolveWith(settings);
   });
 
-  afterEach(()=> simple.restore());
+  afterEach(()=> {
+    watch.clearMessageAlreadySentFlag();
+
+    simple.restore()
+  });
 
   it("should wait until local-storage module is available before sending the WATCH message", () =>
   {
@@ -36,15 +40,15 @@ describe("Watch - Unit", ()=>
     assert(common.broadcastMessage.called);
 
     // this is the actual event object sent to the local storage module
-    const event = common.broadcastMessage.lastCall.args[0]
+    const event = common.broadcastMessage.lastCall.args[0];
 
-    assert(event)
+    assert(event);
     // check we sent it
-    assert.equal(event.from, "display-control")
+    assert.equal(event.from, "display-control");
     // check it's a WATCH event
-    assert.equal(event.topic, "watch")
+    assert.equal(event.topic, "watch");
     // check the URL of the file.
-    assert.equal(event.filePath, "risedisplayconfigurations-DIS123/screen-control.txt")
+    assert.equal(event.filePath, "risedisplayconfigurations-DIS123/screen-control.txt");
   });
 
 });

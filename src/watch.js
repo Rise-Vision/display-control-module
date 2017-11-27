@@ -5,6 +5,10 @@ const logger = require("./logger");
 // So we ensure it will only be sent once.
 let watchMessageAlreadySent = false
 
+function clearMessageAlreadySentFlag() {
+  watchMessageAlreadySent = false;
+}
+
 /**
  * We check the client list until local storage is available before we can
  * send a WATCH message.
@@ -38,5 +42,6 @@ function sendWatchMessage() {
 }
 
 module.exports = {
+  clearMessageAlreadySentFlag,
   receiveClientList
 };
