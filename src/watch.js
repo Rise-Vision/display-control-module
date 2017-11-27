@@ -26,11 +26,15 @@ function receiveClientList(message) {
 }
 
 function sendWatchMessage() {
+  const displayId = config.displayId();
+  const url =
+    `https://storage.googleapis.com/risedisplayconfigurations-${displayId}/screen-control.txt`;
+
   // currently common.broadcastMessage() does not return promises; so any broadcasting errors won't be propagated here and thus can't be handled.
   common.broadcastMessage({
     from: config.moduleName,
     topic: "watch",
-    filePath: ""
+    filePath: url
   });
 }
 

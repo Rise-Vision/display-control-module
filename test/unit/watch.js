@@ -11,7 +11,10 @@ describe("Watch - Unit", ()=>
 
   beforeEach(()=>
   {
+    const settings = Promise.resolve({displayid: "DIS123"});
+
     simple.mock(common, "broadcastMessage").returnWith();
+    simple.mock(common, "getDisplaySettings").returnWith(settings);
   });
 
   afterEach(()=> simple.restore());
@@ -40,6 +43,8 @@ describe("Watch - Unit", ()=>
     assert.equal(event.from, "display-control")
     // check it's a WATCH event
     assert.equal(event.topic, "watch")
+    // check the URL of the file.
+    assert.equal(event.filePath, "https://storage.googleapis.com/risedisplayconfigurations-DIS123/screen-control.txt")
   });
 
 });
