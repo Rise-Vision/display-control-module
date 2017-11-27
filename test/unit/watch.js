@@ -44,7 +44,7 @@ describe("Watch - Unit", ()=>
     // check it's a WATCH event
     assert.equal(event.topic, "watch")
     // check the URL of the file.
-    assert.equal(event.filePath, "https://storage.googleapis.com/risedisplayconfigurations-DIS123/screen-control.txt")
+    assert.equal(event.filePath, "risedisplayconfigurations-DIS123/screen-control.txt")
   });
 
 });
