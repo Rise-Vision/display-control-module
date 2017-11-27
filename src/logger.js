@@ -3,8 +3,8 @@ const config = require("./config");
 const moduleName = config.moduleName;
 
 const BQ_PROJECT_NAME = "client-side-events"
-const BQ_DATASET = "Display_Control_Events"
-const BQ_TABLE = "events"
+const BQ_DATASET = "Module_Events"
+const BQ_TABLE = "display_control_events"
 
 const logFolder = common.getModulePath(moduleName)
 const FAILED_ENTRY_FILE = "display-control-failed.log"
