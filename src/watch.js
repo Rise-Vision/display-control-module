@@ -9,13 +9,7 @@ function clearMessageAlreadySentFlag() {
   watchMessageAlreadySent = false;
 }
 
-/**
- * We check the client list until local storage is available before we can
- * send a WATCH message.
- * @param {Object} message the client-list message object as received from
- * local messaging.
- */
-function receiveClientList(message) {
+function checkIfLocalStorageIsAvailable(message) {
   if (!watchMessageAlreadySent) {
     logger.debug(JSON.stringify(message));
 
@@ -42,6 +36,6 @@ function sendWatchMessage() {
 }
 
 module.exports = {
-  clearMessageAlreadySentFlag,
-  receiveClientList
+  checkIfLocalStorageIsAvailable,
+  clearMessageAlreadySentFlag
 };

@@ -25,17 +25,17 @@ describe("Watch - Unit", ()=>
 
   it("should wait until local-storage module is available before sending the WATCH message", () =>
   {
-    watch.receiveClientList({clients: []});
+    watch.checkIfLocalStorageIsAvailable({clients: []});
     // no clients, so WATCH message shouldn't have been sent
     assert(!common.broadcastMessage.called);
 
     // other non-local-storage clients
-    watch.receiveClientList({clients: ["logging", "system-metrics"]});
+    watch.checkIfLocalStorageIsAvailable({clients: ["logging", "system-metrics"]});
     // so WATCH message shouldn't have been sent
     assert(!common.broadcastMessage.called);
 
     // now local-storage is present
-    watch.receiveClientList({clients: ["logging", "system-metrics", "local-storage"]});
+    watch.checkIfLocalStorageIsAvailable({clients: ["logging", "system-metrics", "local-storage"]});
     // so WATCH message should have been sent
     assert(common.broadcastMessage.called);
 

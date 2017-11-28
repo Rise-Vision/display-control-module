@@ -8,7 +8,8 @@ config.loadDisplayId().then(() =>
   {
     receiver.on("message", message => {
       switch (message.topic) {
-        case "client-list": return watch.receiveClientList(message);
+        case "client-list":
+          return watch.checkIfLocalStorageIsAvailable(message);
       }
     });
   });
