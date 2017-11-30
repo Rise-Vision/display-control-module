@@ -10,4 +10,9 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
         return watch.checkIfLocalStorageIsAvailable(message);
     }
   });
+
+  commonConfig.broadcastMessage({
+    from: config.moduleName,
+    topic: "clientlist-request"
+  });
 });

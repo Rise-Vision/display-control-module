@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-/* eslint-disable max-statements, global-require */
+/* eslint-disable max-statements, global-require, no-magic-numbers */
 const assert = require("assert");
 const common = require("common-display-module");
 const simple = require("simple-mock");
@@ -31,8 +31,17 @@ describe("Watch - Integration", ()=>
         handler({topic: "client-list", clients: []})
         .then(() =>
         {
-          // no clients, so WATCH message shouldn't have been sent
-          assert(!common.broadcastMessage.called);
+          // no clients, CLIENT-LIST-REQUEST should have been sent using broadcastMessage(), but no WATCh
+          assert.equal(common.broadcastMessage.callCount, 1);
+
+          // this is the actual event object sent to the local storage module
+          const event = common.broadcastMessage.lastCall.args[0];
+
+          assert(event);
+          // check we sent it
+          assert.equal(event.from, "display-control");
+          // check it's a WATCH event
+          assert.equal(event.topic, "clientlist-request");
 
           // other non-local-storage clients
           return handler({
@@ -43,7 +52,7 @@ describe("Watch - Integration", ()=>
         .then(() =>
         {
           // so WATCH message shouldn't have been sent
-          assert(!common.broadcastMessage.called);
+          assert.equal(common.broadcastMessage.callCount, 1);
 
           // now local-storage is present
           return handler({
@@ -54,7 +63,7 @@ describe("Watch - Integration", ()=>
         .then(() =>
         {
           // so WATCH message should have been sent
-          assert(common.broadcastMessage.called);
+          assert.equal(common.broadcastMessage.callCount, 2);
 
           // this is the actual event object sent to the local storage module
           const event = common.broadcastMessage.lastCall.args[0];
