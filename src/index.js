@@ -1,8 +1,18 @@
 const commonConfig = require("common-display-module");
+const config = require("./config");
+const watch = require("./watch");
 
-commonConfig.receiveMessages("logger").then((receiver) => {
-  receiver.on("message", (message) => {
-    // remove - soley for initial setup
-    console.log(`message received: ${message}`);
+commonConfig.receiveMessages(config.moduleName).then(receiver =>
+{
+  receiver.on("message", message => {
+    switch (message.topic) {
+      case "client-list":
+        return watch.checkIfLocalStorageIsAvailable(message);
+    }
+  });
+
+  commonConfig.broadcastMessage({
+    from: config.moduleName,
+    topic: "clientlist-request"
   });
 });

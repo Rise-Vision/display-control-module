@@ -26,3 +26,39 @@ npm run build
 ```bash
 npm run test
 ```
+
+### Manual testing
+
+Clone local-messaging-module, install and run it:
+
+```bash
+git clone https://github.com/Rise-Vision/local-messaging-module.git
+npm install
+node src/index.js
+```
+
+Do the same for logging-module in a different terminal window:
+
+```bash
+git clone https://github.com/Rise-Vision/logging-module.git
+npm install
+node src/index.js
+```
+
+Do the same for local-storage in a different terminal window:
+
+```bash
+git clone https://github.com/Rise-Vision/local-storage.git
+npm install
+node src/index.js
+```
+
+Then, supposing display-control-module is already installed, open another
+terminal window and run it:
+
+```bash
+node src/index.js
+```
+
+You should see a WATCH event sent and caught by local-storage, and an
+FILE-UPDATE status response coming shortly after that.

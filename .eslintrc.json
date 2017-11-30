@@ -43,7 +43,7 @@
         "consistent-return": "off",
         "consistent-this": "error",
         "curly": "error",
-        "default-case": "error",
+        "default-case": "off",
         "dot-location": "off",
         "dot-notation": [
             "error",
@@ -61,7 +61,7 @@
             "error",
             "declaration"
         ],
-        "function-paren-newline": "error",
+        "function-paren-newline": "off",
         "generator-star-spacing": "error",
         "getter-return": "error",
         "global-require": "error",
@@ -179,7 +179,7 @@
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-unused-expressions": "error",
-        "no-use-before-define": "error",
+        "no-use-before-define": "off",
         "no-useless-call": "error",
         "no-useless-computed-key": "error",
         "no-useless-concat": "error",
@@ -261,7 +261,7 @@
             "error",
             "never"
         ],
-        "valid-jsdoc": "error",
+        "valid-jsdoc": "off",
         "vars-on-top": "error",
         "wrap-iife": "error",
         "wrap-regex": "error",

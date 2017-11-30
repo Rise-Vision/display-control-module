@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "build": "eslint src && ./pre-build.sh && webpack --env.MODULE_VERSION=$(cat version) --config webpack.config.js && ./post-build.sh",
-    "test": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/**"
+    "test": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/**",
+    "test-unit": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/unit/**",
+    "test-integration": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/integration/**"
   },
   "repository": {
     "type": "git",
@@ -37,7 +39,7 @@
     "zip-webpack-plugin": "^2.0.0"
   },
   "dependencies": {
-    "common-display-module": "git://github.com/Rise-Vision/common-display-module.git#v1.3.4",
+    "common-display-module": "git://github.com/Rise-Vision/common-display-module.git#v1.5.5",
     "node-ipc": "^9.1.1"
   }
 }
