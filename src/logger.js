@@ -1,3 +1,4 @@
+/* eslint-disable space-in-parens */
 const common = require("common-display-module");
 const config = require("./config");
 const moduleName = config.moduleName;
@@ -9,22 +10,18 @@ const BQ_TABLE = "display_control_events"
 const logFolder = common.getModulePath(moduleName)
 const FAILED_ENTRY_FILE = "display-control-failed.log"
 
-const externalLogger = require("common-display-module/external-logger")(BQ_PROJECT_NAME, BQ_DATASET, FAILED_ENTRY_FILE)
-const logger = require("rise-common-electron/logger")(externalLogger, logFolder, moduleName)
+const externalLogger = require("common-display-module/external-logger")(BQ_PROJECT_NAME, BQ_DATASET, FAILED_ENTRY_FILE);
+const logger = require("rise-common-electron/logger")(externalLogger, logFolder, moduleName);
 
 // Creates the detail data structure that the logging functions expect.
 // Assigns "event_details" and "display_id", that are expected in the events table
 function detailsFor(eventDetails, data = {}) {
-  const displayId = config.displayId();
-
-  if (!displayId) {
-    throw new Error('Display ID not initialized');
-  }
-
-  return Object.assign({
-    "event_details": eventDetails,
-    "display_id": displayId
-  }, data)
+  return common.getDisplayId().then(displayId =>
+    Object.assign({
+      "event_details": eventDetails,
+      "display_id": displayId
+    }, data)
+  );
 }
 
 function debug(message) {
@@ -32,9 +29,8 @@ function debug(message) {
 }
 
 function error(eventDetails, userFriendlyMessage) {
-  const detail = detailsFor(eventDetails, {})
-
-  logger.error(detail, userFriendlyMessage, BQ_TABLE)
+  detailsFor(eventDetails, {})
+  .then(detail => logger.error(detail, userFriendlyMessage, BQ_TABLE));
 }
 
-module.exports = {debug, error}
+module.exports = {debug, error};

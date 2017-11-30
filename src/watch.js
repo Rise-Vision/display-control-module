@@ -16,23 +16,27 @@ function checkIfLocalStorageIsAvailable(message) {
     const clients = message.clients;
 
     if (clients.includes("local-storage")) {
-      sendWatchMessage();
-
-      watchMessageAlreadySent = true;
+      return sendWatchMessage()
+      .then(() => watchMessageAlreadySent = true)
     }
   }
+
+  return Promise.resolve()
 }
 
 function sendWatchMessage() {
-  const displayId = config.displayId();
-  const filePath = `risedisplayconfigurations-${displayId}/screen-control.txt`;
+  return common.getDisplayId()
+  .then(displayId =>
+  {
+    const filePath = `risedisplayconfigurations-${displayId}/screen-control.txt`;
 
-  // currently common.broadcastMessage() does not return promises; so any broadcasting errors won't be propagated here and thus can't be handled.
-  common.broadcastMessage({
-    from: config.moduleName,
-    topic: "watch",
-    filePath
-  });
+    // currently common.broadcastMessage() does not return promises; so any broadcasting errors won't be propagated here and thus can't be handled.
+    return common.broadcastMessage({
+      from: config.moduleName,
+      topic: "watch",
+      filePath
+    });
+  })
 }
 
 module.exports = {
