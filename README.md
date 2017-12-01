@@ -14,7 +14,7 @@ git clone https://github.com/Rise-Vision/display-control-module.git
 
 *  Install:
 ```bash
-install npm
+npm install
 ```
 
 * Build:
