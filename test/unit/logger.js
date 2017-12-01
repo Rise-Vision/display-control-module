@@ -15,6 +15,7 @@ describe("Logger - Unit", ()=>
 
     simple.mock(common, "broadcastMessage").returnWith();
     simple.mock(common, "getDisplaySettings").resolveWith(settings);
+    simple.mock(common, "getModuleVersion").returnWith("1.1");
   });
 
   afterEach(()=> {
@@ -47,6 +48,7 @@ describe("Logger - Unit", ()=>
       assert.equal(row.event, "turn-screen-on")
       assert.equal(row.event_details, "TURN_ON --PLEASE")
       assert.equal(row.display_id, "DIS123")
+      assert.equal(row.version, "1.1")
       // ts will be inserted in logging module, so we won't be checking it here
 
       done();
@@ -85,6 +87,7 @@ describe("Logger - Unit", ()=>
       assert.equal(row.event, "failed_command")
       assert.equal(row.event_details, 'screen has died, so sorry')
       assert.equal(row.display_id, "DIS123")
+      assert.equal(row.version, "1.1")
       // ts will be inserted in logging module, so we won't be checking it here
 
       done();
