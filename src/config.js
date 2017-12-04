@@ -8,5 +8,8 @@ module.exports = {
   bqTable: "display_control_events",
   failedEntryFile: "display-control-failed.log",
   logFolder: common.getModulePath(moduleName),
-  moduleName
+  moduleName,
+  getModuleVersion() {
+    return common.getModuleVersion(moduleName)
+  }
 }

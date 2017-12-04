@@ -14,7 +14,7 @@ git clone https://github.com/Rise-Vision/display-control-module.git
 
 *  Install:
 ```bash
-install npm
+npm install
 ```
 
 * Build:
@@ -62,3 +62,14 @@ node src/index.js
 
 You should see a WATCH event sent and caught by local-storage, and an
 FILE-UPDATE status response coming shortly after that.
+
+### Manually testing send command events to BQ via logging module
+
+Instead of running the main src/index.js script, run files from manual
+subdirectory:
+
+```bash
+node manual/send_command.js
+```
+
+This needs local-messaging-module and logging-module to be also running.
