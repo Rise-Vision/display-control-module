@@ -7,7 +7,7 @@ const config = require("../../src/config");
 describe("Watch - Unit", ()=>
 {
 
-  afterEach(()=> config.resetDisplayControlConfiguration);
+  afterEach(()=> config.resetDisplayControlConfiguration());
 
   it("should set the display control strategy", () =>
   {

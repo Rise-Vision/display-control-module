@@ -7,10 +7,11 @@ const screen = require("../../src/screen");
 
 const CECControlStrategy = require("../../src/strategies/cec");
 
-describe("Screen - Unit", ()=>
+describe("Screen - Unit", () =>
 {
 
-  afterEach(()=> config.resetDisplayControlConfiguration);
+  before(()=> config.resetDisplayControlConfiguration());
+  afterEach(()=> config.resetDisplayControlConfiguration());
 
   it("should create CECControlStrategy instance if CEC strategy is configured", done =>
   {
@@ -25,7 +26,43 @@ describe("Screen - Unit", ()=>
     })
     .catch(error =>
     {
-      assert.fail(error)
+      assert.fail(error);
+
+      done()
+    });
+  });
+
+  it("should fail if no strategy is configured", done =>
+  {
+    screen.displayControlStrategy()
+    .then(strategy =>
+    {
+      assert.fail(strategy);
+
+      done();
+    })
+    .catch(error =>
+    {
+      assert.equal(error.message, "Display control not enabled");
+
+      done()
+    });
+  });
+
+  it("should fail if an invalid strategy is configured", done =>
+  {
+    config.setDisplayControlStrategy("other");
+
+    screen.displayControlStrategy()
+    .then(strategy =>
+    {
+      assert.fail(strategy);
+
+      done();
+    })
+    .catch(error =>
+    {
+      assert.equal(error.message, "Illegal display control strategy: 'other'");
 
       done()
     });
