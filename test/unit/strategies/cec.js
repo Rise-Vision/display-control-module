@@ -29,4 +29,24 @@ describe("CECControlStrategy - Unit", () =>
     });
   });
 
+  it("should fail if cec-utils is not available", done =>
+  {
+    // file not found
+    simple.mock(fs, "stat").callFn((path, callback) => callback(true));
+
+    strategy.checkConfigured()
+    .then(() =>
+    {
+      assert.fail();
+
+      done();
+    })
+    .catch(error =>
+    {
+      assert.equal(error.message, "cec-utils not installed in Operating System");
+
+      done();
+    });
+  });
+
 });

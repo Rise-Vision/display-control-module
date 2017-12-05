@@ -45,7 +45,7 @@ describe("Screen - Unit", () =>
     {
       assert.equal(error.message, "Display control not enabled");
 
-      done()
+      done();
     });
   });
 
