@@ -77,4 +77,33 @@ describe("CECControlStrategy - Unit", () =>
     });
   });
 
+  it("should return command error message if the command execution fails", done =>
+  {
+    // no error
+    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+
+    simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
+    {
+      writeRawMessage: () => Promise.reject(Error('display not available'))
+    }));
+
+    cec.init()
+    .then(provider =>
+      provider.turnOff().then(result =>
+      {
+        assert.equal(result.commandType, "turn-off-command");
+        assert.equal(result.command, "standby");
+        assert.equal(result.commandErrorMessage, 'display not available');
+
+        done();
+      })
+    )
+    .catch(error =>
+    {
+      assert.fail(error);
+
+      done();
+    });
+  });
+
 });
