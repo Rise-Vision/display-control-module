@@ -5,7 +5,7 @@
 const config = require("./config");
 const logger = require("./logger");
 
-const CECControlStrategy = require("./strategies/cec");
+const cec = require("./strategies/cec");
 
 function displayControlStrategy() {
   return new Promise((resolve, reject) =>
@@ -14,7 +14,7 @@ function displayControlStrategy() {
 
     if (strategy) {
       switch (strategy) {
-        case "CEC": resolve(new CECControlStrategy()); break;
+        case "CEC": resolve(cec); break;
         // later add RS-232
         default: reject(Error(`Illegal display control strategy: '${strategy}'`));
       }
@@ -22,7 +22,8 @@ function displayControlStrategy() {
     else {
       reject(Error('Display control not enabled'));
     }
-  });
+  })
+  .then(strategy => strategy.init());
 }
 
 function executeScreenCommand(action) {

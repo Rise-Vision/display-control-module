@@ -1,17 +1,28 @@
 /* eslint-env mocha */
 /* eslint-disable max-statements */
 const assert = require("assert");
+const simple = require("simple-mock");
 
 const config = require("../../src/config");
 const screen = require("../../src/screen");
 
-const CECControlStrategy = require("../../src/strategies/cec");
+const cec = require("../../src/strategies/cec");
 
 describe("Screen - Unit", () =>
 {
 
-  before(()=> config.resetDisplayControlConfiguration());
-  afterEach(()=> config.resetDisplayControlConfiguration());
+  beforeEach(() =>
+  {
+    config.resetDisplayControlConfiguration();
+
+    simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy());
+  });
+
+  afterEach(()=>
+  {
+    config.resetDisplayControlConfiguration();
+    cec.clear();
+  });
 
   it("should create CECControlStrategy instance if CEC strategy is configured", done =>
   {
@@ -20,7 +31,10 @@ describe("Screen - Unit", () =>
     screen.displayControlStrategy()
     .then(strategy =>
     {
-      assert(strategy instanceof CECControlStrategy);
+      assert(strategy instanceof cec.CECControlStrategy);
+      assert(strategy.checkConfigured);
+      assert(strategy.turnOff);
+      assert(strategy.turnOn);
 
       done();
     })
