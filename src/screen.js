@@ -28,14 +28,21 @@ function displayControlStrategy() {
 function executeScreenCommand(action) {
   return displayControlStrategy()
   .then(provider =>
-    action(provider)
+    provider.checkConfigured()
+    .then(() => action(provider))
     .then(result =>
       logger.sendCommandAttempt(result.commandType, result.command)
       .then(() =>
         result.commandErrorMessage && logger.sendCommandFailure(result.commandErrorMessage)
       )
     )
-  );
+  )
+  .catch(error=>
+  {
+    const detail = error.message || JSON.stringify(error);
+
+    logger.error(detail, "Error while trying to execute screen command");
+  });
 }
 
 function turnOn() {
