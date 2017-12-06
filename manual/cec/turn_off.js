@@ -14,9 +14,10 @@ monitor.once(CECMonitor.EVENTS._READY, () =>
 
   //monitor.WriteRawMessage(command)
   monitor.SendMessage(null, CEC.LogicalAddress.TV, CEC.Opcode.STANDBY, [0])
-  .then(() =>
+  .then(output =>
   {
     console.log(`Successful command execution: ${command}`);
+    console.log(`Output: ${output}`);
     process.exit();
   })
   .catch(error =>
