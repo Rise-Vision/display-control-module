@@ -63,7 +63,7 @@ describe("CECControlStrategy - Unit", () =>
       provider.turnOff().then(result =>
       {
         assert.equal(result.commandType, "turn-screen-off");
-        assert.equal(result.command, "standby");
+        assert.equal(result.command, "standby 0");
         assert(!result.commandErrorMessage);
 
         done();
@@ -92,7 +92,7 @@ describe("CECControlStrategy - Unit", () =>
       provider.turnOff().then(result =>
       {
         assert.equal(result.commandType, "turn-screen-off");
-        assert.equal(result.command, "standby");
+        assert.equal(result.command, "standby 0");
         assert.equal(result.commandErrorMessage, 'display not available');
 
         done();

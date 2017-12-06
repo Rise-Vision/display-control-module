@@ -63,7 +63,7 @@ describe("Screen - Integration", () =>
       // the BigQuery row entry, see design doc for individual element description
       const row = data.data;
       assert.equal(row.event, "turn-screen-on");
-      assert.equal(row.event_details, "on");
+      assert.equal(row.event_details, "on 0");
       assert.equal(row.display_id, "ABC");
       // ts will be inserted in logging module, so we won't be checking it here
 
@@ -110,7 +110,7 @@ describe("Screen - Integration", () =>
       // the BigQuery row entry, see design doc for individual element description
       const row = data.data;
       assert.equal(row.event, "turn-screen-off");
-      assert.equal(row.event_details, "standby");
+      assert.equal(row.event_details, "standby 0");
       assert.equal(row.display_id, "ABC");
       // ts will be inserted in logging module, so we won't be checking it here
 
@@ -129,7 +129,7 @@ describe("Screen - Integration", () =>
     // cec-utils not found
     simple.mock(fs, "stat").callFn((path, callback) => callback(true));
 
-    simple.mock(cec, "init").callFn(() => cec.checkCecUtilsConfigured());
+    simple.mock(cec, "init").callFn(cec.checkCecUtilsConfigured);
 
     // either turnOn() or turnOff() will fail
     screen.turnOff()
