@@ -24,3 +24,7 @@ setTimeout(() =>
   console.log(`CEC adapter connection unsuccessful after ${SECONDS} seconds`);
   process.exit(1);
 }, SECONDS * 1000);
+
+monitor.start('cec-client', '-m', '-d', '8', '-b', 'r');
+
+process.on('exit', monitor.stop);
