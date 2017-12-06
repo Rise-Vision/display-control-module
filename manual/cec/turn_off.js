@@ -4,7 +4,8 @@ const { CEC, CECMonitor } = require("@senzil/cec-monitor");
 const SECONDS = 10;
 
 const monitor = new CECMonitor('RV', {
-  debug: true
+  debug: true,
+  processManaged: true
 });
 
 monitor.once(CECMonitor.EVENTS._READY, () =>
