@@ -76,6 +76,8 @@ This needs local-messaging-module and logging-module to be also running.
 
 ### Manually testing CEC commands on Raspbian PI
 
+#### Install cec-utils
+
 In order for CEC commands to run, cec-utils must be installed in the
 PI computer:
 
@@ -110,6 +112,8 @@ not support CEC:
 libCEC version: 3.0.1, compiled on Linux-3.13.0-77-generic ... , features: P8_USB, P8_detect, randr
 Found devices: NONE
 ```
+
+#### List CEC-enabled devices
 
 If there are devices, we can now list them using a command like this one:
 
@@ -162,6 +166,8 @@ is on.
 
 See cec-client documentation for more information about this utility.
 
+#### Test connection to the CEC Adapter
+
 Now we can test connection to CEC adapter using the following
 simple script:
 
@@ -171,3 +177,20 @@ node manual/cec/connect.js
 
 If this invocation fails, all of the rest of CEC tests will fail, and the
 CEC facilities of display-control-module will also fail in this computer.
+
+#### Turn off the screen
+
+Then we can tell the CEC monitor to turn off:
+
+```bash
+node manual/cec/turn_off.js
+```
+
+If the previous command succeeds and a scan is performed now, the Power Status
+for the TV device should be 'standby'.
+
+The way to perform this same command using cec-client is:
+
+```bash
+echo "standby 0" | cec-client -s -d 1
+```
