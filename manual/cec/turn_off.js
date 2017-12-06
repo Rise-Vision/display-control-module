@@ -1,6 +1,6 @@
 // turn off the monitor using CEC commands.
 
-const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
+const { CEC, CECMonitor } = require("@senzil/cec-monitor");
 const SECONDS = 10;
 
 const monitor = new CECMonitor('RV', {
@@ -12,7 +12,8 @@ monitor.once(CECMonitor.EVENTS._READY, () =>
   console.log('successful CEC adapter connection');
   const command = 'standby 0';
 
-  monitor.WriteRawMessage(command)
+  //monitor.WriteRawMessage(command)
+  monitor.SendMessage(null, CEC.LogicalAddress.TV, CEC.Opcode.STATUS, [0])
   .then(() =>
   {
     console.log(`Successful command execution: ${command}`);
