@@ -20,6 +20,7 @@ describe("Screen - Unit", () =>
 
   afterEach(()=>
   {
+    simple.restore();
     config.resetDisplayControlConfiguration();
     cec.clear();
   });
