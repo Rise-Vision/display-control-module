@@ -5,24 +5,6 @@ const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
 
 let strategy = null;
 
-function init() {
-  if (strategy) {
-    return Promise.resolve(strategy)
-  }
-
-  const monitor = new CECMonitor('RV', {
-    debug: true
-  });
-
-  return new Promise(resolve =>
-  {
-    monitor.once(CECMonitor.EVENTS._READY, () =>
-    {
-      resolve(strategy = new CECControlStrategy(monitor));
-    });
-  });
-}
-
 function checkCecUtilsConfigured() {
   return new Promise((resolve, reject) =>
   {
@@ -38,6 +20,31 @@ function checkCecUtilsConfigured() {
   });
 }
 
+function init() {
+  if (strategy) {
+    return Promise.resolve(strategy)
+  }
+
+  return checkCecUtilsConfigured()
+  .then(() =>
+  {
+    const monitor = new CECMonitor('RV', {
+      debug: true
+    });
+
+    return new Promise((resolve, reject) =>
+    {
+      monitor.once(CECMonitor.EVENTS._READY, () =>
+        resolve(strategy = new CECControlStrategy(monitor))
+      );
+
+      monitor.once(CECMonitor.EVENTS._ERROR, error =>
+        reject(error || Error('could not init CECMonitor'))
+      );
+    });
+  })
+}
+
 /**
  * For test purposes, or when configuration changes.
  */
@@ -49,10 +56,6 @@ class CECControlStrategy {
 
   constructor(monitor) {
     this.monitor = monitor;
-  }
-
-  checkConfigured() {
-    return checkCecUtilsConfigured();
   }
 
   executeCommand(spec) {

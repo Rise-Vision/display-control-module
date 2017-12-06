@@ -25,7 +25,7 @@ function debug(message) {
 }
 
 function error(eventDetails, userFriendlyMessage) {
-  detailsFor(eventDetails)
+  return detailsFor(eventDetails)
   .then(detail => logger.error(detail, userFriendlyMessage, bqTable));
 }
 

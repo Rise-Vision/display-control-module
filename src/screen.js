@@ -29,8 +29,7 @@ function displayControlStrategy() {
 function executeScreenCommand(action) {
   return displayControlStrategy()
   .then(provider =>
-    provider.checkConfigured()
-    .then(() => action(provider))
+    action(provider)
     .then(result =>
       logger.sendCommandAttempt(result.commandType, result.command)
       .then(() =>
@@ -42,7 +41,7 @@ function executeScreenCommand(action) {
   {
     const detail = error.message || JSON.stringify(error);
 
-    logger.error(detail, "Error while trying to execute screen command");
+    return logger.error(detail, "Error while trying to execute screen command");
   });
 }
 

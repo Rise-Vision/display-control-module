@@ -33,7 +33,6 @@ describe("Screen - Unit", () =>
     .then(strategy =>
     {
       assert(strategy instanceof cec.CECControlStrategy);
-      assert(strategy.checkConfigured);
       assert(strategy.turnOff);
       assert(strategy.turnOn);
 
