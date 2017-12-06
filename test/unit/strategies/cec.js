@@ -55,7 +55,7 @@ describe("CECControlStrategy - Unit", () =>
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
-      writeRawMessage: () => Promise.resolve()
+      WriteRawMessage: () => Promise.resolve()
     }));
 
     cec.init()
@@ -84,7 +84,7 @@ describe("CECControlStrategy - Unit", () =>
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
-      writeRawMessage: () => Promise.reject(Error('display not available'))
+      WriteRawMessage: () => Promise.reject(Error('display not available'))
     }));
 
     cec.init()

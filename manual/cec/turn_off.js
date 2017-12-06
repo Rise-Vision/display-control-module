@@ -12,7 +12,7 @@ monitor.once(CECMonitor.EVENTS._READY, () =>
   console.log('successful CEC adapter connection');
   const command = 'standby 0';
 
-  monitor.writeRawMessage(command)
+  monitor.WriteRawMessage(command)
   .then(() =>
   {
     console.log(`Successful command execution: ${command}`);

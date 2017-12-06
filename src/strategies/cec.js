@@ -62,7 +62,7 @@ class CECControlStrategy {
   }
 
   executeCommand(spec) {
-    return this.monitor.writeRawMessage(spec.command)
+    return this.monitor.WriteRawMessage(spec.command)
     .then(() => spec)
     .catch(error => Object.assign(spec, {
       commandErrorMessage:

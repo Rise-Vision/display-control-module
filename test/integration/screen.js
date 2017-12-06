@@ -37,7 +37,7 @@ describe("Screen - Integration", () =>
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
-      writeRawMessage: () => Promise.resolve()
+      WriteRawMessage: () => Promise.resolve()
     }));
 
     screen.turnOn()
@@ -84,7 +84,7 @@ describe("Screen - Integration", () =>
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
-      writeRawMessage: () => Promise.resolve()
+      WriteRawMessage: () => Promise.resolve()
     }));
 
     screen.turnOff()
