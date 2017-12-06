@@ -66,13 +66,13 @@ class CECControlStrategy {
 
   turnOff() {
     return this.executeCommand({
-      commandType: "turn-off-command", command: "standby"
+      commandType: "turn-screen-off", command: "standby"
     });
   }
 
   turnOn() {
     return this.executeCommand({
-      commandType: "turn-on-command", command: "on"
+      commandType: "turn-screen-on", command: "on"
     });
   }
 
