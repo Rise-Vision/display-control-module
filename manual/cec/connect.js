@@ -27,4 +27,12 @@ setTimeout(() =>
 
 monitor.start('cec-client', '-m', '-d', '8', '-b', 'r');
 
-process.on('exit', monitor.stop);
+process.on('exit', () =>
+{
+  try {
+    monitor.stop();
+  }
+  catch(error) {
+    console.error(error.message);
+  }
+});
