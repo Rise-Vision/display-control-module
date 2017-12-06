@@ -13,7 +13,7 @@ monitor.once(CECMonitor.EVENTS._READY, () =>
   const command = 'standby 0';
 
   //monitor.WriteRawMessage(command)
-  monitor.SendMessage(null, CEC.LogicalAddress.TV, CEC.Opcode.STANDBY, [0])
+  monitor.SendMessage(null, CEC.LogicalAddress.BROADCAST, CEC.Opcode.STANDBY, [0])
   .then(output =>
   {
     console.log(`Successful command execution: ${command}`);
