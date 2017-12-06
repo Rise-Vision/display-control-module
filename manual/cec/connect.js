@@ -1,20 +1,18 @@
 // test if we have connection to the CEC adapter.
 // unless this test finishes successfully, the other tests in this same folder won't work.
 
-const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
+const { NodeCec, CEC } = require("node-cec");
 const SECONDS = 5;
 
-const monitor = new CECMonitor('RV', {
-  debug: true
-});
+const monitor = new NodeCec('node-cec-monitor');
 
-monitor.once(CECMonitor.EVENTS._READY, () =>
+monitor.once('ready', () =>
 {
   console.log('successful CEC adapter connection');
   process.exit();
 });
 
-monitor.once(CECMonitor.EVENTS._ERROR, error =>
+monitor.once('error', error =>
 {
   console.log(`CEC adapter connection failed: ${error}`);
   process.exit(1);

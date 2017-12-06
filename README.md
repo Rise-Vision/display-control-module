@@ -155,10 +155,8 @@ language:      eng
 currently active source: TV (0)
 ```
 
-Note that the monitor ( TV ) is listed as address 0. The current
-implementation of display-control-module uses this address for tests.
-Future implementations might let configure this address depending on the
-device.
+Note that the monitor ( TV ) is listed as address 0; this is the address
+CEC uses for monitors and thus is the used in this module's code.
 
 The 'power status' entry is the one that will be affected by the commands
 of display-control-module. Note that in this case the monitor/TV power status
@@ -194,3 +192,5 @@ The way to perform this same command using cec-client is:
 ```bash
 echo "standby 0" | cec-client -s -d 1
 ```
+
+In this command '0' refers to the monitor/TV device mentioned before.
