@@ -10,10 +10,10 @@ const monitor = new CECMonitor('RV', {
 monitor.once(CECMonitor.EVENTS._READY, () =>
 {
   console.log('successful CEC adapter connection');
-  const command = 'standby 0';
+  const command = 'standby 0.0.0.0';
 
-  //monitor.WriteRawMessage(command)
-  monitor.SendMessage(null, CEC.LogicalAddress.BROADCAST, CEC.Opcode.STANDBY, [0])
+  monitor.WriteRawMessage(command)
+  //monitor.SendMessage(null, CEC.LogicalAddress.BROADCAST, CEC.Opcode.STANDBY, [0])
   .then(output =>
   {
     console.log(`Successful command execution: ${command}`);
