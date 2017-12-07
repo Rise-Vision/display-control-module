@@ -10,7 +10,6 @@ module.exports = command =>
   monitor.once(CECMonitor.EVENTS._READY, () =>
   {
     console.log('successful CEC adapter connection');
-    const command = 'standby 0';
 
     monitor.WriteRawMessage(command)
     .then(() =>
