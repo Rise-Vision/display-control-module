@@ -77,6 +77,35 @@ describe("CECControlStrategy - Unit", () =>
     });
   });
 
+  it("should turn on the screen", done =>
+  {
+    // no error
+    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+
+    simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
+    {
+      WriteRawMessage: () => Promise.resolve()
+    }));
+
+    cec.init()
+    .then(provider =>
+      provider.turnOn().then(result =>
+      {
+        assert.equal(result.commandType, "turn-screen-on");
+        assert.equal(result.command, "on 0");
+        assert(!result.commandErrorMessage);
+
+        done();
+      })
+    )
+    .catch(error =>
+    {
+      assert.fail(error);
+
+      done();
+    });
+  });
+
   it("should return command error message if the command execution fails", done =>
   {
     // no error
