@@ -1,3 +1,3 @@
 // turn off the monitor using CEC commands.
 
-require("./send_command")('standby 0');
+require("./send_command")('on 0');

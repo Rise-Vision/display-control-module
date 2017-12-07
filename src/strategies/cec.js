@@ -56,9 +56,6 @@ class CECControlStrategy {
 
   constructor(monitor) {
     this.monitor = monitor;
-
-    // TV address new fixed to 0; see if it's always the case, or later detect it using scan command
-    this.monitorAddress = 0;
   }
 
   executeCommand(spec) {
@@ -71,14 +68,20 @@ class CECControlStrategy {
   }
 
   turnOff() {
+    // TV/monitor address is always fixed to 0 in CEC.
+    // Low level call equivalent to 'standby 0' is 'tx 10:36'
+    // see http://www.cec-o-matic.com/ for details on this code.
     return this.executeCommand({
-      commandType: "turn-screen-off", command: `standby ${this.monitorAddress}`
+      commandType: "turn-screen-off", command: `standby 0`
     });
   }
 
   turnOn() {
+    // TV/monitor address is always fixed to 0 in CEC.
+    // Low level call equivalent to 'on 0' is 'tx 10:04'
+    // see http://www.cec-o-matic.com/ for details on this code.
     return this.executeCommand({
-      commandType: "turn-screen-on", command: `on ${this.monitorAddress}`
+      commandType: "turn-screen-on", command: `on 0`
     });
   }
 

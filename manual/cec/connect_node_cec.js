@@ -1,5 +1,7 @@
-// test if we have connection to the CEC adapter.
-// unless this test finishes successfully, the other tests in this same folder won't work.
+// Test if we have connection to the CEC adapter.
+// Unless this test finishes successfully, the other tests in this same folder won't work.
+// This test uses the lower level node-cec library.
+// It's left here for future reference and troubleshooting.
 
 const { NodeCec, CEC } = require("node-cec");
 const SECONDS = 5;
@@ -25,7 +27,7 @@ setTimeout(() =>
   process.exit(1);
 }, SECONDS * 1000);
 
-monitor.start('cec-client', '-m', '-d', '8', '-b', 'r');
+monitor.start('cec-client', '-m', '-d', '8');
 
 process.on('exit', () =>
 {

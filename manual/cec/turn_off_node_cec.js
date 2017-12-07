@@ -1,4 +1,6 @@
-// turn off the monitor using CEC commands.
+// Turn off the monitor using CEC commands.
+// This test uses the lower level node-cec library.
+// It's left here for future reference and troubleshooting.
 
 const { NodeCec, CEC } = require("node-cec");
 const SECONDS = 10;

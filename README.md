@@ -123,7 +123,7 @@ echo scan | cec-client -s -d 1
 
 Where:
 - '-s' means command execution and exit, no interactive mode.
-- '-d 1' means debug mode enabled, useful for tests
+- '-d 1' means debug mode enabled, useful for tests. Number can be increased up to 8.
 
 If there are connected devices supporting CEC, this will return something like:
 
@@ -187,10 +187,31 @@ node manual/cec/turn_off.js
 If the previous command succeeds and a scan is performed now, the Power Status
 for the TV device should be 'standby'.
 
-The way to perform this same command using cec-client is:
+The way to perform this same command using cec-client with full tracing is:
 
 ```bash
-echo "standby 0" | cec-client -s -d 1
+echo "standby 0" | cec-client -s -d 8
 ```
 
 In this command '0' refers to the monitor/TV device mentioned before.
+The low level equivalent for 'standby 0' is 'tx 10:36'.
+See http://www.cec-o-matic.com/ for more information about CEC codes.
+
+#### Turn on the screen
+
+To test turning on the monitor using CEC:
+
+```bash
+node manual/cec/turn_on.js
+```
+
+If the previous command succeeds and a scan is performed now, the Power Status
+for the TV device should be 'on'.
+
+The way to perform this same command using cec-client with full tracing is:
+
+```bash
+echo "on 0" | cec-client -s -d 8
+```
+
+The low level equivalent for 'on 0' is 'tx 10:04'.
