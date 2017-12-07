@@ -4,7 +4,8 @@ const { NodeCec, CEC } = require("node-cec");
 const SECONDS = 10;
 
 const monitor = new NodeCec('node-cec-monitor');
-const command = "tx 10:36";
+//const command = "tx 10 36";
+const command = "standby 0";
 
 monitor.once('ready', () =>
 {
