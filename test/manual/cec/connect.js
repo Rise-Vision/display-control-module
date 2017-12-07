@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+
 // test if we have connection to the CEC adapter.
 // unless this test finishes successfully, the other tests in this same folder won't work.
 

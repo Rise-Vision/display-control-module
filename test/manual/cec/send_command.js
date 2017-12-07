@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+
 const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
 const SECONDS = 10;
 

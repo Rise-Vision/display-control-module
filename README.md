@@ -170,7 +170,7 @@ Now we can test connection to CEC adapter using the following
 simple script:
 
 ```bash
-node manual/cec/connect.js
+node test/manual/cec/connect.js
 ```
 
 If this invocation fails, all of the rest of CEC tests will fail, and the
@@ -181,7 +181,7 @@ CEC facilities of display-control-module will also fail in this computer.
 Then we can tell the CEC monitor to turn off:
 
 ```bash
-node manual/cec/turn_off.js
+node test/manual/cec/turn_off.js
 ```
 
 If the previous command succeeds and a scan is performed now, the Power Status
@@ -202,7 +202,7 @@ See http://www.cec-o-matic.com/ for more information about CEC codes.
 To test turning on the monitor using CEC:
 
 ```bash
-node manual/cec/turn_on.js
+node test/manual/cec/turn_on.js
 ```
 
 If the previous command succeeds and a scan is performed now, the Power Status

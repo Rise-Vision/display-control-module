@@ -1,8 +1,10 @@
+/* eslint-disable no-magic-numbers */
+
 // Turn off the monitor using CEC commands.
 // This test uses the lower level node-cec library.
 // It's left here for future reference and troubleshooting.
 
-const { NodeCec, CEC } = require("node-cec");
+const {NodeCec} = require("node-cec");
 const SECONDS = 10;
 
 const monitor = new NodeCec('node-cec-monitor');
@@ -19,7 +21,7 @@ monitor.once('ready', () =>
 
     setTimeout(process.exit, 3000);
   }
-  catch(error) {
+  catch (error) {
     console.error(error);
 
     process.exit(1);
@@ -46,7 +48,7 @@ process.on('exit', () =>
   try {
     monitor.stop();
   }
-  catch(error) {
+  catch (error) {
     console.error(error.message);
   }
 });

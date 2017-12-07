@@ -1,9 +1,11 @@
+/* eslint-disable no-magic-numbers */
+
 // Test if we have connection to the CEC adapter.
 // Unless this test finishes successfully, the other tests in this same folder won't work.
 // This test uses the lower level node-cec library.
 // It's left here for future reference and troubleshooting.
 
-const { NodeCec, CEC } = require("node-cec");
+const {NodeCec} = require("node-cec");
 const SECONDS = 5;
 
 const monitor = new NodeCec('node-cec-monitor');
@@ -34,7 +36,7 @@ process.on('exit', () =>
   try {
     monitor.stop();
   }
-  catch(error) {
+  catch (error) {
     console.error(error.message);
   }
 });
