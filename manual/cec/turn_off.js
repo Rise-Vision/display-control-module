@@ -3,22 +3,29 @@
 const { NodeCec, CEC } = require("node-cec");
 const SECONDS = 10;
 
-const cec = new NodeCec('node-cec-monitor');
+const monitor = new NodeCec('node-cec-monitor');
+const command = "standby 0";
 
-
-
-const command = 'standby 0';
-
-cec.send('standby 0')
-.then(output =>
+monitor.once('ready', () =>
 {
-  console.log(`Successful command execution: ${command}`);
-  console.log(`Output: ${output}`);
-  process.exit();
-})
-.catch(error =>
+  console.log('successful CEC adapter connection');
+
+  try {
+    monitor.send(command);
+    console.log(`CEC command successfully sent: ${command}`);
+
+    process.exit();
+  }
+  catch(error) {
+    console.error(error);
+
+    process.exit(1);
+  }
+});
+
+monitor.once('error', error =>
 {
-  console.log(`Command '${command}' execution failed: ${error}`);
+  console.log(`CEC adapter connection failed: ${error}`);
   process.exit(1);
 });
 
@@ -28,3 +35,15 @@ setTimeout(() =>
   console.log(`CEC adapter connection unsuccessful after ${SECONDS} seconds`);
   process.exit(1);
 }, SECONDS * 1000);
+
+monitor.start('cec-client', '-m', '-d', '8', '-b', 'r');
+
+process.on('exit', () =>
+{
+  try {
+    monitor.stop();
+  }
+  catch(error) {
+    console.error(error.message);
+  }
+});
