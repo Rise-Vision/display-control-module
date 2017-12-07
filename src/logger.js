@@ -52,4 +52,11 @@ function sendCommandFailure(errorMessage) {
   return external("failed_command", errorMessage, {});
 }
 
-module.exports = {debug, error, external, sendCommandAttempt, sendCommandFailure};
+function logResult(result) {
+  return sendCommandAttempt(result.commandType, result.command)
+  .then(() =>
+    result.commandErrorMessage && sendCommandFailure(result.commandErrorMessage)
+  )
+}
+
+module.exports = {debug, error, external, logResult, sendCommandAttempt, sendCommandFailure};

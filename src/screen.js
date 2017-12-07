@@ -28,15 +28,8 @@ function displayControlStrategy() {
 
 function executeScreenCommand(action) {
   return displayControlStrategy()
-  .then(provider =>
-    action(provider)
-    .then(result =>
-      logger.sendCommandAttempt(result.commandType, result.command)
-      .then(() =>
-        result.commandErrorMessage && logger.sendCommandFailure(result.commandErrorMessage)
-      )
-    )
-  )
+  .then(action)
+  .then(logger.logResult)
   .catch(error=>
   {
     const detail = error.message || JSON.stringify(error);
