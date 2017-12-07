@@ -11,11 +11,11 @@ monitor.once('ready', () =>
   console.log('successful CEC adapter connection');
 
   try {
-    const value = monitor.sendCommand(0x10, 0x36);
+    const value = monitor.send(command);
     console.log(value);
     console.log(`CEC command successfully sent: ${command}`);
 
-    setTimeout(process.exit, 1000);
+    setTimeout(process.exit, 3000);
   }
   catch(error) {
     console.error(error);
