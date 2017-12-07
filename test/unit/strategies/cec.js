@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 /* eslint-disable max-statements */
 const assert = require("assert");
-const fs = require("fs");
+const child = require("child_process");
 const simple = require("simple-mock");
 
 const cec = require("../../../src/strategies/cec");
@@ -16,7 +16,7 @@ describe("CECControlStrategy - Unit", () =>
   it("should check if cec-utils is available", done =>
   {
     // no error
-    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+    simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
     cec.checkCecUtilsConfigured()
     .then(() => done())
@@ -31,7 +31,7 @@ describe("CECControlStrategy - Unit", () =>
   it("should fail if cec-utils is not available", done =>
   {
     // file not found
-    simple.mock(fs, "stat").callFn((path, callback) => callback(true));
+    simple.mock(child, "exec").callFn((path, callback) => callback(true));
 
     cec.checkCecUtilsConfigured()
     .then(() =>
@@ -51,7 +51,7 @@ describe("CECControlStrategy - Unit", () =>
   it("should turn off the screen", done =>
   {
     // no error
-    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+    simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
@@ -80,7 +80,7 @@ describe("CECControlStrategy - Unit", () =>
   it("should turn on the screen", done =>
   {
     // no error
-    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+    simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
@@ -109,7 +109,7 @@ describe("CECControlStrategy - Unit", () =>
   it("should return command error message if the command execution fails", done =>
   {
     // no error
-    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+    simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {

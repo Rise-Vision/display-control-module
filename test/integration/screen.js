@@ -2,7 +2,7 @@
 /* eslint-disable max-statements, no-magic-numbers */
 const assert = require("assert");
 const common = require("common-display-module");
-const fs = require("fs");
+const child = require("child_process");
 const simple = require("simple-mock");
 
 const config = require("../../src/config");
@@ -33,7 +33,7 @@ describe("Screen - Integration", () =>
   it("should turn on the screen using CEC commands", done =>
   {
     // no error
-    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+    simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
@@ -79,7 +79,7 @@ describe("Screen - Integration", () =>
   it("should turn off the screen using CEC commands", done =>
   {
     // no error
-    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+    simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {
@@ -125,7 +125,7 @@ describe("Screen - Integration", () =>
   it("should log error if cec-utils are not installed", (done) =>
   {
     // cec-utils not found
-    simple.mock(fs, "stat").callFn((path, callback) => callback(true));
+    simple.mock(child, "exec").callFn((path, callback) => callback(true));
 
     simple.mock(cec, "init").callFn(cec.checkCecUtilsConfigured);
 
@@ -169,7 +169,7 @@ describe("Screen - Integration", () =>
   it("should log error if command execution fails", (done) =>
   {
     // cec-utils found
-    simple.mock(fs, "stat").callFn((path, callback) => callback(false));
+    simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
     {

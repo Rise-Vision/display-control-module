@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-const fs = require("fs")
+const child = require("child_process");
 
 const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
 
@@ -8,7 +8,7 @@ let strategy = null;
 function checkCecUtilsConfigured() {
   return new Promise((resolve, reject) =>
   {
-    fs.stat("/usr/bin/cec-client", err =>
+    child.exec("cec-client -h", err =>
     {
       if (err) {
         reject(Error('cec-utils not installed in Operating System'));
