@@ -13,7 +13,7 @@ describe("Screen - Unit", () =>
 
   beforeEach(() =>
   {
-    config.resetDisplayControlConfiguration();
+    config.setDisplayControlStrategy(null);
 
     simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy());
   });
@@ -21,7 +21,7 @@ describe("Screen - Unit", () =>
   afterEach(()=>
   {
     simple.restore();
-    config.resetDisplayControlConfiguration();
+    config.setDisplayControlStrategy(null);
     cec.clear();
   });
 

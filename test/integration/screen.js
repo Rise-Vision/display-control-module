@@ -19,14 +19,14 @@ describe("Screen - Integration", () =>
     simple.mock(common, "getDisplayId").resolveWith("ABC");
     simple.mock(common, "broadcastMessage").returnWith();
 
-    config.resetDisplayControlConfiguration();
+    config.setDisplayControlStrategy(null);
     config.setDisplayControlStrategy("CEC");
   });
 
   afterEach(()=>
   {
     simple.restore();
-    config.resetDisplayControlConfiguration();
+    config.setDisplayControlStrategy(null);
     cec.clear();
   });
 

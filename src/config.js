@@ -12,14 +12,6 @@ function setDisplayControlStrategy(strategy) {
   displayControlStrategy = strategy;
 }
 
-/**
- * For testing purposes, deletes all configuration that may come from a
- * configuration file.
- */
-function resetDisplayControlConfiguration() {
-  setDisplayControlStrategy(null);
-}
-
 module.exports = {
   bqProjectName: "client-side-events",
   bqDataset: "Module_Events",
@@ -31,6 +23,5 @@ module.exports = {
     return common.getModuleVersion(moduleName)
   },
   getDisplayControlStrategy,
-  setDisplayControlStrategy,
-  resetDisplayControlConfiguration
+  setDisplayControlStrategy
 };
