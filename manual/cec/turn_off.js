@@ -4,7 +4,7 @@ const { NodeCec, CEC } = require("node-cec");
 const SECONDS = 10;
 
 const monitor = new NodeCec('node-cec-monitor');
-const command = "standby 0";
+const command = "tx 10:36";
 
 monitor.once('ready', () =>
 {
@@ -36,7 +36,7 @@ setTimeout(() =>
   process.exit(1);
 }, SECONDS * 1000);
 
-monitor.start('cec-client', '-m', '-d', '8', '-b', 'r');
+monitor.start('cec-client', '-m', '-d', '8');
 
 process.on('exit', () =>
 {
