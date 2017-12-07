@@ -9,6 +9,7 @@ const config = require("../../src/config");
 const screen = require("../../src/screen");
 
 const cec = require("../../src/strategies/cec");
+const CECControlStrategy = require("../../src/strategies/cec/strategy");
 
 describe("Screen - Integration", () =>
 {
@@ -35,7 +36,7 @@ describe("Screen - Integration", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
+    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
     {
       WriteRawMessage: () => Promise.resolve()
     }));
@@ -81,7 +82,7 @@ describe("Screen - Integration", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
+    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
     {
       WriteRawMessage: () => Promise.resolve()
     }));
@@ -171,7 +172,7 @@ describe("Screen - Integration", () =>
     // cec-utils found
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy(
+    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
     {
       WriteRawMessage: () => Promise.reject(Error('display not available'))
     }));

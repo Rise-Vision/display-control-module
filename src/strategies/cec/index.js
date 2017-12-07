@@ -2,6 +2,7 @@
 const child = require("child_process");
 
 const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
+const CECControlStrategy = require("./strategy");
 
 let strategy = null;
 
@@ -52,43 +53,7 @@ function clear() {
   strategy = null;
 }
 
-class CECControlStrategy {
-
-  constructor(monitor) {
-    this.monitor = monitor;
-  }
-
-  executeCommand(spec) {
-    return this.monitor.WriteRawMessage(spec.command)
-    .then(() => spec)
-    .catch(error => Object.assign(spec, {
-      commandErrorMessage:
-        error.message || `CEC command invocation failed: '${spec.command}'`
-    }))
-  }
-
-  turnOff() {
-    // TV/monitor address is always fixed to 0 in CEC.
-    // Low level call equivalent to 'standby 0' is 'tx 10:36'
-    // see http://www.cec-o-matic.com/ for details on this code.
-    return this.executeCommand({
-      commandType: "turn-screen-off", command: `standby 0`
-    });
-  }
-
-  turnOn() {
-    // TV/monitor address is always fixed to 0 in CEC.
-    // Low level call equivalent to 'on 0' is 'tx 10:04'
-    // see http://www.cec-o-matic.com/ for details on this code.
-    return this.executeCommand({
-      commandType: "turn-screen-on", command: `on 0`
-    });
-  }
-
-}
-
 module.exports = {
-  CECControlStrategy,
   checkCecUtilsConfigured,
   init,
   clear

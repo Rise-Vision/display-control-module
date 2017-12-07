@@ -7,6 +7,7 @@ const config = require("../../src/config");
 const screen = require("../../src/screen");
 
 const cec = require("../../src/strategies/cec");
+const CECControlStrategy = require("../../src/strategies/cec/strategy");
 
 describe("Screen - Unit", () =>
 {
@@ -15,7 +16,7 @@ describe("Screen - Unit", () =>
   {
     config.setDisplayControlStrategy(null);
 
-    simple.mock(cec, "init").resolveWith(new cec.CECControlStrategy());
+    simple.mock(cec, "init").resolveWith(new CECControlStrategy());
   });
 
   afterEach(()=>
@@ -32,7 +33,7 @@ describe("Screen - Unit", () =>
     screen.displayControlStrategy()
     .then(strategy =>
     {
-      assert(strategy instanceof cec.CECControlStrategy);
+      assert(strategy instanceof CECControlStrategy);
       assert(strategy.turnOff);
       assert(strategy.turnOn);
 
