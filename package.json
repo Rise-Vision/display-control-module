@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "eslint src && ./pre-build.sh && webpack --env.MODULE_VERSION=$(cat version) --config webpack.config.js && ./post-build.sh",
-    "test": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/**",
+    "test": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/unit/** test/integration/**",
     "test-unit": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/unit/**",
     "test-integration": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/integration/**"
   },
@@ -39,8 +39,9 @@
     "zip-webpack-plugin": "^2.0.0"
   },
   "dependencies": {
+    "@senzil/cec-monitor": "^2.0.0-release.79",
     "common-display-module": "git://github.com/Rise-Vision/common-display-module.git#v1.5.5",
-    "rise-common-electron": "git://github.com/Rise-Vision/rise-common-electron.git#v2.2.3",
-    "node-ipc": "^9.1.1"
+    "node-ipc": "^9.1.1",
+    "rise-common-electron": "git://github.com/Rise-Vision/rise-common-electron.git#v2.2.3"
   }
 }

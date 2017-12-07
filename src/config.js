@@ -1,6 +1,16 @@
 const common = require("common-display-module");
 
-const moduleName = "display-control"
+const moduleName = "display-control";
+
+// This will be set once the configuration file is received, if it is ever received.
+let displayControlStrategy = null;
+
+function getDisplayControlStrategy() {
+  return displayControlStrategy;
+}
+function setDisplayControlStrategy(strategy) {
+  displayControlStrategy = strategy;
+}
 
 module.exports = {
   bqProjectName: "client-side-events",
@@ -11,5 +21,7 @@ module.exports = {
   moduleName,
   getModuleVersion() {
     return common.getModuleVersion(moduleName)
-  }
-}
+  },
+  getDisplayControlStrategy,
+  setDisplayControlStrategy
+};
