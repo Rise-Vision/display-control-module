@@ -1,31 +1,32 @@
 // turn off the monitor using CEC commands.
 
-const { NodeCec, CEC } = require("node-cec");
+const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
 const SECONDS = 10;
 
-const monitor = new NodeCec('node-cec-monitor');
-//const command = "tx 10 36";
-const command = "standby 0";
-
-monitor.once('ready', () =>
-{
-  console.log('successful CEC adapter connection');
-
-  try {
-    const value = monitor.send(command);
-    console.log(value);
-    console.log(`CEC command successfully sent: ${command}`);
-
-    setTimeout(process.exit, 3000);
-  }
-  catch(error) {
-    console.error(error);
-
-    process.exit(1);
-  }
+const monitor = new CECMonitor('RV', {
+  debug: true
 });
 
-monitor.once('error', error =>
+monitor.once(CECMonitor.EVENTS._READY, () =>
+{
+  console.log('successful CEC adapter connection');
+  const command = 'standby 0';
+
+  monitor.WriteRawMessage(command)
+  .then(() =>
+  {
+    console.log(`Successful command execution: ${command}`);
+
+    setTimeout(process.exit, 3000);
+  })
+  .catch(error =>
+  {
+    console.log(`Command '${command}' execution failed: ${error}`);
+    process.exit(1);
+  })
+});
+
+monitor.once(CECMonitor.EVENTS._ERROR, error =>
 {
   console.log(`CEC adapter connection failed: ${error}`);
   process.exit(1);
@@ -37,15 +38,3 @@ setTimeout(() =>
   console.log(`CEC adapter connection unsuccessful after ${SECONDS} seconds`);
   process.exit(1);
 }, SECONDS * 1000);
-
-monitor.start('cec-client', '-m', '-d', '8');
-
-process.on('exit', () =>
-{
-  try {
-    monitor.stop();
-  }
-  catch(error) {
-    console.error(error.message);
-  }
-});
