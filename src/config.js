@@ -14,11 +14,19 @@ function getDisplayControlStrategy() {
   return displayControlSettings && displayControlSettings.interface ?
     displayControlSettings.interface.toUpperCase() : null;
 }
+
 function getDisplayControlSettings() {
   return displayControlSettings;
 }
+
 function setDisplayControlSettings(settings) {
   displayControlSettings = settings;
+}
+
+function isDisplayControlEnabled() {
+  const strategy = getDisplayControlStrategy();
+
+  return strategy === "CEC" || strategy === "RS232";
 }
 
 module.exports = {
@@ -33,5 +41,6 @@ module.exports = {
   },
   getDisplayControlStrategy,
   getDisplayControlSettings,
-  setDisplayControlSettings
+  setDisplayControlSettings,
+  isDisplayControlEnabled
 };
