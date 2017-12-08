@@ -3,13 +3,22 @@ const common = require("common-display-module");
 const moduleName = "display-control";
 
 // This will be set once the configuration file is received, if it is ever received.
-let displayControlStrategy = null;
+// It's an object containing the following properties: interface, serial-port,
+// serial-baud-rate, serial-data-bits, serial-parity, serial-stop-bits,
+// serial-flow-control, serial-screen-on-cmd, serial-screen-off-cmd
+// See the display control design documentation for more information about
+// these fields.
+let displayControlSettings = null;
 
 function getDisplayControlStrategy() {
-  return displayControlStrategy;
+  return displayControlSettings && displayControlSettings.interface ?
+    displayControlSettings.interface.toUpperCase() : null;
 }
-function setDisplayControlStrategy(strategy) {
-  displayControlStrategy = strategy;
+function getDisplayControlSettings() {
+  return displayControlSettings;
+}
+function setDisplayControlSettings(settings) {
+  displayControlSettings = settings;
 }
 
 module.exports = {
@@ -23,5 +32,6 @@ module.exports = {
     return common.getModuleVersion(moduleName)
   },
   getDisplayControlStrategy,
-  setDisplayControlStrategy
+  getDisplayControlSettings,
+  setDisplayControlSettings
 };

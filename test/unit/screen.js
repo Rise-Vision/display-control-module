@@ -14,7 +14,7 @@ describe("Screen - Unit", () =>
 
   beforeEach(() =>
   {
-    config.setDisplayControlStrategy(null);
+    config.setDisplayControlSettings(null);
 
     simple.mock(cec, "init").resolveWith(new CECControlStrategy());
   });
@@ -22,13 +22,13 @@ describe("Screen - Unit", () =>
   afterEach(()=>
   {
     simple.restore();
-    config.setDisplayControlStrategy(null);
+    config.setDisplayControlSettings(null);
     cec.clear();
   });
 
   it("should create CECControlStrategy instance if CEC strategy is configured", done =>
   {
-    config.setDisplayControlStrategy("CEC");
+    config.setDisplayControlSettings({interface: "CEC"});
 
     screen.displayControlStrategy()
     .then(strategy =>
@@ -66,7 +66,7 @@ describe("Screen - Unit", () =>
 
   it("should fail if an invalid strategy is configured", done =>
   {
-    config.setDisplayControlStrategy("other");
+    config.setDisplayControlSettings({interface: "OTHER"});
 
     screen.displayControlStrategy()
     .then(strategy =>
@@ -77,7 +77,7 @@ describe("Screen - Unit", () =>
     })
     .catch(error =>
     {
-      assert.equal(error.message, "Illegal display control strategy: 'other'");
+      assert.equal(error.message, "Illegal display control strategy: 'OTHER'");
 
       done()
     });

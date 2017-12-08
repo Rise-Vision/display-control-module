@@ -7,13 +7,13 @@ const config = require("../../src/config");
 describe("Watch - Unit", ()=>
 {
 
-  afterEach(()=> config.setDisplayControlStrategy(null));
+  afterEach(()=> config.setDisplayControlSettings(null));
 
   it("should set the display control strategy", () =>
   {
     assert(!config.getDisplayControlStrategy());
 
-    config.setDisplayControlStrategy("CEC");
+    config.setDisplayControlSettings({interface: "CEC"});
 
     assert.equal(config.getDisplayControlStrategy(), "CEC");
   });
