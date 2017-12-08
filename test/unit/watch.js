@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-/* eslint-disable max-statements */
+/* eslint-disable max-statements, no-magic-numbers */
 const assert = require("assert");
 const common = require("common-display-module");
 const simple = require("simple-mock");
@@ -18,7 +18,7 @@ describe("Watch - Unit", ()=>
   });
 
   afterEach(()=> {
-    watch.clearMessageAlreadySentFlag();
+    watch.clearMessagesAlreadySentFlag();
 
     simple.restore()
   });
@@ -68,19 +68,35 @@ describe("Watch - Unit", ()=>
     })
     .then(() =>
     {
-      // so WATCH message should have been sent
+      // so WATCH message should have been sent for both screen-control.txt and content.json files
       assert(common.broadcastMessage.called);
+      assert.equal(2, common.broadcastMessage.callCount);
 
-      // this is the actual event object sent to the local storage module
-      const event = common.broadcastMessage.lastCall.args[0];
+      {
+        // this is the request for screen-control.txt
+        const event = common.broadcastMessage.calls[0].args[0];
 
-      assert(event);
-      // check we sent it
-      assert.equal(event.from, "display-control");
-      // check it's a WATCH event
-      assert.equal(event.topic, "watch");
-      // check the URL of the file.
-      assert.equal(event.filePath, "risedisplayconfigurations-DIS123/screen-control.txt");
+        assert(event);
+        // check we sent it
+        assert.equal(event.from, "display-control");
+        // check it's a WATCH event
+        assert.equal(event.topic, "watch");
+        // check the URL of the file.
+        assert.equal(event.filePath, "risevision-display-notifications/DIS123/screen-control.txt");
+      }
+
+      {
+        // this is the request for content.json
+        const event = common.broadcastMessage.calls[1].args[0];
+
+        assert(event);
+        // check we sent it
+        assert.equal(event.from, "display-control");
+        // check it's a WATCH event
+        assert.equal(event.topic, "watch");
+        // check the URL of the file.
+        assert.equal(event.filePath, "risevision-display-notifications/DIS123/content.json");
+      }
 
       done();
     })

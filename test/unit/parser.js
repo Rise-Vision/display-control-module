@@ -23,7 +23,7 @@ serial-screen-on-cmd=
 serial-screen-off-cmd=`;
 
     const settings = parser.parseContent(content);
-console.log(JSON.stringify(settings));
+
     assert(settings);
     assert.equal(settings.interface, "cec");
     assert.equal(settings['serial-port'], "SERIAL1");

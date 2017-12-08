@@ -18,7 +18,7 @@ describe("Watch - Integration", ()=>
   });
 
   afterEach(()=> {
-    watch.clearMessageAlreadySentFlag();
+    watch.clearMessagesAlreadySentFlag();
 
     simple.restore()
   });
@@ -31,7 +31,7 @@ describe("Watch - Integration", ()=>
         handler({topic: "client-list", clients: []})
         .then(() =>
         {
-          // no clients, CLIENT-LIST-REQUEST should have been sent using broadcastMessage(), but no WATCh
+          // no clients, CLIENT-LIST-REQUEST should have been sent using broadcastMessage(), but no WATCH
           assert.equal(common.broadcastMessage.callCount, 1);
 
           // this is the actual event object sent to the local storage module
@@ -62,19 +62,34 @@ describe("Watch - Integration", ()=>
         })
         .then(() =>
         {
-          // so WATCH message should have been sent
-          assert.equal(common.broadcastMessage.callCount, 2);
+          // so both WATCH messages should have been sent
+          assert.equal(common.broadcastMessage.callCount, 3);
 
-          // this is the actual event object sent to the local storage module
-          const event = common.broadcastMessage.lastCall.args[0];
+          {
+            // this is the request for screen-control.txt
+            const event = common.broadcastMessage.calls[1].args[0];
 
-          assert(event);
-          // check we sent it
-          assert.equal(event.from, "display-control");
-          // check it's a WATCH event
-          assert.equal(event.topic, "watch");
-          // check the URL of the file.
-          assert.equal(event.filePath, "risedisplayconfigurations-DIS123/screen-control.txt");
+            assert(event);
+            // check we sent it
+            assert.equal(event.from, "display-control");
+            // check it's a WATCH event
+            assert.equal(event.topic, "watch");
+            // check the URL of the file.
+            assert.equal(event.filePath, "risevision-display-notifications/DIS123/screen-control.txt");
+          }
+
+          {
+            // this is the request for content.json
+            const event = common.broadcastMessage.calls[2].args[0];
+
+            assert(event);
+            // check we sent it
+            assert.equal(event.from, "display-control");
+            // check it's a WATCH event
+            assert.equal(event.topic, "watch");
+            // check the URL of the file.
+            assert.equal(event.filePath, "risevision-display-notifications/DIS123/content.json");
+          }
 
           done();
         })
