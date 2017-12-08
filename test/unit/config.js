@@ -23,4 +23,22 @@ describe("Watch - Unit", ()=>
     assert.deepEqual(config.getDisplayControlSettings(), {interface: "CEC"});
   });
 
+  it("should set display control settings", () =>
+  {
+    config.setDisplayControlSettings({
+      interface: "RS232",
+      "serial-port": "serial1",
+      "serial-baud-rate": "6600",
+      "serial-data-bits": "8"
+    });
+
+    assert.equal(config.getDisplayControlStrategy(), "RS232");
+    assert.deepEqual(config.getDisplayControlSettings(), {
+      interface: "RS232",
+      "serial-port": "serial1",
+      "serial-baud-rate": "6600",
+      "serial-data-bits": "8"
+    });
+  });
+
 });
