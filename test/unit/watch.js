@@ -23,12 +23,12 @@ describe("Watch - Unit", ()=>
     simple.restore()
   });
 
-  it("should not send WATCH message if no module is available", done =>
+  it("should not send WATCH messages if no module is available", done =>
   {
     watch.checkIfLocalStorageIsAvailable({clients: []})
     .then(() =>
     {
-      // no clients, so WATCH message shouldn't have been sent
+      // no clients, so WATCH messages shouldn't have been sent
       assert(!common.broadcastMessage.called);
 
       done();
@@ -41,14 +41,14 @@ describe("Watch - Unit", ()=>
     });
   });
 
-  it("should not send WATCH message if local-storage module is not available", done =>
+  it("should not send WATCH messages if local-storage module is not available", done =>
   {
     watch.checkIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics"]
     })
     .then(() =>
     {
-      // so WATCH message shouldn't have been sent
+      // so WATCH messages shouldn't have been sent
       assert(!common.broadcastMessage.called);
 
       done();
@@ -61,14 +61,14 @@ describe("Watch - Unit", ()=>
     });
   });
 
-  it("should send WATCH message if local-storage module is available", done =>
+  it("should send WATCH messages if local-storage module is available", done =>
   {
     watch.checkIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics", "local-storage"]
     })
     .then(() =>
     {
-      // so WATCH message should have been sent for both screen-control.txt and content.json files
+      // so WATCH messages should have been sent for both screen-control.txt and content.json files
       assert(common.broadcastMessage.called);
       assert.equal(2, common.broadcastMessage.callCount);
 
