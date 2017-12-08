@@ -4,7 +4,7 @@ const assert = require("assert");
 
 const config = require("../../src/config");
 
-describe("Watch - Unit", ()=>
+describe("Config - Unit", ()=>
 {
 
   afterEach(()=> config.setDisplayControlSettings(null));
