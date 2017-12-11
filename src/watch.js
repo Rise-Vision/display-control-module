@@ -27,8 +27,8 @@ function checkIfLocalStorageIsAvailable(message) {
 function sendWatchMessages() {
   return common.getDisplayId()
   .then(displayId =>
-  {
-    function sendWatchMessageForFile(name) {
+    ['screen-control.txt', 'content.json'].forEach(name =>
+    {
       const filePath = `risevision-display-notifications/${displayId}/${name}`;
 
       common.broadcastMessage({
@@ -36,11 +36,8 @@ function sendWatchMessages() {
         topic: "watch",
         filePath
       });
-    }
-
-    sendWatchMessageForFile('screen-control.txt');
-    sendWatchMessageForFile('content.json');
-  })
+    })
+  );
 }
 
 module.exports = {
