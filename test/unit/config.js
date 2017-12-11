@@ -47,4 +47,25 @@ describe("Config - Unit", ()=> {
     assert.equal(config.setTimeline({}), false);
     assert.equal(config.setTimeline(), false);
   });
+
+  it("should indicate playability now since timedefined is false", ()=>{
+    config.setTimeline({content: {schedule: {"items": [
+      {
+        "name": "Caridad Main",
+        "type": "presentation",
+        "objectReference": "2a195ef9-7969-4dfd-94d3-dc4b19d199f6",
+        "duration": 10,
+        "distributeToAll": true,
+        "timeDefined": false,
+        "recurrenceType": "Daily",
+        "recurrenceFrequency": 1,
+        "recurrenceAbsolute": true,
+        "recurrenceDayOfWeek": 0,
+        "recurrenceDayOfMonth": 1,
+        "recurrenceWeekOfMonth": 0,
+        "recurrenceMonthOfYear": 0
+      }
+    ]}}});
+    assert(config.checkTimelineNow());
+  });
 });

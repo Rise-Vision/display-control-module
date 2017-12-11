@@ -1,4 +1,5 @@
 const common = require("common-display-module");
+const timelineParser = require("./timeline-parser.js");
 
 const moduleName = "display-control";
 
@@ -43,6 +44,12 @@ function getTimeline() {
   return timeline;
 }
 
+function checkTimelineNow() {
+  if (!timeline) {return false;}
+
+  return timeline.items.some(timelineParser.canPlay);
+}
+
 module.exports = {
   bqProjectName: "client-side-events",
   bqDataset: "Module_Events",
@@ -58,5 +65,6 @@ module.exports = {
   setDisplayControlSettings,
   isDisplayControlEnabled,
   setTimeline,
-  getTimeline
+  getTimeline,
+  checkTimelineNow
 };
