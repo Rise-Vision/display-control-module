@@ -2,6 +2,7 @@ const commonConfig = require("common-display-module");
 const config = require("./config");
 const watch = require("./watch");
 const interval = require("./interval-schedule-check");
+const displayConfigBucket = "rise-display-notifications";
 
 interval.startInterval();
 
@@ -12,10 +13,13 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
       case "CLIENT-LIST":
         return watch.checkIfLocalStorageIsAvailable(message);
       case "FILE-UPDATE":
-        if (message.filePath && message.filePath.endsWith("/screen-control.txt")) {
+        if (!message.filePath) {return;}
+        if (!message.filePath.startsWith(displayConfigBucket)) {return;}
+
+        if (message.filePath.endsWith("/screen-control.txt")) {
           return watch.receiveConfigurationFile(message);
         }
-        if (message.filePath && message.filePath.endsWith("/content.json")) {
+        if (message.filePath.endsWith("/content.json")) {
           return watch.receiveContentFile(message);
         }
     }
