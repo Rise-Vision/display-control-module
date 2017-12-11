@@ -13,7 +13,10 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
         return watch.checkIfLocalStorageIsAvailable(message);
       case "FILE-UPDATE":
         if (message.filePath && message.filePath.endsWith("/screen-control.txt")) {
-          watch.receiveConfigurationFile(message);
+          return watch.receiveConfigurationFile(message);
+        }
+        if (message.filePath && message.filePath.endsWith("/content.json")) {
+          return watch.receiveContentFile(message);
         }
     }
   });
