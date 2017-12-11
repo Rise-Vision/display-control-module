@@ -1,6 +1,4 @@
 /* eslint-disable */
-const EntryPoint = require("../EntryPoint");
-
 const factory = {};
 
 const RECURRENCE_TYPE = {
@@ -93,10 +91,6 @@ const _diffWeeks = (fromDate, toDate) => {
 };
 
 factory.canPlay = (item, d) => {
-  if (!EntryPoint.isDisplay()) {
-    return true;
-  }
-
   if (!d) {
     d = new Date();
   }
