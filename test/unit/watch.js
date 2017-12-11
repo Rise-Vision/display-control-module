@@ -8,11 +8,9 @@ const platform = require("rise-common-electron").platform;
 const config = require("../../src/config");
 const watch = require("../../src/watch");
 
-describe("Watch - Unit", ()=>
-{
+describe("Watch - Unit", ()=> {
 
-  beforeEach(()=>
-  {
+  beforeEach(()=> {
     const settings = {displayid: "DIS123"};
 
     simple.mock(common, "broadcastMessage").returnWith();
@@ -25,51 +23,43 @@ describe("Watch - Unit", ()=>
     simple.restore()
   });
 
-  it("should not send WATCH messages if no module is available", done =>
-  {
+  it("should not send WATCH messages if no module is available", done => {
     watch.checkIfLocalStorageIsAvailable({clients: []})
-    .then(() =>
-    {
+    .then(() => {
       // no clients, so WATCH messages shouldn't have been sent
       assert(!common.broadcastMessage.called);
 
       done();
     })
-    .catch(error =>
-    {
+    .catch(error => {
       assert.fail(error)
 
       done()
     });
   });
 
-  it("should not send WATCH messages if local-storage module is not available", done =>
-  {
+  it("should not send WATCH messages if local-storage module is not available", done => {
     watch.checkIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics"]
     })
-    .then(() =>
-    {
+    .then(() => {
       // so WATCH messages shouldn't have been sent
       assert(!common.broadcastMessage.called);
 
       done();
     })
-    .catch(error =>
-    {
+    .catch(error => {
       assert.fail(error)
 
       done()
     });
   });
 
-  it("should send WATCH messages if local-storage module is available", done =>
-  {
+  it("should send WATCH messages if local-storage module is available", done => {
     watch.checkIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics", "local-storage"]
     })
-    .then(() =>
-    {
+    .then(() => {
       // so WATCH messages should have been sent for both screen-control.txt and content.json files
       assert(common.broadcastMessage.called);
       assert.equal(2, common.broadcastMessage.callCount);
@@ -102,16 +92,14 @@ describe("Watch - Unit", ()=>
 
       done();
     })
-    .catch(error =>
-    {
+    .catch(error => {
       assert.fail(error)
 
       done()
     });
   });
 
-  it("should receive control config file", done =>
-  {
+  it("should receive control config file", done => {
     simple.mock(platform, "readTextFile").resolveWith(`
 interface=cec
 serial-port=
@@ -128,8 +116,7 @@ serial-screen-off-cmd=`);
       status: "CURRENT",
       ospath: "xxxxxxx/screen-control.txt"
     })
-    .then(() =>
-    {
+    .then(() => {
       assert(config.isDisplayControlEnabled());
       const settings = config.getDisplayControlSettings();
 
@@ -141,29 +128,25 @@ serial-screen-off-cmd=`);
 
       done();
     })
-    .catch(error =>
-    {
+    .catch(error => {
       assert.fail(error)
 
       done()
     });
   });
 
-  it("should clear settings if local file is not current", done =>
-  {
+  it("should clear settings if local file is not current", done => {
     watch.receiveConfigurationFile({
       topic: "file-update",
       status: "UNKNOWN",
       ospath: "xxxxxxx/screen-control.txt"
     })
-    .then(() =>
-    {
+    .then(() => {
       assert(!config.isDisplayControlEnabled());
 
       done();
     })
-    .catch(error =>
-    {
+    .catch(error => {
       assert.fail(error)
 
       done()
