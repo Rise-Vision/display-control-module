@@ -138,7 +138,7 @@ serial-screen-off-cmd=`);
   it("should clear settings if local file is not current", done => {
     watch.receiveConfigurationFile({
       topic: "file-update",
-      status: "UNKNOWN",
+      status: "DELETED",
       ospath: "xxxxxxx/screen-control.txt"
     })
     .then(() => {
