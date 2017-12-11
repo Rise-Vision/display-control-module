@@ -44,10 +44,8 @@ function sendWatchMessages() {
   );
 }
 
-function receiveConfigurationFile(message) {
-  if (message.status === "CURRENT") {
-    const configurationPath = message.ospath;
-
+function loadCurrentConfiguration(configurationPath) {
+  if (configurationPath) {
     logger.debug(`reading ${configurationPath}`);
 
     return platform.readTextFile(configurationPath)
@@ -63,12 +61,22 @@ function receiveConfigurationFile(message) {
       logger.error(error.message, `Could not parse configuration file ${configurationPath}`)
     );
   }
-  else if (message.status === 'UNKNOWN') { // if we don't already have a file set empty configuration.
-    config.setDisplayControlSettings(null);
-  }
 
   // allows linking in tests.
   return Promise.resolve();
+}
+
+function receiveConfigurationFile(message) {
+  switch (message.status) {
+    case "DELETED": case "NOEXIST":
+      // if we don't have a file set empty configuration.
+      config.setDisplayControlSettings(null);
+
+      // allows linking in tests.
+      return Promise.resolve();
+
+    default: return loadCurrentConfiguration(message.ospath);
+  }
 }
 
 module.exports = {
