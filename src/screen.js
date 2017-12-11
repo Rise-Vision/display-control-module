@@ -34,6 +34,7 @@ function executeScreenCommand(action, options = {}) {
   {
     const detail = error.message || JSON.stringify(error);
 
+    if (options.suppressLog) {return logger.debug(error);}
     return logger.error(detail, "Error while trying to execute screen command");
   });
 }
