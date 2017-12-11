@@ -36,4 +36,15 @@ describe("Config - Unit", ()=> {
       "serial-data-bits": "8"
     });
   });
+
+  it("should set timeline", ()=>{
+    config.setTimeline({content: {schedule: 1}});
+    assert.equal(config.getTimeline(), 1);
+  });
+
+  it("should not set invalid timeline", ()=>{
+    assert.equal(config.setTimeline({content: {}}), false);
+    assert.equal(config.setTimeline({}), false);
+    assert.equal(config.setTimeline(), false);
+  });
 });
