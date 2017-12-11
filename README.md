@@ -69,7 +69,7 @@ Instead of running the main src/index.js script, run files from manual
 subdirectory:
 
 ```bash
-node manual/send_command.js
+node test/manual/send_command.js
 ```
 
 This needs local-messaging-module and logging-module to be also running.
