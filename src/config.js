@@ -45,7 +45,7 @@ function getTimeline() {
 }
 
 function checkTimelineNow() {
-  if (!timeline) {return false;}
+  if (!timeline) {return true;}
 
   return timeline.items.some(timelineParser.canPlay);
 }
