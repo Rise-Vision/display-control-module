@@ -153,4 +153,17 @@ serial-screen-off-cmd=`);
     });
   });
 
+  it("should receive content file", ()=>{
+    simple.mock(platform, "readTextFile").resolveWith('{"content": {"schedule": 1}}');
+    simple.mock(config, "setTimeline").returnWith();
+
+    return watch.receiveContentFile({
+      topic: "file-update",
+      status: "CURRENT",
+      ospath: "xxxxxxx"
+    })
+    .then(() => {
+      assert.deepEqual(config.setTimeline.lastCall.args[0], {content: {schedule: 1}});
+    });
+  });
 });

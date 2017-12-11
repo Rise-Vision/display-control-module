@@ -71,8 +71,22 @@ function receiveConfigurationFile(message) {
   return Promise.resolve();
 }
 
+function receiveContentFile(message) {
+  if (["DELETED", "NOEXIST"].includes(message.status)) {return;}
+
+  return platform.readTextFile(message.ospath)
+  .then(fileData=>{
+    try {
+      config.setTimeline(JSON.parse(fileData));
+    } catch (error) {
+      logger.error(error.message, `Could not parse content file ${message.ospath}`)
+    }
+  });
+}
+
 module.exports = {
   checkIfLocalStorageIsAvailable,
   clearMessagesAlreadySentFlag,
-  receiveConfigurationFile
+  receiveConfigurationFile,
+  receiveContentFile
 };
