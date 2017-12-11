@@ -50,7 +50,7 @@ function receiveConfigurationFile(message) {
 
     logger.debug(`reading ${configurationPath}`);
 
-    return platform.readTextFile(message.configurationPath)
+    return platform.readTextFile(configurationPath)
     .then(data =>
     {
       const settings = parser.parseContent(data);
