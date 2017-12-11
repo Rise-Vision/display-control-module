@@ -4,27 +4,23 @@ const assert = require("assert");
 
 const config = require("../../src/config");
 
-describe("Config - Unit", ()=>
-{
+describe("Config - Unit", ()=> {
 
   afterEach(()=> config.setDisplayControlSettings(null));
 
-  it("should not be enabled if no display control settings set", () =>
-  {
+  it("should not be enabled if no display control settings set", () => {
     assert(!config.getDisplayControlStrategy());
     assert(!config.isDisplayControlEnabled());
   });
 
-  it("should set the display control strategy", () =>
-  {
+  it("should set the display control strategy", () => {
     config.setDisplayControlSettings({interface: "CEC"});
 
     assert.equal(config.getDisplayControlStrategy(), "CEC");
     assert.deepEqual(config.getDisplayControlSettings(), {interface: "CEC"});
   });
 
-  it("should set display control settings", () =>
-  {
+  it("should set display control settings", () => {
     config.setDisplayControlSettings({
       interface: "RS232",
       "serial-port": "serial1",
@@ -40,5 +36,4 @@ describe("Config - Unit", ()=>
       "serial-data-bits": "8"
     });
   });
-
 });
