@@ -3,7 +3,9 @@
 const assert = require("assert");
 const common = require("common-display-module");
 const simple = require("simple-mock");
+const platform = require("rise-common-electron").platform;
 
+const config = require("../../src/config");
 const watch = require("../../src/watch");
 
 describe("Watch - Unit", ()=>
@@ -97,6 +99,66 @@ describe("Watch - Unit", ()=>
         // check the URL of the file.
         assert.equal(event.filePath, "risevision-display-notifications/DIS123/content.json");
       }
+
+      done();
+    })
+    .catch(error =>
+    {
+      assert.fail(error)
+
+      done()
+    });
+  });
+
+  it("should receive control config file", done =>
+  {
+    simple.mock(platform, "readTextFile").resolveWith(`
+interface=cec
+serial-port=
+serial-baud-rate=
+serial-data-bits=
+serial-parity=
+serial-stop-bits=
+serial-flow-control=
+serial-screen-on-cmd=
+serial-screen-off-cmd=`);
+
+    watch.receiveConfigurationFile({
+      topic: "file-update",
+      status: "CURRENT",
+      ospath: "xxxxxxx/screen-control.txt"
+    })
+    .then(() =>
+    {
+      assert(config.isDisplayControlEnabled());
+      const settings = config.getDisplayControlSettings();
+
+      assert(settings);
+      assert.equal(settings.interface, "cec");
+      assert.equal(settings['serial-port'], "");
+      assert.equal(settings['serial-baud-rate'], "");
+      assert.equal(settings['serial-screen-off-cmd'], "");
+
+      done();
+    })
+    .catch(error =>
+    {
+      assert.fail(error)
+
+      done()
+    });
+  });
+
+  it("should clear settings if local file is not current", done =>
+  {
+    watch.receiveConfigurationFile({
+      topic: "file-update",
+      status: "UNKNOWN",
+      ospath: "xxxxxxx/screen-control.txt"
+    })
+    .then(() =>
+    {
+      assert(!config.isDisplayControlEnabled());
 
       done();
     })

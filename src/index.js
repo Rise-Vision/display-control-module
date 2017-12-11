@@ -8,6 +8,12 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
     switch (message.topic) {
       case "client-list":
         return watch.checkIfLocalStorageIsAvailable(message);
+      case "file-update":
+        if (message.ospath) {
+          if (message.ospath.endsWith("screen-control.txt")) {
+            watch.receiveConfigurationFile(message);
+          }
+        }
     }
   });
 
