@@ -26,10 +26,10 @@ function displayControlStrategy() {
   .then(strategy => strategy.init());
 }
 
-function executeScreenCommand(action) {
-  return displayControlStrategy()
+function executeScreenCommand(action, options = {}) {
+  return module.exports.displayControlStrategy()
   .then(action)
-  .then(logger.logResult)
+  .then((result)=>!options.suppressLog && logger.logResult(result))
   .catch(error=>
   {
     const detail = error.message || JSON.stringify(error);
@@ -38,12 +38,12 @@ function executeScreenCommand(action) {
   });
 }
 
-function turnOn() {
-  return executeScreenCommand(provider => provider.turnOn());
+function turnOn(options = {}) {
+  return executeScreenCommand(provider => provider.turnOn(), options);
 }
 
-function turnOff() {
-  return executeScreenCommand(provider => provider.turnOff());
+function turnOff(options) {
+  return executeScreenCommand(provider => provider.turnOff(), options);
 }
 
 module.exports = {displayControlStrategy, turnOff, turnOn}

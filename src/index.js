@@ -1,6 +1,9 @@
 const commonConfig = require("common-display-module");
 const config = require("./config");
 const watch = require("./watch");
+const interval = require("./interval-schedule-check");
+
+interval.startInterval();
 
 commonConfig.receiveMessages(config.moduleName).then(receiver =>
 {
