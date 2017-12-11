@@ -5,11 +5,11 @@ const watch = require("./watch");
 commonConfig.receiveMessages(config.moduleName).then(receiver =>
 {
   receiver.on("message", message => {
-    switch (message.topic) {
-      case "client-list":
+    switch (message.topic.toUpperCase()) {
+      case "CLIENT-LIST":
         return watch.checkIfLocalStorageIsAvailable(message);
-      case "file-update":
-        if (message.ospath && message.ospath.endsWith("screen-control.txt")) {
+      case "FILE-UPDATE":
+        if (message.filePath && message.filePath.endsWith("/screen-control.txt")) {
           watch.receiveConfigurationFile(message);
         }
     }
