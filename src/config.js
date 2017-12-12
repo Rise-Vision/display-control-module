@@ -29,7 +29,7 @@ function toArrayOfBytesEncodedAsString(command) {
   const valid = (/^([0-9a-f][0-9a-f])+$/).test(compact);
 
   if (!valid) {
-    throw new Error(`Invalid RS-232 command ${command}`)
+    throw new Error(`Invalid RS-232 command: '${command}'`)
   }
 
   return compact.match(/.{2}/g);
