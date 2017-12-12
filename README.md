@@ -74,6 +74,12 @@ node test/manual/send_command.js
 
 This needs local-messaging-module and logging-module to be also running.
 
+### Manually testing RS-232 commands
+
+Use commands from this project:
+
+https://github.com/Rise-Vision/serialport-test
+
 ### Manually testing CEC commands on Raspbian PI
 
 #### Install cec-utils
