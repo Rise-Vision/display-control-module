@@ -6,6 +6,7 @@ const config = require("./config");
 const logger = require("./logger");
 
 const cec = require("./strategies/cec");
+const rs232 = require("./strategies/rs232");
 
 function displayControlStrategy() {
   return new Promise((resolve, reject) =>
@@ -15,7 +16,7 @@ function displayControlStrategy() {
     if (strategy) {
       switch (strategy) {
         case "CEC": resolve(cec); break;
-        // later add RS-232
+        case "RS232": resolve(rs232); break;
         default: reject(Error(`Illegal display control strategy: '${strategy}'`));
       }
     }
