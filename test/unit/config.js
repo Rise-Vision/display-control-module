@@ -25,7 +25,9 @@ describe("Config - Unit", ()=> {
       interface: "RS232",
       "serial-port": "serial1",
       "serial-baud-rate": "6600",
-      "serial-data-bits": "8"
+      "serial-data-bits": "8",
+      "serial-screen-on-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 31 03 73 0d",
+      "serial-screen-off-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d"
     });
 
     assert.equal(config.getDisplayControlStrategy(), "RS232");
@@ -33,7 +35,13 @@ describe("Config - Unit", ()=> {
       interface: "RS232",
       "serial-port": "serial1",
       "serial-baud-rate": "6600",
-      "serial-data-bits": "8"
+      "serial-data-bits": "8",
+      "serial-screen-on-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 31 03 73 0d",
+      "serial-screen-off-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d",
+      "serial-screen-on":
+        ["01", "30", "41", "30", "41", "30", "43", "02", "43", "32", "30", "33", "44", "36", "30", "30", "30", "31", "03", "73", "0d"],
+      "serial-screen-off":
+        ["01", "30", "41", "30", "41", "30", "43", "02", "43", "32", "30", "33", "44", "36", "30", "30", "30", "34", "03", "76", "0d"]
     });
   });
 

@@ -23,7 +23,44 @@ function getDisplayControlSettings() {
   return displayControlSettings;
 }
 
+// Storing the commands this way helps RS-232 to process more easily
+function toArrayOfBytesEncodedAsString(command) {
+  const compact = command.toLowerCase().replace(/\s/g, '');
+  const valid = (/^([0-9a-f][0-9a-f])+$/).test(compact);
+
+  if (!valid) {
+    throw new Error(`Invalid RS-232 command ${command}`)
+  }
+
+  return compact.match(/.{2}/g);
+}
+
+function validateRS232Settings(settings) {
+  if (!settings['serial-port']) {
+    throw new Error('RS-232 serial port not provided.');
+  }
+
+  const onCommand = settings['serial-screen-on-cmd'];
+  const offCommand = settings['serial-screen-off-cmd'];
+
+  if (!onCommand || !offCommand) {
+    throw new Error('RS-232 ON/OFF commands not provided.');
+  }
+
+  settings['serial-screen-on'] = toArrayOfBytesEncodedAsString(onCommand);
+  settings['serial-screen-off'] = toArrayOfBytesEncodedAsString(offCommand);
+}
+
 function setDisplayControlSettings(settings) {
+  // initially set to null so previous configuration is reset even if an error happens
+  displayControlSettings = null;
+
+  if (settings && settings.interface) {
+    if (settings.interface.toUpperCase() === 'RS232') {
+      validateRS232Settings(settings);
+    }
+  }
+
   displayControlSettings = settings;
 }
 

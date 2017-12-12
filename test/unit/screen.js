@@ -55,7 +55,12 @@ describe("Screen - Unit", () =>
 
   it("should create RS232ControlStrategy instance if RS232 strategy is configured", done =>
   {
-    config.setDisplayControlSettings({interface: "rs232"});
+    config.setDisplayControlSettings({
+      interface: "rs232",
+      "serial-port": "COM3",
+      "serial-screen-on-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 31 03 73 0d",
+      "serial-screen-off-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d"
+    });
 
     screen.displayControlStrategy()
     .then(strategy =>
