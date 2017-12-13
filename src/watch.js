@@ -100,6 +100,7 @@ function receiveContentFile(message) {
 module.exports = {
   checkIfLocalStorageIsAvailable,
   clearMessagesAlreadySentFlag,
+  loadCurrentConfiguration,
   receiveConfigurationFile,
   receiveContentFile
 };
