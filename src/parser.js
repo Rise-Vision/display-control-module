@@ -11,7 +11,7 @@ function parseContent(content) {
   return (content
     .split("\n")
     .filter(line => line.includes('='))
-    .map(line => line.split('='))
+    .map(line => line.trim().split('='))
     .reduce((settings, [key, value]) =>
       Object.assign(settings, {[key]: value}), {}
     )
