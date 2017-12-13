@@ -193,4 +193,32 @@ describe("Screen RS232 - Integration", () => {
     });
   });
 
+  it("should clear the strategy", done =>
+  {
+    // any command to initialize the port
+    screen.turnOn()
+    .then(() =>
+    {
+      const strategy = rs232.getStrategy();
+      assert(strategy);
+
+      return screen.clearCurrentStrategy();
+    })
+    .then(() =>
+    {
+      const strategy = rs232.getStrategy();
+
+      // should've been deleted
+      assert(!strategy);
+
+      done();
+    })
+    .catch(error =>
+    {
+      assert.fail(error);
+
+      done();
+    });
+  });
+
 });

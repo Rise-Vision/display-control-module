@@ -4,6 +4,7 @@ const common = require("common-display-module");
 const config = require("./config");
 const logger = require("./logger");
 const parser = require("./parser");
+const screen = require("./screen");
 const platform = require("rise-common-electron").platform;
 
 // So we ensure it will only be sent once.
@@ -55,7 +56,11 @@ function loadCurrentConfiguration(configurationPath) {
 
       logger.debug(`loading settings ${JSON.stringify(settings)}`);
 
-      config.setDisplayControlSettings(settings);
+      // it's important to clear current strategy to shutdown ports and resources
+      // before attempting to load a new one
+      return screen.clearCurrentStrategy().then(() =>
+        config.setDisplayControlSettings(settings)
+      );
     })
     .catch(error =>
       logger.error(error.message, `Could not parse configuration file ${configurationPath}`)

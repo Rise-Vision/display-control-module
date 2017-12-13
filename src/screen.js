@@ -8,6 +8,16 @@ const logger = require("./logger");
 const cec = require("./strategies/cec");
 const rs232 = require("./strategies/rs232");
 
+function clearCurrentStrategy() {
+  const strategy = config.getDisplayControlStrategy();
+
+  switch (strategy) {
+    case "CEC": return cec.clear();
+    case "RS232": return rs232.clear();
+    default: return Promise.resolve();
+  }
+}
+
 function displayControlStrategy() {
   return new Promise((resolve, reject) =>
   {
@@ -48,4 +58,4 @@ function turnOff(options) {
   return executeScreenCommand(provider => provider.turnOff(), options);
 }
 
-module.exports = {displayControlStrategy, turnOff, turnOn}
+module.exports = {clearCurrentStrategy, displayControlStrategy, turnOff, turnOn}
