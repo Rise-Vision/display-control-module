@@ -30,7 +30,8 @@ function init() {
   .then(() =>
   {
     const monitor = new CECMonitor('RV', {
-      debug: true
+      debug: true,
+      cache: {enable: false}
     });
 
     return new Promise((resolve, reject) =>
