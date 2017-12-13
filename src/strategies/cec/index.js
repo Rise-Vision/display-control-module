@@ -51,6 +51,8 @@ function init() {
  */
 function clear() {
   strategy = null;
+
+  return Promise.resolve();
 }
 
 module.exports = {

@@ -1,8 +1,7 @@
 const config = require('../../config');
 const logger = require('../../logger');
+const SerialPort = require('./serial-port-factory');
 const RS232ControlStrategy = require("./strategy");
-
-const SerialPort = require('serialport');
 
 let strategy = null;
 
@@ -41,7 +40,7 @@ function init() {
     const path = settings['serial-port'];
     const options = asSerialPortOptions(settings);
 
-    const port = new SerialPort(path, options, false);
+    const port = SerialPort.create(path, options);
 
     // RS-232 errors not related to opening and command sending. There are explicit handlers for those others.
     port.on('error', error =>
@@ -53,7 +52,8 @@ function init() {
 
     port.open(error =>
     {
-      if (error) {
+      // opening message sent as error message in callback, so we filter it.
+      if (error && !error.message.includes('Port is opening')) {
         return reject(error);
       }
 
@@ -66,9 +66,13 @@ function init() {
  * For test purposes, or when configuration changes.
  */
 function clear() {
-  strategy.close();
+  if (strategy) {
+    return strategy.close().then(() => {
+      strategy = null
+    });
+  }
 
-  strategy = null;
+  return Promise.resolve();
 }
 
 module.exports = {

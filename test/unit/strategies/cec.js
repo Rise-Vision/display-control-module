@@ -9,9 +9,10 @@ const CECControlStrategy = require("../../../src/strategies/cec/strategy");
 
 describe("CECControlStrategy - Unit", () =>
 {
-  afterEach(()=> {
+  afterEach(done => {
     simple.restore();
-    cec.clear();
+
+    cec.clear().then(() => done());
   });
 
   it("should check if cec-utils is available", done =>
