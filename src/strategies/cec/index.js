@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const child = require("child_process");
 
-const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
+const CECMonitor = require("rise-cec-monitor").CECMonitor;
 const CECControlStrategy = require("./strategy");
 
 let strategy = null;

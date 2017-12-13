@@ -3,7 +3,7 @@
 // test if we have connection to the CEC adapter.
 // unless this test finishes successfully, the other tests in this same folder won't work.
 
-const CECMonitor = require("@senzil/cec-monitor").CECMonitor;
+const CECMonitor = require("rise-cec-monitor").CECMonitor;
 const SECONDS = 5;
 
 const monitor = new CECMonitor('RV', {
