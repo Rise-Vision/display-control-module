@@ -255,8 +255,8 @@ RS-232 connection type.
 Default and valid values for serial entries can be found here:
 https://www.npmjs.com/package/serialport#module_serialport--SerialPort..openOptions
 
-- serial-flow-control can be a comma separated string of values: "rtscts", "xon",
-"xoff", "xany"
+- serial-flow-control can be a comma separated string of the following values:
+rtscts, xon, xoff, xany
 
 Once the file is created, run the following command to turn the screen off:
 
