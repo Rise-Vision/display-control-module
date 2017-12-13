@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
-const screen = "../../../src/screen"
-const watch = "../../../src/watch"
+const screen = "../../src/screen"
+const watch = "../../src/watch"
 
 const configurationPath = process.argv[2];
 
