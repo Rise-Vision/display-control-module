@@ -261,11 +261,11 @@ rtscts, xon, xoff, xany
 Once the file is created, run the following command to turn the screen off:
 
 ```bash
-node test/manual/turn_off.js
+node test/manual/turn_off.js /path/to/config/file
 ```
 
 Run the following command to turn the screen on:
 
 ```bash
-node test/manual/turn_on.js
+node test/manual/turn_on.js /path/to/config/file
 ```
