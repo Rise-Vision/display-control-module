@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-/* eslint-disable max-statements, line-comment-position, no-inline-comments */
+/* eslint-disable max-statements, line-comment-position, no-inline-comments,  array-bracket-newline, no-magic-numbers */
 const assert = require("assert");
 const simple = require("simple-mock");
 const SerialPort = require('serialport/test');
@@ -43,6 +43,9 @@ describe("RS232ControlStrategy - Unit", () => {
         assert.equal(result.commandType, "turn-screen-off");
         assert.equal(result.command, "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d");
         assert(!result.commandErrorMessage);
+
+        const sent = rs232.getStrategy().port.binding.recording.toString('hex');
+        assert.equal(sent, "01304130413043024332303344363030303403760d");
 
         done();
       })

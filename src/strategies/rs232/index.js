@@ -62,6 +62,11 @@ function init() {
   });
 }
 
+// Exposed for test purposes
+function getStrategy() {
+  return strategy;
+}
+
 /**
  * For test purposes, or when configuration changes.
  */
@@ -77,6 +82,7 @@ function clear() {
 
 module.exports = {
   asSerialPortOptions,
+  getStrategy,
   init,
   clear
 };

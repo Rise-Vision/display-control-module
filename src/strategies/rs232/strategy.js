@@ -1,5 +1,7 @@
 module.exports = function(port, settings) {
 
+  this.port = port;
+
   this.executeCommand = suffix =>
   {
     const key = `serial-screen-${suffix}`;
