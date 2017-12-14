@@ -29,6 +29,11 @@ function error(eventDetails, userFriendlyMessage) {
   .then(detail => logger.error(detail, userFriendlyMessage, bqTable));
 }
 
+function all(eventType, eventDetails, data = {}) {
+  return detailsFor(eventDetails, data)
+    .then(detail => logger.all(eventType, detail, null, bqTable));
+}
+
 /**
  * @return {Promise} so it can be chained.
  */
@@ -59,4 +64,4 @@ function logResult(result) {
   )
 }
 
-module.exports = {debug, error, external, logResult, sendCommandAttempt, sendCommandFailure};
+module.exports = {debug, error, external, all, logResult, sendCommandAttempt, sendCommandFailure};
