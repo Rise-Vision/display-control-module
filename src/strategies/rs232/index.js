@@ -2,7 +2,7 @@ const SerialPort = require('serialport');
 
 const config = require('../../config');
 const logger = require('../../logger');
-const RS232ControlStrategy = require("./strategy");
+const rs232Strategy = require("./strategy");
 
 let strategy = null;
 
@@ -59,7 +59,9 @@ function init(providedPort) {
         return reject(error);
       }
 
-      resolve(strategy = new RS232ControlStrategy(port, settings));
+      rs232Strategy.init(port, settings)
+
+      resolve(strategy = rs232Strategy);
     });
   });
 }

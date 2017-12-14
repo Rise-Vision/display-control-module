@@ -9,7 +9,7 @@ const screen = require("../../src/screen");
 const cec = require("../../src/strategies/cec");
 const rs232 = require("../../src/strategies/rs232");
 const CECControlStrategy = require("../../src/strategies/cec/strategy");
-const RS232ControlStrategy = require("../../src/strategies/rs232/strategy");
+const rs232Strategy = require("../../src/strategies/rs232/strategy");
 
 const logger = require("../../src/logger");
 
@@ -22,7 +22,7 @@ describe("Screen - Unit", () =>
     simple.mock(logger, "logResult").resolveWith();
 
     simple.mock(cec, "init").resolveWith(new CECControlStrategy());
-    simple.mock(rs232, "init").resolveWith(new RS232ControlStrategy());
+    simple.mock(rs232, "init").resolveWith(rs232Strategy);
   });
 
   afterEach(()=>
@@ -65,7 +65,6 @@ describe("Screen - Unit", () =>
     screen.displayControlStrategy()
     .then(strategy =>
     {
-      assert(strategy instanceof RS232ControlStrategy);
       assert(strategy.turnOff);
       assert(strategy.turnOn);
       assert(strategy.close);

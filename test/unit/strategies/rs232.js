@@ -32,14 +32,16 @@ describe("RS232ControlStrategy - Unit", () => {
   });
 
   it("should turn off the screen", done => {
-    rs232.init(new SerialPort("/dev/mock"))
+    const port = new SerialPort("/dev/mock");
+
+    rs232.init(port)
     .then(provider =>
       provider.turnOff().then(result => {
         assert.equal(result.commandType, "turn-screen-off");
         assert.equal(result.command, "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d");
         assert(!result.commandErrorMessage);
 
-        const sent = rs232.getStrategy().port.binding.recording.toString('hex');
+        const sent = port.binding.recording.toString('hex');
         assert.equal(sent, "01304130413043024332303344363030303403760d");
 
         done();
@@ -53,14 +55,16 @@ describe("RS232ControlStrategy - Unit", () => {
   });
 
   it("should turn on the screen", done => {
-    rs232.init(new SerialPort("/dev/mock"))
+    const port = new SerialPort("/dev/mock")
+
+    rs232.init(port)
     .then(provider =>
       provider.turnOn().then(result => {
         assert.equal(result.commandType, "turn-screen-on");
         assert.equal(result.command, "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 31 03 73 0d");
         assert(!result.commandErrorMessage);
 
-        const sent = rs232.getStrategy().port.binding.recording.toString('hex');
+        const sent = port.binding.recording.toString('hex');
         assert.equal(sent, "01304130413043024332303344363030303103730d");
 
         done();
