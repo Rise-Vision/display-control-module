@@ -31,5 +31,5 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
     topic: "clientlist-request"
   });
 
-  logger.all("started", "");
+  if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
 });
