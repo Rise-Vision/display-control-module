@@ -3,6 +3,7 @@ const config = require("./config");
 const watch = require("./watch");
 const interval = require("./interval-schedule-check");
 const displayConfigBucket = "rise-display-notifications";
+const logger = require("./logger");
 
 interval.startInterval();
 
@@ -29,4 +30,6 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
     from: config.moduleName,
     topic: "clientlist-request"
   });
+
+  logger.all("started", "");
 });
