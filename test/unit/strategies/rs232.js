@@ -8,7 +8,7 @@ const MockBinding = SerialPort.Binding;
 const config = require("../../../src/config");
 const rs232 = require("../../../src/strategies/rs232");
 
-describe("RS232ControlStrategy - Unit", () => {
+describe("RS232 Strategy - Unit", () => {
 
   beforeEach(() => {
     MockBinding.createPort("/dev/mock", {echo: false, record: true});

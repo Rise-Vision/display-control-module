@@ -5,9 +5,9 @@ const child = require("child_process");
 const simple = require("simple-mock");
 
 const cec = require("../../../src/strategies/cec");
-const CECControlStrategy = require("../../../src/strategies/cec/strategy");
+const cecStrategy = require("../../../src/strategies/cec/strategy");
 
-describe("CECControlStrategy - Unit", () =>
+describe("CEC Strategy - Unit", () =>
 {
   afterEach(done => {
     simple.restore();
@@ -55,10 +55,11 @@ describe("CECControlStrategy - Unit", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    cecStrategy.init({
       WriteRawMessage: () => Promise.resolve()
-    }));
+    })
+
+    simple.mock(cec, "init").resolveWith(cecStrategy);
 
     cec.init()
     .then(provider =>
@@ -84,10 +85,11 @@ describe("CECControlStrategy - Unit", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    cecStrategy.init({
       WriteRawMessage: () => Promise.resolve()
-    }));
+    })
+
+    simple.mock(cec, "init").resolveWith(cecStrategy);
 
     cec.init()
     .then(provider =>
@@ -113,10 +115,11 @@ describe("CECControlStrategy - Unit", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    cecStrategy.init({
       WriteRawMessage: () => Promise.reject(Error('display not available'))
-    }));
+    })
+
+    simple.mock(cec, "init").resolveWith(cecStrategy);
 
     cec.init()
     .then(provider =>

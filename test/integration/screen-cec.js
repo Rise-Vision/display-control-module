@@ -9,7 +9,7 @@ const config = require("../../src/config");
 const screen = require("../../src/screen");
 
 const cec = require("../../src/strategies/cec");
-const CECControlStrategy = require("../../src/strategies/cec/strategy");
+const cecStrategy = require("../../src/strategies/cec/strategy");
 
 describe("Screen CEC - Integration", () =>
 {
@@ -36,10 +36,11 @@ describe("Screen CEC - Integration", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    cecStrategy.init({
       WriteRawMessage: () => Promise.resolve()
-    }));
+    });
+
+    simple.mock(cec, "init").resolveWith(cecStrategy);
 
     screen.turnOn()
     .then(() =>
@@ -82,10 +83,11 @@ describe("Screen CEC - Integration", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    cecStrategy.init({
       WriteRawMessage: () => Promise.resolve()
-    }));
+    });
+
+    simple.mock(cec, "init").resolveWith(cecStrategy);
 
     screen.turnOff()
     .then(() =>
@@ -172,10 +174,11 @@ describe("Screen CEC - Integration", () =>
     // cec-utils found
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    cecStrategy.init({
       WriteRawMessage: () => Promise.reject(Error('display not available'))
-    }));
+    });
+
+    simple.mock(cec, "init").resolveWith(cecStrategy);
 
     // either turnOn() or turnOff() will fail
     screen.turnOff()

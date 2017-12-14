@@ -10,7 +10,7 @@ const parser = require("../../src/parser");
 const screen = require("../../src/screen");
 
 const cec = require("../../src/strategies/cec");
-const CECControlStrategy = require("../../src/strategies/cec/strategy");
+const cecStrategy = require("../../src/strategies/cec/strategy");
 
 describe("Parser - Integration", () =>
 {
@@ -24,10 +24,11 @@ describe("Parser - Integration", () =>
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    cecStrategy.init({
       WriteRawMessage: () => Promise.resolve()
-    }));
+    });
+
+    simple.mock(cec, "init").resolveWith(cecStrategy);
   });
 
   afterEach(()=>

@@ -2,7 +2,7 @@
 const child = require("child_process");
 
 const CECMonitor = require("rise-cec-monitor").CECMonitor;
-const CECControlStrategy = require("./strategy");
+const cecStrategy = require("./strategy");
 
 let strategy = null;
 
@@ -36,9 +36,11 @@ function init() {
 
     return new Promise((resolve, reject) =>
     {
-      monitor.once(CECMonitor.EVENTS._READY, () =>
-        resolve(strategy = new CECControlStrategy(monitor))
-      );
+      monitor.once(CECMonitor.EVENTS._READY, () => {
+        cecStrategy.init(monitor);
+
+        resolve(strategy = cecStrategy);
+      });
 
       monitor.once(CECMonitor.EVENTS._ERROR, error =>
         reject(error || Error('could not init CECMonitor'))
