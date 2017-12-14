@@ -1,6 +1,7 @@
+const SerialPort = require('serialport');
+
 const config = require('../../config');
 const logger = require('../../logger');
-const SerialPort = require('./serial-port-factory');
 const RS232ControlStrategy = require("./strategy");
 
 let strategy = null;
@@ -29,7 +30,8 @@ function asSerialPortOptions(settings) {
   return options;
 }
 
-function init() {
+// this function has provided port injection for test purposes.
+function init(providedPort) {
   if (strategy) {
     return Promise.resolve(strategy);
   }
@@ -40,7 +42,7 @@ function init() {
     const path = settings['serial-port'];
     const options = asSerialPortOptions(settings);
 
-    const port = SerialPort.create(path, options);
+    const port = providedPort || new SerialPort(path, options, false);
 
     // RS-232 errors not related to opening and command sending. There are explicit handlers for those others.
     port.on('error', error =>

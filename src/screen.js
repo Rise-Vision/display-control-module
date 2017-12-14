@@ -18,7 +18,8 @@ function clearCurrentStrategy() {
   }
 }
 
-function displayControlStrategy() {
+// serialPort for test purposes, and may be null or undefined
+function displayControlStrategy(serialPort) {
   return new Promise((resolve, reject) =>
   {
     const strategy = config.getDisplayControlStrategy();
@@ -34,11 +35,11 @@ function displayControlStrategy() {
       reject(Error('Display control not enabled'));
     }
   })
-  .then(strategy => strategy.init());
+  .then(strategy => strategy.init(serialPort));
 }
 
 function executeScreenCommand(action, options = {}) {
-  return module.exports.displayControlStrategy()
+  return module.exports.displayControlStrategy(options.serialPort)
   .then(action)
   .then((result)=>!options.suppressLog && logger.logResult(result))
   .catch(error=>
@@ -54,7 +55,7 @@ function turnOn(options = {}) {
   return executeScreenCommand(provider => provider.turnOn(), options);
 }
 
-function turnOff(options) {
+function turnOff(options = {}) {
   return executeScreenCommand(provider => provider.turnOff(), options);
 }
 

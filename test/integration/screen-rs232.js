@@ -10,7 +10,6 @@ const config = require("../../src/config");
 const screen = require("../../src/screen");
 
 const rs232 = require("../../src/strategies/rs232");
-const SerialPortFactory = require("../../src/strategies/rs232/serial-port-factory");
 
 describe("Screen RS232 - Integration", () => {
 
@@ -18,10 +17,6 @@ describe("Screen RS232 - Integration", () => {
     simple.mock(common, "connect").resolveWith({});
     simple.mock(common, "getDisplayId").resolveWith("ABC");
     simple.mock(common, "broadcastMessage").returnWith();
-
-    simple.mock(SerialPortFactory, "create").callFn(path =>
-      new SerialPort(path)
-    )
 
     MockBinding.createPort("/dev/mock", {echo: false, record: true});
 
@@ -47,7 +42,7 @@ describe("Screen RS232 - Integration", () => {
 
   it("should turn on the screen using RS232 commands", done =>
   {
-    screen.turnOn()
+    screen.turnOn({serialPort: new SerialPort("/dev/mock")})
     .then(() =>
     {
       // should have resulted in a call to logging module
@@ -85,7 +80,7 @@ describe("Screen RS232 - Integration", () => {
 
   it("should turn off the screen using RS-232 commands", done =>
   {
-    screen.turnOff()
+    screen.turnOff({serialPort: new SerialPort("/dev/mock")})
     .then(() =>
     {
       // should have resulted in a call to logging module
@@ -122,17 +117,13 @@ describe("Screen RS232 - Integration", () => {
   });
 
   it("should log error if command execution fails", (done) => {
-    simple.mock(SerialPortFactory, "create").callFn(path => {
-      const port = new SerialPort(path);
+    const serialPort = new SerialPort("/dev/mock");
 
-      port.write = (data, errorCallback) =>
-        errorCallback({message: 'display not available'});
-
-      return port;
-    });
+    serialPort.write = (data, errorCallback) =>
+      errorCallback({message: 'display not available'});
 
     // either turnOn() or turnOff() will fail
-    screen.turnOff()
+    screen.turnOff({serialPort})
     .then(() =>
     {
       // should have resulted in 2 calls to logging module: attempt and failure
@@ -196,7 +187,7 @@ describe("Screen RS232 - Integration", () => {
   it("should clear the strategy", done =>
   {
     // any command to initialize the port
-    screen.turnOn()
+    screen.turnOn({serialPort: new SerialPort("/dev/mock")})
     .then(() =>
     {
       const strategy = rs232.getStrategy();

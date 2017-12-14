@@ -7,15 +7,10 @@ const MockBinding = SerialPort.Binding;
 
 const config = require("../../../src/config");
 const rs232 = require("../../../src/strategies/rs232");
-const SerialPortFactory = require("../../../src/strategies/rs232/serial-port-factory");
 
 describe("RS232ControlStrategy - Unit", () => {
 
   beforeEach(() => {
-    simple.mock(SerialPortFactory, "create").callFn(path =>
-      new SerialPort(path)
-    )
-
     MockBinding.createPort("/dev/mock", {echo: false, record: true});
 
     config.setDisplayControlSettings({
@@ -37,7 +32,7 @@ describe("RS232ControlStrategy - Unit", () => {
   });
 
   it("should turn off the screen", done => {
-    rs232.init()
+    rs232.init(new SerialPort("/dev/mock"))
     .then(provider =>
       provider.turnOff().then(result => {
         assert.equal(result.commandType, "turn-screen-off");
@@ -58,7 +53,7 @@ describe("RS232ControlStrategy - Unit", () => {
   });
 
   it("should turn on the screen", done => {
-    rs232.init()
+    rs232.init(new SerialPort("/dev/mock"))
     .then(provider =>
       provider.turnOn().then(result => {
         assert.equal(result.commandType, "turn-screen-on");
@@ -79,16 +74,12 @@ describe("RS232ControlStrategy - Unit", () => {
   });
 
   it("should return command error message if the command execution fails", done => {
-    simple.mock(SerialPortFactory, "create").callFn(path => {
-      const port = new SerialPort(path);
+    const port = new SerialPort("/dev/mock");
 
-      port.write = (data, errorCallback) =>
-        errorCallback({message: 'display not available'});
+    port.write = (data, errorCallback) =>
+      errorCallback({message: 'display not available'});
 
-      return port;
-    });
-
-    rs232.init()
+    rs232.init(port)
     .then(provider =>
       provider.turnOff().then(result =>
       {
