@@ -2,7 +2,7 @@ const commonConfig = require("common-display-module");
 const config = require("./config");
 const watch = require("./watch");
 const interval = require("./interval-schedule-check");
-const displayConfigBucket = "rise-display-notifications";
+const displayConfigBucket = "risevision-display-notifications";
 const logger = require("./logger");
 
 interval.startInterval();
