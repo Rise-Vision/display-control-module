@@ -15,6 +15,6 @@ gsutil cp manifests/*.json gs://install-versions.risevision.com/staging/$MODULEN
 gsutil setmeta -h "Cache-Control:private, max-age=0" gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/*
 gsutil setmeta -h "Content-Disposition:attachment" gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/*.sh
 gsutil acl ch -u AllUsers:R gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/*
-gsutil cp gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/display-modules-beta-*.json gs://install-versions.risevision.com/
+gsutil -m cp -p gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/display-modules-beta-*.json gs://install-versions.risevision.com/
 gsutil cp -p gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/* gs://install-versions.risevision.com/backups/$MODULENAME/$VERSION
 gsutil -m cp -p gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/* gs://install-versions.risevision.com/releases/$MODULENAME/$VERSION
