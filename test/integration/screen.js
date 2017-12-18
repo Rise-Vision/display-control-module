@@ -153,7 +153,7 @@ describe("Screen - Integration", () =>
       // the BigQuery row entry, see design doc for individual element description
       const row = data.data;
       assert.equal(row.event, "error");
-      assert.equal(row.event_details, "cec-utils not installed in Operating System");
+      assert(row.event_details.includes("cec-utils not installed in Operating System"));
       assert.equal(row.display_id, "ABC");
 
       done();

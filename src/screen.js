@@ -32,7 +32,7 @@ function executeScreenCommand(action, options = {}) {
   .then((result)=>!options.suppressLog && logger.logResult(result))
   .catch(error=>
   {
-    const detail = error.message || JSON.stringify(error);
+    const detail = error.stack || JSON.stringify(error);
 
     if (options.suppressLog) {return logger.debug(error);}
     return logger.error(detail, "Error while trying to execute screen command");
