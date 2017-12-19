@@ -33,11 +33,8 @@ function isDisplayControlEnabled() {
   return strategy === "CEC" || strategy === "RS232";
 }
 
-function setTimeline(displayContent) {
-  if (!displayContent || !displayContent.content) {return false;}
-  if (!displayContent.content.schedule) {return false;}
-
-  return timeline = displayContent.content.schedule;
+function setTimeline(schedule) {
+  return timeline = schedule;
 }
 
 function getTimeline() {
