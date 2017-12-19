@@ -20,10 +20,6 @@ function detailsFor(eventDetails, data = {}) {
   );
 }
 
-function debug(message) {
-  logger.debug(message);
-}
-
 function error(eventDetails, userFriendlyMessage) {
   return detailsFor(eventDetails)
   .then(detail => logger.error(detail, userFriendlyMessage, bqTable));
@@ -64,4 +60,13 @@ function logResult(result) {
   )
 }
 
-module.exports = {debug, error, external, all, logResult, sendCommandAttempt, sendCommandFailure};
+module.exports = {
+  file: logger.file,
+  debug: logger.debug,
+  error,
+  external,
+  all,
+  logResult,
+  sendCommandAttempt,
+  sendCommandFailure
+};

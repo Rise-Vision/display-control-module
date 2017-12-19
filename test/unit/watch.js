@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 /* eslint-disable max-statements, no-magic-numbers */
 const assert = require("assert");
+const logger = require("../../src/logger");
 const common = require("common-display-module");
 const simple = require("simple-mock");
 const platform = require("rise-common-electron").platform;
@@ -14,6 +15,7 @@ describe("Watch - Unit", ()=> {
     const settings = {displayid: "DIS123"};
 
     simple.mock(common, "broadcastMessage").returnWith();
+    simple.mock(logger, "error").returnWith();
     simple.mock(common, "getDisplaySettings").resolveWith(settings);
   });
 
@@ -154,7 +156,8 @@ serial-screen-off-cmd=`);
   });
 
   it("should receive content file", ()=>{
-    simple.mock(platform, "readTextFile").resolveWith('{"content": {"schedule": 1}}');
+    const mockScheduleText = '{"content": {"schedule": {"timeDefined": true}}}';
+    simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
     simple.mock(config, "setTimeline").returnWith();
 
     return watch.receiveContentFile({
@@ -163,7 +166,35 @@ serial-screen-off-cmd=`);
       ospath: "xxxxxxx"
     })
     .then(() => {
-      assert.deepEqual(config.setTimeline.lastCall.args[0], {content: {schedule: 1}});
+      assert.deepEqual(config.setTimeline.lastCall.args[0], {timeDefined: true});
+    });
+  });
+
+  it("should catch invalid content file", ()=>{
+    const mockScheduleText = '{"content": invalid}';
+    simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
+
+    return watch.receiveContentFile({
+      topic: "file-update",
+      status: "CURRENT",
+      ospath: "xxxxxxx"
+    })
+    .then(() => {
+      assert(logger.error.lastCall.args[1].startsWith("Could not parse"));
+    });
+  });
+
+  it("should catch invalid content file", ()=>{
+    const mockScheduleText = '{{';
+    simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
+
+    return watch.receiveContentFile({
+      topic: "file-update",
+      status: "CURRENT",
+      ospath: "xxxxxxx"
+    })
+    .then(() => {
+      assert(logger.error.lastCall.args[1].startsWith("Could not parse"));
     });
   });
 });
