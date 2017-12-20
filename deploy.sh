@@ -18,3 +18,9 @@ gsutil acl ch -u AllUsers:R gs://install-versions.risevision.com/staging/$MODULE
 gsutil -m cp -p gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/display-modules-beta-*.json gs://install-versions.risevision.com/
 gsutil cp -p gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/* gs://install-versions.risevision.com/backups/$MODULENAME/$VERSION
 gsutil -m cp -p gs://install-versions.risevision.com/staging/$MODULENAME/$VERSION/* gs://install-versions.risevision.com/releases/$MODULENAME/$VERSION
+
+echo -n "RisePlayerElectron $VERSION" > latest-version
+gsutil cp latest-version gs://install-versions.risevision.com
+gsutil setmeta -h "Cache-Control:private, max-age=0" gs://install-versions.risevision.com/latest-version
+gsutil setmeta -h "Content-Type:text/plain" gs://install-versions.risevision.com/latest-version
+gsutil acl ch -u AllUsers:R gs://install-versions.risevision.com/latest-version
