@@ -24,6 +24,8 @@ function runCheck(date = null) {
     lastCommand = command;
   }
   catch (error) {
-    logger.error(error);
+    // This handler should never be reached, unless there is a bug in the code.
+    // Command execution errors should have been handled by the screen object.
+    logger.error(error.stack, "Unexpected error in schedled check.");
   }
 }
