@@ -9,12 +9,21 @@ const interval = require("../../src/interval-schedule-check");
 
 describe("Interval Schedule Check - Unit", ()=>{
   beforeEach(()=>{
+    simple.mock(config, "isDisplayControlEnabled").returnWith(true);
     simple.mock(screen, "turnOn").returnWith();
     simple.mock(screen, "turnOff").returnWith();
   });
 
   afterEach(()=>{
     simple.restore();
+  });
+
+  it("should not send any command if display control is not enabled", ()=>{
+    simple.mock(config, "isDisplayControlEnabled").returnWith(false);
+    simple.mock(config, "checkTimelineNow").returnWith(true);
+
+    interval.runCheck();
+    assert(!screen.turnOn.called);
   });
 
   it("should turn the screen on if timeline is now valid for play", ()=>{
