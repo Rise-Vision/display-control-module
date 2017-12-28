@@ -42,6 +42,6 @@
     "rise-cec-monitor": "git://github.com/Rise-Vision/rise-cec-monitor.git#65c6fa04",
     "common-display-module": "git://github.com/Rise-Vision/common-display-module.git#v2.1.3",
     "node-ipc": "^9.1.1",
-    "rise-common-electron": "git://github.com/Rise-Vision/rise-common-electron.git#v2.2.4"
+    "rise-common-electron": "git://github.com/Rise-Vision/rise-common-electron.git#v2.2.5"
   }
 }
