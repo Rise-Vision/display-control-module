@@ -48,7 +48,7 @@ node src/index.js
 Do the same for local-storage in a different terminal window:
 
 ```bash
-git clone https://github.com/Rise-Vision/local-storage.git
+git clone https://github.com/Rise-Vision/local-storage-module.git
 npm install
 node src/index.js
 ```
