@@ -69,59 +69,52 @@ const full = {
 
 describe("Config check timeline - Unit", ()=> {
 
-  afterEach(()=> config.setDisplayControlSettings(null));
+  beforeEach(() => config.setTimeline(full.content.schedule));
+  afterEach(() => config.setTimeline(null));
 
   it("should not indicate playability if time is before first interval", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2017, 11, 27, 14, 0, 0);
 
     assert(!config.checkTimelineNow(date));
   });
 
   it("should indicate playability if time is in first interval", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2017, 11, 27, 14, 20, 0);
 
     assert(config.checkTimelineNow(date));
   });
 
   it("should not indicate playability if time is between intervals", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2017, 11, 27, 14, 35, 0);
 
     assert(!config.checkTimelineNow(date));
   });
 
   it("should indicate playability if time is in second interval", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2017, 11, 27, 14, 48, 0);
 
     assert(config.checkTimelineNow(date));
   });
 
   it("should not indicate playability if time is after second interval", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2017, 11, 27, 15, 0, 0);
 
     assert(!config.checkTimelineNow(date));
   });
 
   it("should indicate playability if time is in first interval other day", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2018, 1, 27, 14, 20, 0);
 
     assert(config.checkTimelineNow(date));
   });
 
   it("should not indicate playability if time is between intervals other day", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2018, 1, 27, 14, 35, 0);
 
     assert(!config.checkTimelineNow(date));
   });
 
   it("should indicate playability if time is in second interval other day", () => {
-    config.setTimeline(full.content.schedule);
     const date = new Date(2018, 1, 27, 14, 48, 0);
 
     assert(config.checkTimelineNow(date));

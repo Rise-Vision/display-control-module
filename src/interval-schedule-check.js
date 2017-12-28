@@ -11,12 +11,12 @@ module.exports = {
   runCheck
 };
 
-function runCheck() {
+function runCheck(date = null) {
   if (!config.isDisplayControlEnabled()) {
     return;
   }
 
-  const command = config.checkTimelineNow() ? "turnOn" : "turnOff";
+  const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
 
   screen[command]({suppressLog: lastCommand === command});
   lastCommand = command;
