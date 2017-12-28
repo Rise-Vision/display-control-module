@@ -1,4 +1,5 @@
 const config = require("./config");
+const logger = require("./logger.js");
 const scheduleCheckInterval = 60000;
 const screen = require("./screen.js");
 
@@ -12,12 +13,17 @@ module.exports = {
 };
 
 function runCheck(date = null) {
-  if (!config.isDisplayControlEnabled()) {
-    return;
+  try {
+    if (!config.isDisplayControlEnabled()) {
+      return;
+    }
+
+    const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
+
+    screen[command]({suppressLog: lastCommand === command});
+    lastCommand = command;
   }
-
-  const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
-
-  screen[command]({suppressLog: lastCommand === command});
-  lastCommand = command;
+  catch (error) {
+    logger.error(error);
+  }
 }
