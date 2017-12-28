@@ -66,4 +66,34 @@ describe("Interval Schedule Check - Unit", ()=>{
     assert.equal(screen.turnOn.callCount, 1);
     assert(!screen.turnOn.lastCall.args[0].suppressLog);
   });
+
+  it("should switch correctly between turn on and turn off commands", ()=>{
+    simple.mock(config, "checkTimelineNow").returnWith(false);
+    interval.runCheck();
+    interval.runCheck();
+    interval.runCheck();
+    assert.equal(screen.turnOff.callCount, 3);
+    assert(screen.turnOff.lastCall.args[0].suppressLog);
+
+    simple.mock(config, "checkTimelineNow").returnWith(true);
+    interval.runCheck();
+    interval.runCheck();
+    interval.runCheck();
+    assert.equal(screen.turnOn.callCount, 3);
+    assert(screen.turnOn.lastCall.args[0].suppressLog);
+
+    simple.mock(config, "checkTimelineNow").returnWith(false);
+    interval.runCheck();
+    interval.runCheck();
+    interval.runCheck();
+    assert.equal(screen.turnOff.callCount, 6);
+    assert(screen.turnOff.lastCall.args[0].suppressLog);
+
+    simple.mock(config, "checkTimelineNow").returnWith(true);
+    interval.runCheck();
+    interval.runCheck();
+    interval.runCheck();
+    assert.equal(screen.turnOn.callCount, 6);
+    assert(screen.turnOn.lastCall.args[0].suppressLog);
+  });
 });
