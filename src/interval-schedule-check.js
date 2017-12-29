@@ -14,16 +14,21 @@ module.exports = {
 
 function runCheck(date = null) {
   try {
+console.log("a----" + Date.now());
     if (!config.isDisplayControlEnabled()) {
       return Promise.resolve();
     }
 
+    console.log("b----" + Date.now());
     const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
     const suppressLog = lastCommand === command;
 
     // Promise returned for testing purposes
     return screen[command]({suppressLog})
-    .then(() => lastCommand = command)
+    .then(() => {
+      lastCommand = command;
+      console.log("c----" + Date.now());
+    })
   }
   catch (error) {
     // This handler should never be reached, unless there is a bug in the code.

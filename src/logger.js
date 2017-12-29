@@ -62,7 +62,8 @@ function logResult(result) {
 
 module.exports = {
   file: logger.file,
-  debug: logger.debug,
+  // debug: logger.debug,
+  debug: console.log,
   error,
   external,
   all,
