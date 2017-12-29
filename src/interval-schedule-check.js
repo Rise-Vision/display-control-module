@@ -14,12 +14,12 @@ module.exports = {
 
 function runCheck(date = null) {
   try {
-console.log("a----" + Date.now());
+console.log(`a----${Date.now()}`);
     if (!config.isDisplayControlEnabled()) {
       return Promise.resolve();
     }
 
-    console.log("b----" + Date.now());
+    console.log(`b----${Date.now()}`);
     const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
     const suppressLog = lastCommand === command;
 
@@ -27,7 +27,7 @@ console.log("a----" + Date.now());
     return screen[command]({suppressLog})
     .then(() => {
       lastCommand = command;
-      console.log("c----" + Date.now());
+      console.log(`c----${Date.now()}`);
     })
   }
   catch (error) {
