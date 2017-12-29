@@ -26,10 +26,7 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
     }
   });
 
-  commonConfig.broadcastMessage({
-    from: config.moduleName,
-    topic: "clientlist-request"
-  });
+  commonConfig.getClientList(config.moduleName);
 
   if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
 });
