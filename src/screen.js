@@ -29,7 +29,7 @@ function displayControlStrategy() {
 function executeScreenCommand(action, options = {}) {
   return module.exports.displayControlStrategy()
   .then(action)
-  .then((result)=>!options.suppressLog && logger.logResult(result))
+  .then((result)=> !options.suppressLog && logger.logResult(result))
   .catch(error=>
   {
     const detail = error.stack || JSON.stringify(error);
@@ -43,7 +43,7 @@ function turnOn(options = {}) {
   return executeScreenCommand(provider => provider.turnOn(), options);
 }
 
-function turnOff(options) {
+function turnOff(options = {}) {
   return executeScreenCommand(provider => provider.turnOff(), options);
 }
 

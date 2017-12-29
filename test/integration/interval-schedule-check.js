@@ -1,13 +1,18 @@
 /* eslint-env mocha */
-/* eslint-disable max-statements, no-magic-numbers, no-useless-escape, no-irregular-whitespace, no-tabs */
+/* eslint-disable max-statements, no-magic-numbers, no-useless-escape, no-irregular-whitespace, no-tabs, no-multi-spaces */
 const assert = require("assert");
+const child = require("child_process");
+const common = require("common-display-module");
 const simple = require("simple-mock");
+const platform = require("rise-common-electron").platform;
+
 const config = require("../../src/config");
 const logger = require("../../src/logger");
-const screen = require("../../src/screen");
 const interval = require("../../src/interval-schedule-check");
-const platform = require("rise-common-electron").platform;
 const watch = require("../../src/watch");
+
+const cec = require("../../src/strategies/cec");
+const CECControlStrategy = require("../../src/strategies/cec/strategy");
 
 const content = `
 {
@@ -99,9 +104,12 @@ const content = `
 
 describe("Interval Schedule Check - Integration", ()=>{
   beforeEach(()=>{
+    simple.mock(common, "broadcastMessage").returnWith();
     simple.mock(platform, "readTextFile").resolveWith(content);
-    simple.mock(screen, "turnOff").returnWith();
-    simple.mock(screen, "turnOn").returnWith();
+
+		// no error, so cec-utils check passes
+		simple.mock(child, "exec").callFn((path, callback) => callback(false));
+
     // simple.mock(logger, "file").callFn(console.log);
     simple.mock(logger, "error").callFn((stack, error) => {
       console.error(error);
@@ -113,88 +121,127 @@ describe("Interval Schedule Check - Integration", ()=>{
     simple.restore();
     config.setDisplayControlSettings(null);
     config.setTimeline(null);
+    cec.clear();
   });
 
   it("should switch correctly between turn on and turn off commands", ()=>{
 
+		const dateBeforeFirstInterval = new Date(2017, 11, 27, 14,  0, 0);
+		const dateInFirstInterval     = new Date(2017, 11, 27, 14, 20, 0);
+    const dateBetweenIntervals    = new Date(2017, 11, 27, 14, 35, 0);
+		const dateInSecondInterval    = new Date(2017, 11, 27, 14, 48, 0);
+		const dateAfterSecondInterval = new Date(2017, 11, 27, 15, 35, 0);
+
+		let offCount = 0;
+		let onCount = 0;
+
+    // intercept CEC write operations
+    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
+    {
+      WriteRawMessage: message => {
+        switch (message) {
+          case "standby 0": offCount += 1; break;
+          case "on 0": onCount += 1; break;
+          default: throw new Error("unreachable");
+        }
+
+				return Promise.resolve()
+			}
+    }));
+
     config.setDisplayControlSettings({interface: "CEC"});
 
-    return watch.receiveContentFile({status: "NEW"})
+    return watch.receiveContentFile({status: "CURRENT"})
     .then(() => {
       const timeline = config.getTimeline();
       assert(timeline);
       assert(timeline.items);
       assert.equal(timeline.items.length, 2);
 
-      // before first interval 14:00
-      {
-        const date = new Date(2017, 11, 27, 14, 0, 0);
+      return interval.runCheck(dateBeforeFirstInterval);
+		})
+		.then(() => {
+			assert.equal(offCount, 1);
+			assert.equal(onCount, 0);
+			// command log called
+			assert.equal(common.broadcastMessage.callCount, 1);
 
-        interval.runCheck(date);
-        assert.equal(screen.turnOff.callCount, 1);
-        assert(!screen.turnOff.lastCall.args[0].suppressLog);
+			return interval.runCheck(dateBeforeFirstInterval);
+		})
+		.then(() => interval.runCheck(dateBeforeFirstInterval))
+    .then(() => {
+      assert.equal(offCount, 3);
+      assert.equal(onCount, 0);
+			// command log was not called again
+      assert.equal(common.broadcastMessage.callCount, 1);
 
-        interval.runCheck(date);
-        interval.runCheck(date);
-        assert.equal(screen.turnOff.callCount, 3);
-        assert(screen.turnOff.lastCall.args[0].suppressLog);
-      }
-
-      // in first interval 14:20
-      {
-        const date = new Date(2017, 11, 27, 14, 20, 0);
-
-        interval.runCheck(date);
-        assert.equal(screen.turnOn.callCount, 1);
-        assert(!screen.turnOn.lastCall.args[0].suppressLog);
-
-        interval.runCheck(date);
-        interval.runCheck(date);
-        assert.equal(screen.turnOn.callCount, 3);
-        assert(screen.turnOn.lastCall.args[0].suppressLog);
-      }
-
-      // between intervals 14:35
-      {
-        const date = new Date(2017, 11, 27, 14, 35, 0);
-
-        interval.runCheck(date);
-        assert.equal(screen.turnOff.callCount, 4);
-        assert(!screen.turnOff.lastCall.args[0].suppressLog);
-
-        interval.runCheck(date);
-        interval.runCheck(date);
-        assert.equal(screen.turnOff.callCount, 6);
-        assert(screen.turnOff.lastCall.args[0].suppressLog);
-      }
-
-      // in second interval 14:20
-      {
-        const date = new Date(2017, 11, 27, 14, 48, 0);
-
-        interval.runCheck(date);
-        assert.equal(screen.turnOn.callCount, 4);
-        assert(!screen.turnOn.lastCall.args[0].suppressLog);
-
-        interval.runCheck(date);
-        interval.runCheck(date);
-        assert.equal(screen.turnOn.callCount, 6);
-        assert(screen.turnOn.lastCall.args[0].suppressLog);
-      }
-
-      // after second interval 15:35
-      {
-        const date = new Date(2017, 11, 27, 15, 35, 0);
-
-        interval.runCheck(date);
-        assert.equal(screen.turnOff.callCount, 7);
-        assert(!screen.turnOff.lastCall.args[0].suppressLog);
-
-        interval.runCheck(date);
-        interval.runCheck(date);
-        assert.equal(screen.turnOff.callCount, 9);
-        assert(screen.turnOff.lastCall.args[0].suppressLog);
-      }
+			return interval.runCheck(dateInFirstInterval);
     })
+		.then(() => {
+      assert.equal(offCount, 3);
+      assert.equal(onCount, 1);
+			// command log called
+      assert.equal(common.broadcastMessage.callCount, 2);
+
+      return interval.runCheck(dateInFirstInterval);
+		})
+		.then(() => interval.runCheck(dateInFirstInterval))
+		.then(() => {
+      assert.equal(offCount, 3);
+      assert.equal(onCount, 3);
+			// command log was not called again
+      assert.equal(common.broadcastMessage.callCount, 2);
+
+      return interval.runCheck(dateBetweenIntervals);
+		})
+		.then(() => {
+      assert.equal(offCount, 4);
+      assert.equal(onCount, 3);
+			// command log called
+      assert.equal(common.broadcastMessage.callCount, 3);
+
+      return interval.runCheck(dateBetweenIntervals);
+		})
+		.then(() => interval.runCheck(dateBetweenIntervals))
+		.then(() => {
+      assert.equal(offCount, 6);
+      assert.equal(onCount, 3);
+			// command log was not called again
+      assert.equal(common.broadcastMessage.callCount, 3);
+
+      return interval.runCheck(dateInSecondInterval);
+		})
+		.then(() => {
+      assert.equal(offCount, 6);
+      assert.equal(onCount, 4);
+			// command log called
+      assert.equal(common.broadcastMessage.callCount, 4);
+
+      return interval.runCheck(dateInSecondInterval);
+		})
+		.then(() => interval.runCheck(dateInSecondInterval))
+		.then(() => {
+      assert.equal(offCount, 6);
+      assert.equal(onCount, 6);
+			// command log was not called again
+      assert.equal(common.broadcastMessage.callCount, 4);
+
+      return interval.runCheck(dateAfterSecondInterval);
+		})
+		.then(() => {
+      assert.equal(offCount, 7);
+      assert.equal(onCount, 6);
+			// command log called
+      assert.equal(common.broadcastMessage.callCount, 5);
+
+      return interval.runCheck(dateAfterSecondInterval);
+		})
+		.then(() => interval.runCheck(dateAfterSecondInterval))
+		.then(() => {
+      assert.equal(offCount, 9);
+      assert.equal(onCount, 6);
+			// command log was not called again
+      assert.equal(common.broadcastMessage.callCount, 5);
+		});
   });
 });
