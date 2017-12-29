@@ -41,12 +41,12 @@ function getTimeline() {
   return timeline;
 }
 
-function checkTimelineNow() {
+function checkTimelineNow(date = null) {
   if (!timeline) {return true;}
 
-  if (!timelineParser.canPlay(timeline)) {return false;}
+  if (!timelineParser.canPlay(timeline, date)) {return false;}
 
-  return timeline.items.some(timelineParser.canPlay);
+  return timeline.items.some(item => timelineParser.canPlay(item, date));
 }
 
 module.exports = {

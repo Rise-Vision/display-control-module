@@ -48,7 +48,7 @@ node src/index.js
 Do the same for local-storage in a different terminal window:
 
 ```bash
-git clone https://github.com/Rise-Vision/local-storage.git
+git clone https://github.com/Rise-Vision/local-storage-module.git
 npm install
 node src/index.js
 ```
@@ -57,7 +57,7 @@ Then, supposing display-control-module is already installed, open another
 terminal window and run it:
 
 ```bash
-node src/index.js
+node src/index.js --debug
 ```
 
 You should see a WATCH event sent and caught by local-storage, and an
