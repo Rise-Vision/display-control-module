@@ -53,7 +53,7 @@ function loadCurrentConfiguration(configurationPath) {
     {
       const settings = parser.parseContent(data);
 
-      logger.debug(`loading settings ${JSON.stringify(settings)}`);
+      logger.file(`loading settings ${JSON.stringify(settings)}`);
 
       config.setDisplayControlSettings(settings);
     })
@@ -67,6 +67,8 @@ function loadCurrentConfiguration(configurationPath) {
 }
 
 function receiveConfigurationFile(message) {
+  logger.file(`***** ${message.status}`);
+
   switch (message.status) {
     case "DELETED": case "NOEXIST":
       // if we don't have a file set empty configuration.
