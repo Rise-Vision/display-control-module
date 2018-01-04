@@ -70,23 +70,20 @@ function isDisplayControlEnabled() {
   return strategy === "CEC" || strategy === "RS232";
 }
 
-function setTimeline(displayContent) {
-  if (!displayContent || !displayContent.content) {return false;}
-  if (!displayContent.content.schedule) {return false;}
-
-  return timeline = displayContent.content.schedule;
+function setTimeline(schedule) {
+  return timeline = schedule;
 }
 
 function getTimeline() {
   return timeline;
 }
 
-function checkTimelineNow() {
+function checkTimelineNow(date = null) {
   if (!timeline) {return true;}
 
-  if (!timelineParser.canPlay(timeline)) {return false;}
+  if (!timelineParser.canPlay(timeline, date)) {return false;}
 
-  return timeline.items.some(timelineParser.canPlay);
+  return timeline.items.some(item => timelineParser.canPlay(item, date));
 }
 
 module.exports = {

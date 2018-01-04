@@ -2,7 +2,8 @@ const commonConfig = require("common-display-module");
 const config = require("./config");
 const watch = require("./watch");
 const interval = require("./interval-schedule-check");
-const displayConfigBucket = "rise-display-notifications";
+const displayConfigBucket = "risevision-display-notifications";
+const logger = require("./logger");
 
 interval.startInterval();
 
@@ -25,8 +26,7 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
     }
   });
 
-  commonConfig.broadcastMessage({
-    from: config.moduleName,
-    topic: "clientlist-request"
-  });
+  commonConfig.getClientList(config.moduleName);
+
+  if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
 });

@@ -23,15 +23,15 @@ describe("Screen CEC - Integration", () =>
     config.setDisplayControlSettings({interface: "CEC"});
   });
 
-  afterEach(done=>
+  afterEach(()=>
   {
     simple.restore();
     config.setDisplayControlSettings(null);
 
-    cec.clear().then(() => done());
+    return cec.clear();
   });
 
-  it("should turn on the screen using CEC commands", done =>
+  it("should turn on the screen using CEC commands", () =>
   {
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
@@ -42,7 +42,7 @@ describe("Screen CEC - Integration", () =>
 
     simple.mock(cec, "init").resolveWith(cecStrategy);
 
-    screen.turnOn()
+    return screen.turnOn()
     .then(() =>
     {
       // should have resulted in a call to logging module
@@ -67,18 +67,10 @@ describe("Screen CEC - Integration", () =>
       assert.equal(row.event, "turn-screen-on");
       assert.equal(row.event_details, "on 0");
       assert.equal(row.display_id, "ABC");
-
-      done();
-    })
-    .catch(error =>
-    {
-      assert.fail(error);
-
-      done();
     });
   });
 
-  it("should turn off the screen using CEC commands", done =>
+  it("should turn off the screen using CEC commands", () =>
   {
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
@@ -89,7 +81,7 @@ describe("Screen CEC - Integration", () =>
 
     simple.mock(cec, "init").resolveWith(cecStrategy);
 
-    screen.turnOff()
+    return screen.turnOff()
     .then(() =>
     {
       // should have resulted in a call to logging module
@@ -114,18 +106,10 @@ describe("Screen CEC - Integration", () =>
       assert.equal(row.event, "turn-screen-off");
       assert.equal(row.event_details, "standby 0");
       assert.equal(row.display_id, "ABC");
-
-      done();
-    })
-    .catch(error =>
-    {
-      assert.fail(error);
-
-      done();
     });
   });
 
-  it("should log error if cec-utils are not installed", (done) =>
+  it("should log error if cec-utils are not installed", () =>
   {
     // cec-utils not found
     simple.mock(child, "exec").callFn((path, callback) => callback(true));
@@ -133,7 +117,7 @@ describe("Screen CEC - Integration", () =>
     simple.mock(cec, "init").callFn(cec.checkCecUtilsConfigured);
 
     // either turnOn() or turnOff() will fail
-    screen.turnOff()
+    return screen.turnOff()
     .then(() =>
     {
       // should have resulted in a call to logging module
@@ -156,20 +140,12 @@ describe("Screen CEC - Integration", () =>
       // the BigQuery row entry, see design doc for individual element description
       const row = data.data;
       assert.equal(row.event, "error");
-      assert.equal(row.event_details, "cec-utils not installed in Operating System");
+      assert(row.event_details.includes("cec-utils not installed in Operating System"));
       assert.equal(row.display_id, "ABC");
-
-      done();
-    })
-    .catch(error =>
-    {
-      assert.fail(error);
-
-      done();
     });
   });
 
-  it("should log error if command execution fails", (done) =>
+  it("should log error if command execution fails", () =>
   {
     // cec-utils found
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
@@ -181,7 +157,7 @@ describe("Screen CEC - Integration", () =>
     simple.mock(cec, "init").resolveWith(cecStrategy);
 
     // either turnOn() or turnOff() will fail
-    screen.turnOff()
+    return screen.turnOff()
     .then(() =>
     {
       // should have resulted in 2 calls to logging module: attempt and failure
@@ -231,14 +207,6 @@ describe("Screen CEC - Integration", () =>
         assert.equal(row.event_details, "display not available");
         assert.equal(row.display_id, "ABC");
       }
-
-      done();
-    })
-    .catch(error =>
-    {
-      assert.fail(error);
-
-      done();
     });
   });
 
