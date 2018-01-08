@@ -3,6 +3,7 @@ const nodeExternals = require("webpack-node-externals");
 const path = require("path");
 const UnzipsfxPlugin = require("unzipsfx-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = [
   {
@@ -14,6 +15,10 @@ module.exports = [
       filename: "index.js"
     },
     plugins: [
+      new CopyWebpackPlugin([
+        {from: "./build-x-armv7l/node_modules", to: "node_modules"},
+        {from: "./package.json"}
+      ]),
       new MinifyPlugin(),
       new ZipPlugin({
         path: path.join(__dirname, "build-armv7l"),
@@ -31,17 +36,21 @@ module.exports = [
     target: "node",
     externals: [nodeExternals()],
     output: {
-      path: path.join(__dirname, "build-x32", "display-control"),
+      path: path.join(__dirname, "build-32", "display-control"),
       filename: "index.js"
     },
     plugins: [
+      new CopyWebpackPlugin([
+        {from: "./build-x32/node_modules", to: "node_modules"},
+        {from: "./package.json"}
+      ]),
       new MinifyPlugin(),
       new ZipPlugin({
-        path: path.join(__dirname, "build-x32"),
+        path: path.join(__dirname, "build-32"),
         filename: "display-control-32"
       }),
       new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-x32"),
+        outputPath: path.join(__dirname, "build-32"),
         outputFilename: "display-control",
         arch: "32"
       })
@@ -52,17 +61,21 @@ module.exports = [
     target: "node",
     externals: [nodeExternals()],
     output: {
-      path: path.join(__dirname, "build-x64", "display-control"),
+      path: path.join(__dirname, "build-64", "display-control"),
       filename: "index.js"
     },
     plugins: [
+      new CopyWebpackPlugin([
+        {from: "./build-x64/node_modules", to: "node_modules"},
+        {from: "./package.json"}
+      ]),
       new MinifyPlugin(),
       new ZipPlugin({
-        path: path.join(__dirname, "build-x64"),
+        path: path.join(__dirname, "build-64"),
         filename: "display-control-64"
       }),
       new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-x64"),
+        outputPath: path.join(__dirname, "build-64"),
         outputFilename: "display-control",
         arch: "64"
       })

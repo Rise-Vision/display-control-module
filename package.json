@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Rise-Vision/display-control-module#readme",
   "devDependencies": {
     "babel-minify-webpack-plugin": "^0.2.0",
+    "copy-webpack-plugin": "^4.3.1",
     "istanbul": "^0.4.5",
     "electron-rebuild": "^1.6.0",
     "eslint": "^4.10.0",
