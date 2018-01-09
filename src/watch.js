@@ -45,7 +45,7 @@ function sendWatchMessages() {
 }
 
 function loadCurrentConfiguration(configurationPath) {
-  if (configurationPath) {
+  if (configurationPath && platform.fileExists(configurationPath)) {
     logger.debug(`reading ${configurationPath}`);
 
     return platform.readTextFile(configurationPath)
@@ -67,8 +67,6 @@ function loadCurrentConfiguration(configurationPath) {
 }
 
 function receiveConfigurationFile(message) {
-  logger.file(`***** ${message.status}`);
-
   switch (message.status) {
     case "DELETED": case "NOEXIST":
       // if we don't have a file set empty configuration.
