@@ -45,7 +45,7 @@ function sendWatchMessages() {
 }
 
 function loadCurrentConfiguration(configurationPath) {
-  if (configurationPath) {
+  if (configurationPath && platform.fileExists(configurationPath)) {
     logger.debug(`reading ${configurationPath}`);
 
     return platform.readTextFile(configurationPath)
@@ -53,7 +53,7 @@ function loadCurrentConfiguration(configurationPath) {
     {
       const settings = parser.parseContent(data);
 
-      logger.debug(`loading settings ${JSON.stringify(settings)}`);
+      logger.file(`loading settings ${JSON.stringify(settings)}`);
 
       config.setDisplayControlSettings(settings);
     })

@@ -17,6 +17,7 @@ describe("Watch - Unit", ()=> {
     simple.mock(common, "broadcastMessage").returnWith();
     simple.mock(logger, "error").returnWith();
     simple.mock(common, "getDisplaySettings").resolveWith(settings);
+    simple.mock(platform, "fileExists").returnWith(true);
   });
 
   afterEach(()=> {
