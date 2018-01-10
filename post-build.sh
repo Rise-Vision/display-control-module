@@ -1,19 +1,27 @@
 #!/bin/bash
 
 set -x
-ARCHS=(32 64 armv7l)
 
+#RPI
+cp build-armv7l/*.sh build
+rm -rf build-armv7l
+
+ARCHS=(32 64)
+
+# Windows
 for ARCH in "${ARCHS[@]}"
 do
-  if [ $ARCH == "armv7l" ]
-  then
-    cp build-armv7l/*.sh build
-    rm -rf build-x-armv7l
-  else
-    cp build-${ARCH}/*.{sh,exe} build
-    rm -rf build-x${ARCH}
-  fi
-  rm -rf build-${ARCH}
+  cp build-win-${ARCH}/*.exe build
+  rm -rf build-win-x${ARCH}
+  rm -rf build-win-${ARCH}
+done
+
+# Linux
+for ARCH in "${ARCHS[@]}"
+do
+  cp build-lnx-${ARCH}/*.sh build
+  rm -rf build-lnx-x${ARCH}
+  rm -rf build-lnx-${ARCH}
 done
 
 rm -rf build-temp

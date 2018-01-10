@@ -8,15 +8,29 @@ cd ./build-temp
 npm install --production
 cd ..
 
-ARCHS=(x32 x64 x-armv7l)
+PLATFORMS=(win lnx)
+ARCHS=(x32 x64)
 
-for ARCH in "${ARCHS[@]}"
+for PLATFORM in "${PLATFORMS[@]}"
 do
-  rm -rf build-${ARCH}
-  mkdir -p build-${ARCH}
-  cp ./build-temp/package.json ./build-${ARCH}
-  cp -r ./build-temp/node_modules ./build-${ARCH}
-  "$(npm bin)"/electron-rebuild --version 1.7.8 --arch ${ARCH} --only serialport --module-dir ./build-${ARCH}
+  for ARCH in "${ARCHS[@]}"
+  do
+    rm -rf build-${PLATFORM}-${ARCH}
+    mkdir -p build-${PLATFORM}-${ARCH}
+    cp ./build-temp/package.json ./build-${PLATFORM}-${ARCH}
+    cp -r ./build-temp/node_modules ./build-${PLATFORM}-${ARCH}
+    rm -rf ./build-${PLATFORM}-${ARCH}/node_modules/serialport/bin
+    if [ $PLATFORM == "lnx" ] && [ $ARCH == "x32" ]
+    then
+      cp -r ./serialport/lnx/x86/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
+    elif [ $PLATFORM == "win" ] && [ $ARCH == "x32" ]
+    then
+      cp -r ./serialport/win/ia32/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
+    else
+      cp -r ./serialport/${PLATFORM}/${ARCH}/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
+    fi
+  done
 done
+
 rm -rf build
 mkdir -p build

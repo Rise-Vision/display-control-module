@@ -16,8 +16,8 @@ module.exports = [
     },
     plugins: [
       new CopyWebpackPlugin([
-        {from: "./build-x-armv7l/node_modules", to: "node_modules"},
-        {from: "./package.json"}
+        {from: "./build-temp/node_modules", to: "node_modules"},
+        {from: "./build-temp/package.json"}
       ]),
       new MinifyPlugin(),
       new ZipPlugin({
@@ -27,7 +27,8 @@ module.exports = [
       new UnzipsfxPlugin({
         outputPath: path.join(__dirname, "build-armv7l"),
         outputFilename: "display-control",
-        arch: "armv7l"
+        arch: "armv7l",
+        platform: "lnx"
       })
     ]
   },
@@ -36,23 +37,24 @@ module.exports = [
     target: "node",
     externals: [nodeExternals()],
     output: {
-      path: path.join(__dirname, "build-32", "display-control"),
+      path: path.join(__dirname, "build-win-32", "display-control"),
       filename: "index.js"
     },
     plugins: [
       new CopyWebpackPlugin([
-        {from: "./build-x32/node_modules", to: "node_modules"},
+        {from: "./build-win-x32/node_modules", to: "node_modules"},
         {from: "./package.json"}
       ]),
       new MinifyPlugin(),
       new ZipPlugin({
-        path: path.join(__dirname, "build-32"),
-        filename: "display-control-32"
+        path: path.join(__dirname, "build-win-32"),
+        filename: "display-control-win-32"
       }),
       new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-32"),
+        outputPath: path.join(__dirname, "build-win-32"),
         outputFilename: "display-control",
-        arch: "32"
+        arch: "32",
+        platform: "win"
       })
     ]
   },
@@ -61,23 +63,76 @@ module.exports = [
     target: "node",
     externals: [nodeExternals()],
     output: {
-      path: path.join(__dirname, "build-64", "display-control"),
+      path: path.join(__dirname, "build-win-64", "display-control"),
       filename: "index.js"
     },
     plugins: [
       new CopyWebpackPlugin([
-        {from: "./build-x64/node_modules", to: "node_modules"},
+        {from: "./build-win-x64/node_modules", to: "node_modules"},
         {from: "./package.json"}
       ]),
       new MinifyPlugin(),
       new ZipPlugin({
-        path: path.join(__dirname, "build-64"),
-        filename: "display-control-64"
+        path: path.join(__dirname, "build-win-64"),
+        filename: "display-control-win-64"
       }),
       new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-64"),
+        outputPath: path.join(__dirname, "build-win-64"),
         outputFilename: "display-control",
-        arch: "64"
+        arch: "64",
+        platform: "win"
+      })
+    ]
+  },
+  {
+    entry: "./src/index.js",
+    target: "node",
+    externals: [nodeExternals()],
+    output: {
+      path: path.join(__dirname, "build-lnx-32", "display-control"),
+      filename: "index.js"
+    },
+    plugins: [
+      new CopyWebpackPlugin([
+        {from: "./build-lnx-x32/node_modules", to: "node_modules"},
+        {from: "./package.json"}
+      ]),
+      new MinifyPlugin(),
+      new ZipPlugin({
+        path: path.join(__dirname, "build-lnx-32"),
+        filename: "display-control-lnx-32"
+      }),
+      new UnzipsfxPlugin({
+        outputPath: path.join(__dirname, "build-lnx-32"),
+        outputFilename: "display-control",
+        arch: "32",
+        platform: "lnx"
+      })
+    ]
+  },
+  {
+    entry: "./src/index.js",
+    target: "node",
+    externals: [nodeExternals()],
+    output: {
+      path: path.join(__dirname, "build-lnx-64", "display-control"),
+      filename: "index.js"
+    },
+    plugins: [
+      new CopyWebpackPlugin([
+        {from: "./build-lnx-x64/node_modules", to: "node_modules"},
+        {from: "./package.json"}
+      ]),
+      new MinifyPlugin(),
+      new ZipPlugin({
+        path: path.join(__dirname, "build-lnx-64"),
+        filename: "display-control-lnx-64"
+      }),
+      new UnzipsfxPlugin({
+        outputPath: path.join(__dirname, "build-lnx-64"),
+        outputFilename: "display-control",
+        arch: "64",
+        platform: "lnx"
       })
     ]
   }
