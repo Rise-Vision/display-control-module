@@ -46,7 +46,7 @@ function sendWatchMessages() {
 }
 
 function loadCurrentConfiguration(configurationPath) {
-  if (configurationPath) {
+  if (configurationPath && platform.fileExists(configurationPath)) {
     logger.debug(`reading ${configurationPath}`);
 
     return platform.readTextFile(configurationPath)
@@ -54,7 +54,7 @@ function loadCurrentConfiguration(configurationPath) {
     {
       const settings = parser.parseContent(data);
 
-      logger.debug(`loading settings ${JSON.stringify(settings)}`);
+      logger.file(`loading settings ${JSON.stringify(settings)}`);
 
       // it's important to clear current strategy to shutdown ports and resources
       // before attempting to load a new one
