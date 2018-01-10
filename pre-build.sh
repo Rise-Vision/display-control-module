@@ -22,12 +22,12 @@ do
     rm -rf ./build-${PLATFORM}-${ARCH}/node_modules/serialport/bin
     if [ $PLATFORM == "lnx" ] && [ $ARCH == "x32" ]
     then
-      cp -r dir ./serialport/lnx/x86/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
+      cp -r ./serialport/lnx/x86/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
     elif [ $PLATFORM == "win" ] && [ $ARCH == "x32" ]
     then
-      cp -r dir ./serialport/win/ia32/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
+      cp -r ./serialport/win/ia32/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
     else
-      cp -r dir ./serialport/${PLATFORM}/${ARCH}/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
+      cp -r ./serialport/${PLATFORM}/${ARCH}/bin ./build-${PLATFORM}-${ARCH}/node_modules/serialport
     fi
   done
 done
