@@ -2,7 +2,6 @@ node_modules/
 build-temp/
 src/test/test-results.xml
 private-keys/
-build/
-build-*/
+
 *.zip
 npm-debug.log
