@@ -1,19 +1,24 @@
+/* eslint-disable global-require */
+
 // Commands that can be sent to display control.
 // These functions should only be invoked if dislay control is enabled and properly configured.
 // All functions return a Promise, so they can be chained.
 
+const isRaspbian = process.arch.includes("arm");
+
 const config = require("./config");
 const logger = require("./logger");
 
+// serialport gave lots of trouble with Raspbian, so we are excluding it in that platform.
+const rs232 = !isRaspbian && require("./strategies/rs232");
 const cec = require("./strategies/cec");
-const rs232 = require("./strategies/rs232");
 
 function clearCurrentStrategy() {
   const strategy = config.getDisplayControlStrategy();
 
   switch (strategy) {
     case "CEC": return cec.clear();
-    case "RS232": return rs232.clear();
+    case "RS232": return isRaspbian ? Promise.resolve() : rs232.clear();
     default: return Promise.resolve();
   }
 }
@@ -27,7 +32,15 @@ function displayControlStrategy(serialPort) {
     if (strategy) {
       switch (strategy) {
         case "CEC": resolve(cec); break;
-        case "RS232": resolve(rs232); break;
+        case "RS232":
+          if (isRaspbian) {
+            reject(Error("RS232 display control strategy is not supported in Raspbian"));
+          }
+          else {
+            resolve(rs232);
+          }
+
+          break;
         default: reject(Error(`Illegal display control strategy: '${strategy}'`));
       }
     }
