@@ -11,21 +11,21 @@ module.exports = [
     target: "node",
     externals: [nodeExternals()],
     output: {
-      path: path.join(__dirname, "build-armv7l", "display-control"),
+      path: path.join(__dirname, "build-lnx-armv7l", "display-control"),
       filename: "index.js"
     },
     plugins: [
       new CopyWebpackPlugin([
-        {from: "./build-temp/node_modules", to: "node_modules"},
-        {from: "./build-temp/package.json"}
+        {from: "./build-lnx-x-armv7l/node_modules", to: "node_modules"},
+        {from: "./package.json"}
       ]),
       new MinifyPlugin(),
       new ZipPlugin({
-        path: path.join(__dirname, "build-armv7l"),
-        filename: "display-control-armv7l"
+        path: path.join(__dirname, "build-lnx-armv7l"),
+        filename: "display-control-lnx-armv7l"
       }),
       new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-armv7l"),
+        outputPath: path.join(__dirname, "build-lnx-armv7l"),
         outputFilename: "display-control",
         arch: "armv7l",
         platform: "lnx"
