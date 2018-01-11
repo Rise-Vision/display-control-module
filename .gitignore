@@ -6,6 +6,7 @@ build/
 build-*/
 !serialport/lnx/x86/build/
 !serialport/lnx/x64/build/
+!serialport/lnx/armv7l/build/
 !serialport/win/ia32/build/
 !serialport/win/x64/build/
 *.zip

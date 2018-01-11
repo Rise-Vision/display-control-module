@@ -3,8 +3,9 @@
 set -x
 
 #RPI
-cp build-armv7l/*.sh build
-rm -rf build-armv7l
+cp build-lnx-armv7l/*.sh build
+rm -rf build-lnx-x-armv7l
+rm -rf build-lnx-armv7l
 
 ARCHS=(32 64)
 

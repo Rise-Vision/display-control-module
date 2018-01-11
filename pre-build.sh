@@ -16,6 +16,7 @@ do
   for ARCH in "${ARCHS[@]}"
   do
     rm -rf build-${PLATFORM}-${ARCH}
+    rm -rf build-${PLATFORM}-x${ARCH}
     mkdir -p build-${PLATFORM}-${ARCH}
     cp ./build-temp/package.json ./build-${PLATFORM}-${ARCH}
     cp -r ./build-temp/node_modules ./build-${PLATFORM}-${ARCH}
@@ -35,6 +36,17 @@ do
     fi
   done
 done
+
+#RPI
+rm -rf build-lnx-armv7l
+rm -rf build-lnx-x-armv7l
+mkdir -p build-lnx-x-armv7l
+cp ./build-temp/package.json ./build-lnx-x-armv7l
+cp -r ./build-temp/node_modules ./build-lnx-x-armv7l
+rm -rf ./build-lnx-x-armv7l/node_modules/serialport/bin
+rm -rf ./build-lnx-x-armv7l/node_modules/serialport/build/Release
+cp -r ./serialport/lnx/armv7l/bin ./build-lnx-x-armv7l/node_modules/serialport
+cp -r ./serialport/lnx/armv7l/build/Release ./build-lnx-x-armv7l/node_modules/serialport/build
 
 rm -rf build
 mkdir -p build
