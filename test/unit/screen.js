@@ -7,7 +7,9 @@ const config = require("../../src/config");
 const screen = require("../../src/screen");
 
 const cec = require("../../src/strategies/cec");
-const CECControlStrategy = require("../../src/strategies/cec/strategy");
+const rs232 = require("../../src/strategies/rs232");
+const cecStrategy = require("../../src/strategies/cec/strategy");
+const rs232Strategy = require("../../src/strategies/rs232/strategy");
 
 const logger = require("../../src/logger");
 
@@ -19,7 +21,8 @@ describe("Screen - Unit", () =>
     config.setDisplayControlSettings(null);
     simple.mock(logger, "logResult").resolveWith();
 
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy());
+    simple.mock(cec, "init").resolveWith(cecStrategy);
+    simple.mock(rs232, "init").resolveWith(rs232Strategy);
   });
 
   afterEach(()=>
@@ -36,9 +39,34 @@ describe("Screen - Unit", () =>
     screen.displayControlStrategy()
     .then(strategy =>
     {
-      assert(strategy instanceof CECControlStrategy);
       assert(strategy.turnOff);
       assert(strategy.turnOn);
+
+      done();
+    })
+    .catch(error =>
+    {
+      assert.fail(error);
+
+      done()
+    });
+  });
+
+  it("should create RS232ControlStrategy instance if RS232 strategy is configured", done =>
+  {
+    config.setDisplayControlSettings({
+      interface: "rs232",
+      "serial-port": "COM3",
+      "serial-screen-on-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 31 03 73 0d",
+      "serial-screen-off-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d"
+    });
+
+    screen.displayControlStrategy()
+    .then(strategy =>
+    {
+      assert(strategy.turnOff);
+      assert(strategy.turnOn);
+      assert(strategy.close);
 
       done();
     })

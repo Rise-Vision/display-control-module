@@ -3,5 +3,11 @@ build-temp/
 src/test/test-results.xml
 private-keys/
 build/
+build-*/
+!serialport/lnx/ia32/build/
+!serialport/lnx/x64/build/
+!serialport/lnx/armv7l/build/
+!serialport/win/ia32/build/
+!serialport/win/x64/build/
 *.zip
 npm-debug.log

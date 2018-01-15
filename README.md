@@ -74,6 +74,13 @@ node test/manual/send_command.js
 
 This needs local-messaging-module and logging-module to be also running.
 
+### Manually testing RS-232 commands
+
+Use commands from this project to check RS-232 is working properly from the
+serialport library:
+
+https://github.com/Rise-Vision/serialport-test
+
 ### Manually testing CEC commands on Raspbian PI
 
 #### Install cec-utils
@@ -215,3 +222,50 @@ echo "on 0" | cec-client -s -d 8
 ```
 
 The low level equivalent for 'on 0' is 'tx 10:04'.
+
+### Manually testing using a config file ( CEC or RS-232 )
+
+The tests described in this section use the same parsing, connection and
+communication scripts as display-control-module. Only file watching and
+scheduling is left out.
+
+Ensure both local-messaging-module and logging-module are running.
+local-storage not needed for this test as the file will be provided manually.
+
+Create a config file with the correct format, for example:
+
+```
+interface=rs232
+serial-port=COM3
+serial-baud-rate=
+serial-data-bits=
+serial-parity=
+serial-stop-bits=
+serial-flow-control=
+serial-screen-on-cmd=01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 31 03 73 0d
+serial-screen-off-cmd=01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d
+```
+
+Interface can be 'rs232' or 'cec'. If it is 'cec' the rest of the file is
+ignored.
+
+serial-port, serial-screen-off-cmd and serial-screen-on-cmd are required for
+RS-232 connection type.
+
+Default and valid values for serial entries can be found here:
+https://www.npmjs.com/package/serialport#module_serialport--SerialPort..openOptions
+
+- serial-flow-control can be a comma separated string of the following values:
+rtscts, xon, xoff, xany
+
+Once the file is created, run the following command to turn the screen off:
+
+```bash
+node test/manual/turn_off.js /path/to/config/file
+```
+
+Run the following command to turn the screen on:
+
+```bash
+node test/manual/turn_on.js /path/to/config/file
+```

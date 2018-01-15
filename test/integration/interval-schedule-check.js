@@ -12,7 +12,7 @@ const interval = require("../../src/interval-schedule-check");
 const watch = require("../../src/watch");
 
 const cec = require("../../src/strategies/cec");
-const CECControlStrategy = require("../../src/strategies/cec/strategy");
+const cecStrategy = require("../../src/strategies/cec/strategy");
 
 const content = `
 {
@@ -121,7 +121,8 @@ describe("Interval Schedule Check - Integration", ()=>{
     simple.restore();
     config.setDisplayControlSettings(null);
     config.setTimeline(null);
-    cec.clear();
+
+    return cec.clear();
   });
 
   it("should switch correctly between turn on and turn off commands", ()=>{
@@ -135,9 +136,8 @@ describe("Interval Schedule Check - Integration", ()=>{
     let offCount = 0;
     let onCount = 0;
 
-    // intercept CEC write operations
-    simple.mock(cec, "init").resolveWith(new CECControlStrategy(
-    {
+    // Intercept CEC write operations.
+    cecStrategy.init({
       WriteRawMessage: message => {
         switch (message) {
           case "standby 0": offCount += 1; break;
@@ -147,7 +147,8 @@ describe("Interval Schedule Check - Integration", ()=>{
 
         return Promise.resolve()
       }
-    }));
+    });
+    simple.mock(cec, "init").resolveWith(cecStrategy);
 
     config.setDisplayControlSettings({interface: "CEC"});
 

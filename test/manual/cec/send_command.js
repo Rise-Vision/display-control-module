@@ -6,7 +6,8 @@ const SECONDS = 10;
 module.exports = command =>
 {
   const monitor = new CECMonitor('RV', {
-    debug: true
+    debug: true,
+    cache: {enable: false}
   });
 
   monitor.once(CECMonitor.EVENTS._READY, () =>
