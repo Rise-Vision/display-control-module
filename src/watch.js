@@ -3,6 +3,7 @@
 const common = require("common-display-module");
 const config = require("./config");
 const logger = require("./logger");
+const messaging = require("common-display-module/messaging");
 const parser = require("./parser");
 const screen = require("./screen");
 const platform = require("rise-common-electron").platform;
@@ -36,7 +37,7 @@ function sendWatchMessages() {
     {
       const filePath = `risevision-display-notifications/${displayId}/${name}`;
 
-      common.broadcastMessage({
+      messaging.broadcastMessage({
         from: config.moduleName,
         topic: "watch",
         filePath

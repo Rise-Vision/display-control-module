@@ -2,7 +2,7 @@
 /* eslint-disable max-statements, no-magic-numbers, no-useless-escape, no-irregular-whitespace, no-multi-spaces */
 const assert = require("assert");
 const child = require("child_process");
-const common = require("common-display-module");
+const messaging = require("common-display-module/messaging");
 const simple = require("simple-mock");
 const platform = require("rise-common-electron").platform;
 
@@ -104,7 +104,7 @@ const content = `
 
 describe("Interval Schedule Check - Integration", ()=>{
   beforeEach(()=>{
-    simple.mock(common, "broadcastMessage").returnWith();
+    simple.mock(messaging, "broadcastMessage").returnWith();
     simple.mock(platform, "readTextFile").resolveWith(content);
 
     // no error, so cec-utils check passes
@@ -165,7 +165,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 1);
       assert.equal(onCount, 0);
       // command log called
-      assert.equal(common.broadcastMessage.callCount, 1);
+      assert.equal(messaging.broadcastMessage.callCount, 1);
 
       return interval.runCheck(dateBeforeFirstInterval);
     })
@@ -174,7 +174,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 3);
       assert.equal(onCount, 0);
       // command log was not called again
-      assert.equal(common.broadcastMessage.callCount, 1);
+      assert.equal(messaging.broadcastMessage.callCount, 1);
 
       return interval.runCheck(dateInFirstInterval);
     })
@@ -182,7 +182,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 3);
       assert.equal(onCount, 1);
       // command log called
-      assert.equal(common.broadcastMessage.callCount, 2);
+      assert.equal(messaging.broadcastMessage.callCount, 2);
 
       return interval.runCheck(dateInFirstInterval);
     })
@@ -191,7 +191,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 3);
       assert.equal(onCount, 3);
       // command log was not called again
-      assert.equal(common.broadcastMessage.callCount, 2);
+      assert.equal(messaging.broadcastMessage.callCount, 2);
 
       return interval.runCheck(dateBetweenIntervals);
     })
@@ -199,7 +199,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 4);
       assert.equal(onCount, 3);
       // command log called
-      assert.equal(common.broadcastMessage.callCount, 3);
+      assert.equal(messaging.broadcastMessage.callCount, 3);
 
       return interval.runCheck(dateBetweenIntervals);
     })
@@ -208,7 +208,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 6);
       assert.equal(onCount, 3);
       // command log was not called again
-      assert.equal(common.broadcastMessage.callCount, 3);
+      assert.equal(messaging.broadcastMessage.callCount, 3);
 
       return interval.runCheck(dateInSecondInterval);
     })
@@ -216,7 +216,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 6);
       assert.equal(onCount, 4);
       // command log called
-      assert.equal(common.broadcastMessage.callCount, 4);
+      assert.equal(messaging.broadcastMessage.callCount, 4);
 
       return interval.runCheck(dateInSecondInterval);
     })
@@ -225,7 +225,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 6);
       assert.equal(onCount, 6);
       // command log was not called again
-      assert.equal(common.broadcastMessage.callCount, 4);
+      assert.equal(messaging.broadcastMessage.callCount, 4);
 
       return interval.runCheck(dateAfterSecondInterval);
     })
@@ -233,7 +233,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 7);
       assert.equal(onCount, 6);
       // command log called
-      assert.equal(common.broadcastMessage.callCount, 5);
+      assert.equal(messaging.broadcastMessage.callCount, 5);
 
       return interval.runCheck(dateAfterSecondInterval);
     })
@@ -242,7 +242,7 @@ describe("Interval Schedule Check - Integration", ()=>{
       assert.equal(offCount, 9);
       assert.equal(onCount, 6);
       // command log was not called again
-      assert.equal(common.broadcastMessage.callCount, 5);
+      assert.equal(messaging.broadcastMessage.callCount, 5);
     });
   });
 });

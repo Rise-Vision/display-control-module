@@ -2,6 +2,7 @@
 /* eslint-disable max-statements, no-magic-numbers */
 const assert = require("assert");
 const common = require("common-display-module");
+const messaging = require("common-display-module/messaging");
 const child = require("child_process");
 const simple = require("simple-mock");
 
@@ -16,9 +17,9 @@ describe("Screen CEC - Integration", () =>
 
   beforeEach(() =>
   {
-    simple.mock(common, "connect").resolveWith({});
     simple.mock(common, "getDisplayId").resolveWith("ABC");
-    simple.mock(common, "broadcastMessage").returnWith();
+    simple.mock(messaging, "connect").resolveWith({});
+    simple.mock(messaging, "broadcastMessage").returnWith();
 
     config.setDisplayControlSettings({interface: "CEC"});
   });
@@ -46,10 +47,10 @@ describe("Screen CEC - Integration", () =>
     .then(() =>
     {
       // should have resulted in a call to logging module
-      assert(common.broadcastMessage.called);
+      assert(messaging.broadcastMessage.called);
 
       // this is the actual event object sent to the logging module
-      const event = common.broadcastMessage.lastCall.args[0];
+      const event = messaging.broadcastMessage.lastCall.args[0];
 
       // I sent the event
       assert.equal(event.from, "display-control");
@@ -85,10 +86,10 @@ describe("Screen CEC - Integration", () =>
     .then(() =>
     {
       // should have resulted in a call to logging module
-      assert(common.broadcastMessage.called);
+      assert(messaging.broadcastMessage.called);
 
       // this is the actual event object sent to the logging module
-      const event = common.broadcastMessage.lastCall.args[0];
+      const event = messaging.broadcastMessage.lastCall.args[0];
 
       // I sent the event
       assert.equal(event.from, "display-control");
@@ -121,10 +122,10 @@ describe("Screen CEC - Integration", () =>
     .then(() =>
     {
       // should have resulted in a call to logging module
-      assert(common.broadcastMessage.called);
+      assert(messaging.broadcastMessage.called);
 
       // this is the actual event object sent to the logging module
-      const event = common.broadcastMessage.lastCall.args[0];
+      const event = messaging.broadcastMessage.lastCall.args[0];
 
       // I sent the event
       assert.equal(event.from, "display-control");
@@ -161,12 +162,12 @@ describe("Screen CEC - Integration", () =>
     .then(() =>
     {
       // should have resulted in 2 calls to logging module: attempt and failure
-      assert(common.broadcastMessage.called);
-      assert.equal(common.broadcastMessage.callCount, 2);
+      assert(messaging.broadcastMessage.called);
+      assert.equal(messaging.broadcastMessage.callCount, 2);
 
       {
         // event representing command attempt
-        const event = common.broadcastMessage.calls[0].args[0];
+        const event = messaging.broadcastMessage.calls[0].args[0];
 
         // I sent the event
         assert.equal(event.from, "display-control");
@@ -188,7 +189,7 @@ describe("Screen CEC - Integration", () =>
 
       {
         // event representing command failure
-        const event = common.broadcastMessage.calls[1].args[0];
+        const event = messaging.broadcastMessage.calls[1].args[0];
 
         // I sent the event
         assert.equal(event.from, "display-control");

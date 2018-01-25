@@ -1,4 +1,4 @@
-const commonConfig = require("common-display-module");
+const messaging = require("common-display-module/messaging");
 const config = require("./config");
 const watch = require("./watch");
 const interval = require("./interval-schedule-check");
@@ -7,7 +7,7 @@ const logger = require("./logger");
 
 interval.startInterval();
 
-commonConfig.receiveMessages(config.moduleName).then(receiver =>
+messaging.receiveMessages(config.moduleName).then(receiver =>
 {
   receiver.on("message", message => {
     switch (message.topic.toUpperCase()) {
@@ -26,7 +26,7 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
     }
   });
 
-  commonConfig.getClientList(config.moduleName);
+  messaging.getClientList(config.moduleName);
 
   if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
 });

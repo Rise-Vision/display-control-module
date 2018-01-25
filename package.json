@@ -40,8 +40,7 @@
   },
   "dependencies": {
     "rise-cec-monitor": "git://github.com/Rise-Vision/rise-cec-monitor.git#65c6fa04",
-    "common-display-module": "git://github.com/Rise-Vision/common-display-module.git#v2.4.2",
-    "node-ipc": "^9.1.1",
+    "common-display-module": "git://github.com/Rise-Vision/common-display-module.git#v3.0.1",
     "rise-common-electron": "git://github.com/Rise-Vision/rise-common-electron.git#v2.2.5",
     "serialport": "^6.0.4"
   }

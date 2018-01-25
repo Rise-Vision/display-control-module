@@ -3,6 +3,7 @@
 const assert = require("assert");
 const logger = require("../../src/logger");
 const common = require("common-display-module");
+const messaging = require("common-display-module/messaging");
 const simple = require("simple-mock");
 const platform = require("rise-common-electron").platform;
 
@@ -14,7 +15,7 @@ describe("Watch - Unit", ()=> {
   beforeEach(()=> {
     const settings = {displayid: "DIS123"};
 
-    simple.mock(common, "broadcastMessage").returnWith();
+    simple.mock(messaging, "broadcastMessage").returnWith();
     simple.mock(logger, "error").returnWith();
     simple.mock(common, "getDisplaySettings").resolveWith(settings);
     simple.mock(platform, "fileExists").returnWith(true);
@@ -30,7 +31,7 @@ describe("Watch - Unit", ()=> {
     watch.sendWatchMessagesIfLocalStorageIsAvailable({clients: []})
     .then(() => {
       // no clients, so WATCH messages shouldn't have been sent
-      assert(!common.broadcastMessage.called);
+      assert(!messaging.broadcastMessage.called);
 
       done();
     })
@@ -47,7 +48,7 @@ describe("Watch - Unit", ()=> {
     })
     .then(() => {
       // so WATCH messages shouldn't have been sent
-      assert(!common.broadcastMessage.called);
+      assert(!messaging.broadcastMessage.called);
 
       done();
     })
@@ -64,12 +65,12 @@ describe("Watch - Unit", ()=> {
     })
     .then(() => {
       // so WATCH messages should have been sent for both screen-control.txt and content.json files
-      assert(common.broadcastMessage.called);
-      assert.equal(2, common.broadcastMessage.callCount);
+      assert(messaging.broadcastMessage.called);
+      assert.equal(2, messaging.broadcastMessage.callCount);
 
       {
         // this is the request for screen-control.txt
-        const event = common.broadcastMessage.calls[0].args[0];
+        const event = messaging.broadcastMessage.calls[0].args[0];
 
         assert(event);
         // check we sent it
@@ -82,7 +83,7 @@ describe("Watch - Unit", ()=> {
 
       {
         // this is the request for content.json
-        const event = common.broadcastMessage.calls[1].args[0];
+        const event = messaging.broadcastMessage.calls[1].args[0];
 
         assert(event);
         // check we sent it

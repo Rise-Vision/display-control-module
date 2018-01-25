@@ -2,6 +2,7 @@
 /* eslint-disable max-statements */
 const assert = require("assert");
 const common = require("common-display-module");
+const messaging = require("common-display-module/messaging");
 const simple = require("simple-mock");
 
 const logger = require("../../src/logger");
@@ -13,7 +14,7 @@ describe("Logger - Unit", ()=>
   {
     const settings = {displayid: "DIS123"};
 
-    simple.mock(common, "broadcastMessage").returnWith();
+    simple.mock(messaging, "broadcastMessage").returnWith();
     simple.mock(common, "getDisplaySettings").resolveWith(settings);
     simple.mock(common, "getModuleVersion").returnWith("1.1");
   });
@@ -27,10 +28,10 @@ describe("Logger - Unit", ()=>
     logger.sendCommandAttempt('turn-screen-on', 'TURN_ON --PLEASE')
     .then(() =>
     {
-      assert(common.broadcastMessage.called);
+      assert(messaging.broadcastMessage.called);
 
       // this is the actual event object sent to the logging module
-      const event = common.broadcastMessage.lastCall.args[0]
+      const event = messaging.broadcastMessage.lastCall.args[0]
 
       // I sent the event
       assert.equal(event.from, "display-control")
@@ -66,10 +67,10 @@ describe("Logger - Unit", ()=>
     logger.sendCommandFailure('screen has died, so sorry')
     .then(() =>
     {
-      assert(common.broadcastMessage.called);
+      assert(messaging.broadcastMessage.called);
 
       // this is the actual event object sent to the logging module
-      const event = common.broadcastMessage.lastCall.args[0]
+      const event = messaging.broadcastMessage.lastCall.args[0]
 
       // I sent the event
       assert.equal(event.from, "display-control")
