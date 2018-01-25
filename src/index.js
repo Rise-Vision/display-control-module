@@ -30,6 +30,7 @@ messaging.receiveMessages(config.moduleName).then(receiver =>
   });
 
   messaging.getClientList(config.moduleName);
+  licensing.requestLicensingData();
 
   if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
 });

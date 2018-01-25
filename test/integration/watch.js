@@ -5,6 +5,7 @@ const common = require("common-display-module");
 const messaging = require("common-display-module/messaging");
 const simple = require("simple-mock");
 
+const licensing = require("../../src/licensing");
 const watch = require("../../src/watch");
 
 describe("Watch - Integration", ()=>
@@ -14,7 +15,8 @@ describe("Watch - Integration", ()=>
   {
     const settings = {displayid: "DIS123"};
 
-    simple.mock(messaging, "broadcastMessage").returnWith();
+    simple.mock(licensing, "requestLicensingData").resolveWith();
+    simple.mock(messaging, "broadcastMessage").resolveWith();
     simple.mock(messaging, "getClientList").returnWith();
     simple.mock(common, "getDisplaySettings").resolveWith(settings);
   });

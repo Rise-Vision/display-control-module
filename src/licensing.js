@@ -3,6 +3,13 @@ const licensing = require("common-display-module/licensing");
 const config = require("./config");
 const logger = require("./logger");
 
+function requestLicensingData() {
+  return licensing.requestLicensingData(config.moduleName)
+  .catch(error => {
+    logger.error(error.stack, 'Error while requesting licensing data');
+  });
+}
+
 function updateLicensingData(data) {
   if (licensing.containsSubscriptionDataForRisePlayerProfessional(data)) {
     const previousAuthorized = config.isAuthorized();
@@ -19,4 +26,4 @@ function updateLicensingData(data) {
   return Promise.resolve();
 }
 
-module.exports = {updateLicensingData};
+module.exports = {requestLicensingData, updateLicensingData};
