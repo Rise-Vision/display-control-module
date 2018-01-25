@@ -12,9 +12,11 @@ function updateLicensingData(data) {
     if (previousAuthorized !== currentAuthorized) {
       config.setAuthorized(currentAuthorized);
 
-      logger.all(currentAuthorized ? 'authorized' : 'not_authorized');
+      return logger.all(currentAuthorized ? 'authorized' : 'not_authorized');
     }
   }
+
+  return Promise.resolve();
 }
 
 module.exports = {updateLicensingData};
