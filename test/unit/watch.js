@@ -30,40 +30,26 @@ describe("Watch - Unit", ()=> {
     simple.restore()
   });
 
-  it("should not send WATCH messages if no module is available", done => {
-    watch.sendWatchMessagesIfLocalStorageIsAvailable({clients: []})
+  it("should not send WATCH messages if no module is available", () => {
+    return watch.sendWatchMessagesIfLocalStorageIsAvailable({clients: []})
     .then(() => {
       // no clients, so WATCH messages shouldn't have been sent
       assert(!messaging.broadcastMessage.called);
-
-      done();
-    })
-    .catch(error => {
-      assert.fail(error)
-
-      done()
     });
   });
 
-  it("should not send WATCH messages if local-storage module is not available", done => {
-    watch.sendWatchMessagesIfLocalStorageIsAvailable({
+  it("should not send WATCH messages if local-storage module is not available", () => {
+    return watch.sendWatchMessagesIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics"]
     })
     .then(() => {
       // so WATCH messages shouldn't have been sent
       assert(!messaging.broadcastMessage.called);
-
-      done();
     })
-    .catch(error => {
-      assert.fail(error)
-
-      done()
-    });
   });
 
-  it("should send WATCH messages if local-storage module is available", done => {
-    watch.sendWatchMessagesIfLocalStorageIsAvailable({
+  it("should send WATCH messages if local-storage module is available", () => {
+    return watch.sendWatchMessagesIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics", "local-storage"]
     })
     .then(() => {
@@ -96,17 +82,10 @@ describe("Watch - Unit", ()=> {
         // check the URL of the file.
         assert.equal(event.filePath, "risevision-display-notifications/DIS123/content.json");
       }
-
-      done();
     })
-    .catch(error => {
-      assert.fail(error)
-
-      done()
-    });
   });
 
-  it("should receive control config file", done => {
+  it("should receive control config file", () => {
     simple.mock(platform, "readTextFile").resolveWith(`
 interface=cec
 serial-port=
@@ -118,7 +97,7 @@ serial-flow-control=
 serial-screen-on-cmd=
 serial-screen-off-cmd=`);
 
-    watch.receiveConfigurationFile({
+    return watch.receiveConfigurationFile({
       topic: "file-update",
       status: "CURRENT",
       ospath: "xxxxxxx/screen-control.txt"
@@ -132,35 +111,21 @@ serial-screen-off-cmd=`);
       assert.equal(settings['serial-port'], "");
       assert.equal(settings['serial-baud-rate'], "");
       assert.equal(settings['serial-screen-off-cmd'], "");
-
-      done();
-    })
-    .catch(error => {
-      assert.fail(error)
-
-      done()
     });
   });
 
-  it("should clear settings if local file is not current", done => {
-    watch.receiveConfigurationFile({
+  it("should clear settings if local file is not current", () => {
+    return watch.receiveConfigurationFile({
       topic: "file-update",
       status: "DELETED",
       ospath: "xxxxxxx/screen-control.txt"
     })
     .then(() => {
       assert(!config.isDisplayControlEnabled());
-
-      done();
     })
-    .catch(error => {
-      assert.fail(error)
-
-      done()
-    });
   });
 
-  it("should receive content file", ()=>{
+  it("should receive content file", () => {
     const mockScheduleText = '{"content": {"schedule": {"timeDefined": true}}}';
     simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
     simple.mock(config, "setTimeline").returnWith();
@@ -175,7 +140,7 @@ serial-screen-off-cmd=`);
     });
   });
 
-  it("should catch invalid content file", ()=>{
+  it("should catch invalid content file", () => {
     const mockScheduleText = '{"content": invalid}';
     simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
 
@@ -189,7 +154,7 @@ serial-screen-off-cmd=`);
     });
   });
 
-  it("should catch invalid content file", ()=>{
+  it("should catch invalid content file", () => {
     const mockScheduleText = '{{';
     simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
 
