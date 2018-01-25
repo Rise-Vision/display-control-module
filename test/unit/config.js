@@ -6,7 +6,7 @@ const config = require("../../src/config");
 
 describe("Config - Unit", ()=> {
 
-  afterEach(()=> config.setDisplayControlSettings(null));
+  afterEach(()=> config.clear());
 
   it("should not be enabled if no display control settings set", () => {
     assert(!config.getDisplayControlStrategy());
