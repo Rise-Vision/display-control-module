@@ -12,7 +12,7 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
   receiver.on("message", message => {
     switch (message.topic.toUpperCase()) {
       case "CLIENT-LIST":
-        return watch.checkIfLocalStorageIsAvailable(message);
+        return watch.sendWatchMessagesIfLocalStorageIsAvailable(message);
       case "FILE-UPDATE":
         if (!message.filePath) {return;}
         if (!message.filePath.startsWith(displayConfigBucket)) {return;}

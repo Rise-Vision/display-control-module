@@ -27,7 +27,7 @@ describe("Watch - Unit", ()=> {
   });
 
   it("should not send WATCH messages if no module is available", done => {
-    watch.checkIfLocalStorageIsAvailable({clients: []})
+    watch.sendWatchMessagesIfLocalStorageIsAvailable({clients: []})
     .then(() => {
       // no clients, so WATCH messages shouldn't have been sent
       assert(!common.broadcastMessage.called);
@@ -42,7 +42,7 @@ describe("Watch - Unit", ()=> {
   });
 
   it("should not send WATCH messages if local-storage module is not available", done => {
-    watch.checkIfLocalStorageIsAvailable({
+    watch.sendWatchMessagesIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics"]
     })
     .then(() => {
@@ -59,7 +59,7 @@ describe("Watch - Unit", ()=> {
   });
 
   it("should send WATCH messages if local-storage module is available", done => {
-    watch.checkIfLocalStorageIsAvailable({
+    watch.sendWatchMessagesIfLocalStorageIsAvailable({
       clients: ["logging", "system-metrics", "local-storage"]
     })
     .then(() => {

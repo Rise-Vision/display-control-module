@@ -14,7 +14,7 @@ function clearMessagesAlreadySentFlag() {
   watchMessagesAlreadySent = false;
 }
 
-function checkIfLocalStorageIsAvailable(message) {
+function sendWatchMessagesIfLocalStorageIsAvailable(message) {
   if (!watchMessagesAlreadySent) {
     logger.debug(JSON.stringify(message));
 
@@ -101,7 +101,7 @@ function receiveContentFile(message) {
 }
 
 module.exports = {
-  checkIfLocalStorageIsAvailable,
+  sendWatchMessagesIfLocalStorageIsAvailable,
   clearMessagesAlreadySentFlag,
   loadCurrentConfiguration,
   receiveConfigurationFile,
