@@ -13,6 +13,8 @@ const watch = require("../../src/watch");
 describe("Watch - Unit", ()=> {
 
   beforeEach(()=> {
+    config.setAuthorized(true);
+
     const settings = {displayid: "DIS123"};
 
     simple.mock(messaging, "broadcastMessage").returnWith();
@@ -23,6 +25,7 @@ describe("Watch - Unit", ()=> {
 
   afterEach(()=> {
     watch.clearMessagesAlreadySentFlag();
+    config.clear();
 
     simple.restore()
   });

@@ -104,6 +104,8 @@ const content = `
 
 describe("Interval Schedule Check - Integration", ()=>{
   beforeEach(()=>{
+    config.setAuthorized(true);
+
     simple.mock(messaging, "broadcastMessage").returnWith();
     simple.mock(platform, "readTextFile").resolveWith(content);
 
@@ -119,8 +121,7 @@ describe("Interval Schedule Check - Integration", ()=>{
 
   afterEach(()=>{
     simple.restore();
-    config.setDisplayControlSettings(null);
-    config.setTimeline(null);
+    config.clear();
 
     return cec.clear();
   });

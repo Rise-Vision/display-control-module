@@ -3,6 +3,8 @@ const timelineParser = require("./timeline-parser.js");
 
 const moduleName = "display-control";
 
+const VALID_STRATEGIES = ["CEC", "RS232"];
+
 // This will be set once the configuration file is received, if it is ever received.
 // It's an object containing the following properties: interface, serial-port,
 // serial-baud-rate, serial-data-bits, serial-parity, serial-stop-bits,
@@ -13,6 +15,9 @@ let displayControlSettings = null;
 
 // The timeline comes from the display's schedule, provided by local-storage
 let timeline = null;
+
+// will turn to either true or false when valid license data is received
+let authorized = null;
 
 function getDisplayControlStrategy() {
   return displayControlSettings && displayControlSettings.interface ?
@@ -67,7 +72,7 @@ function setDisplayControlSettings(settings) {
 function isDisplayControlEnabled() {
   const strategy = getDisplayControlStrategy();
 
-  return strategy === "CEC" || strategy === "RS232";
+  return isAuthorized() && VALID_STRATEGIES.includes(strategy);
 }
 
 function setTimeline(schedule) {
@@ -86,6 +91,21 @@ function checkTimelineNow(date = null) {
   return timeline.items.some(item => timelineParser.canPlay(item, date));
 }
 
+function setAuthorized(flag) {
+  authorized = flag;
+}
+
+function isAuthorized() {
+  return authorized;
+}
+
+// Clear all state, for testing purposes only
+function clear() {
+  setDisplayControlSettings(null);
+  setTimeline(null);
+  setAuthorized(null);
+}
+
 module.exports = {
   bqProjectName: "client-side-events",
   bqDataset: "Module_Events",
@@ -102,5 +122,8 @@ module.exports = {
   isDisplayControlEnabled,
   setTimeline,
   getTimeline,
-  checkTimelineNow
+  checkTimelineNow,
+  setAuthorized,
+  isAuthorized,
+  clear
 };
