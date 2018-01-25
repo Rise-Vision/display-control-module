@@ -19,7 +19,7 @@ function updateLicensingData(data) {
     if (previousAuthorized !== currentAuthorized) {
       config.setAuthorized(currentAuthorized);
 
-      return logger.all(currentAuthorized ? 'authorized' : 'not_authorized');
+      return logger.all(currentAuthorized ? 'authorized' : 'not_authorized', '');
     }
   }
 
