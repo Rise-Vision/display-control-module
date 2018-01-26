@@ -2,6 +2,7 @@
 /* eslint-disable max-statements, no-magic-numbers */
 const assert = require("assert");
 const common = require("common-display-module");
+const messaging = require("common-display-module/messaging");
 const child = require("child_process");
 const simple = require("simple-mock");
 
@@ -17,9 +18,9 @@ describe("Parser - Integration", () =>
 
   beforeEach(() =>
   {
-    simple.mock(common, "connect").resolveWith({});
     simple.mock(common, "getDisplayId").resolveWith("ABC");
-    simple.mock(common, "broadcastMessage").returnWith();
+    simple.mock(messaging, "connect").resolveWith({});
+    simple.mock(messaging, "broadcastMessage").returnWith();
 
     // no error
     simple.mock(child, "exec").callFn((path, callback) => callback(false));
@@ -59,10 +60,10 @@ serial-screen-off-cmd=`;
     .then(() =>
     {
       // should have resulted in a call to logging module
-      assert(common.broadcastMessage.called);
+      assert(messaging.broadcastMessage.called);
 
       // this is the actual event object sent to the logging module
-      const event = common.broadcastMessage.lastCall.args[0];
+      const event = messaging.broadcastMessage.lastCall.args[0];
 
       // I sent the event
       assert.equal(event.from, "display-control");

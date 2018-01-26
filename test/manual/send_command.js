@@ -1,12 +1,12 @@
 // Manually test sending commands to BQ vía logging module.
 
-const common = require("common-display-module")
+const messaging = require("common-display-module/messaging");
 
-const config = require("../src/config")
-const logger = require("../src/logger")
+const config = require("../src/config");
+const logger = require("../src/logger");
 
-common.connect(config.moduleName).then(() =>
+messaging.connect(config.moduleName).then(() =>
 {
-  return logger.sendCommandAttempt('turn-screen-on', 'TURN_ON --PLEASE')
+  return logger.sendCommandAttempt('turn-screen-on', 'TURN_ON --PLEASE');
 })
-.catch(console.error)
+.catch(console.error);

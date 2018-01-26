@@ -1,5 +1,6 @@
-const commonConfig = require("common-display-module");
+const messaging = require("common-display-module/messaging");
 const config = require("./config");
+const licensing = require("./licensing");
 const watch = require("./watch");
 const interval = require("./interval-schedule-check");
 const displayConfigBucket = "risevision-display-notifications";
@@ -7,12 +8,14 @@ const logger = require("./logger");
 
 interval.startInterval();
 
-commonConfig.receiveMessages(config.moduleName).then(receiver =>
+messaging.receiveMessages(config.moduleName).then(receiver =>
 {
   receiver.on("message", message => {
     switch (message.topic.toUpperCase()) {
       case "CLIENT-LIST":
-        return watch.checkIfLocalStorageIsAvailable(message);
+        return watch.sendWatchMessagesIfLocalStorageIsAvailable(message);
+      case "LICENSING-UPDATE":
+        return licensing.updateLicensingData(message);
       case "FILE-UPDATE":
         if (!message.filePath) {return;}
         if (!message.filePath.startsWith(displayConfigBucket)) {return;}
@@ -26,7 +29,8 @@ commonConfig.receiveMessages(config.moduleName).then(receiver =>
     }
   });
 
-  commonConfig.getClientList(config.moduleName);
+  messaging.getClientList(config.moduleName);
+  licensing.requestLicensingData();
 
   if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
 });
