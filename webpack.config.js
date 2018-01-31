@@ -1,139 +1,35 @@
+const webpack = require("webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
-const nodeExternals = require("webpack-node-externals");
 const path = require("path");
 const UnzipsfxPlugin = require("unzipsfx-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-module.exports = [
-  {
-    entry: "./src/index.js",
-    target: "node",
-    externals: [nodeExternals()],
-    output: {
-      path: path.join(__dirname, "build-lnx-armv7l", "display-control"),
-      filename: "index.js"
-    },
-    plugins: [
-      new CopyWebpackPlugin([
-        {from: "./build-lnx-x-armv7l/node_modules", to: "node_modules"},
-        {from: "./package.json"}
-      ]),
-      new MinifyPlugin(),
-      new ZipPlugin({
-        path: path.join(__dirname, "build-lnx-armv7l"),
-        filename: "display-control-lnx-armv7l"
-      }),
-      new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-lnx-armv7l"),
-        outputFilename: "display-control",
-        arch: "armv7l",
-        platform: "lnx"
-      })
-    ]
+module.exports = {
+  entry: "./src/index.js",
+  target: "node",
+  externals: {
+    "electron": "electron",
+    "original-fs": "original-fs"
   },
-  {
-    entry: "./src/index.js",
-    target: "node",
-    externals: [nodeExternals()],
-    output: {
-      path: path.join(__dirname, "build-win-32", "display-control"),
-      filename: "index.js"
-    },
-    plugins: [
-      new CopyWebpackPlugin([
-        {from: "./build-win-x32/node_modules", to: "node_modules"},
-        {from: "./package.json"}
-      ]),
-      new MinifyPlugin(),
-      new ZipPlugin({
-        path: path.join(__dirname, "build-win-32"),
-        filename: "display-control-win-32"
-      }),
-      new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-win-32"),
-        outputFilename: "display-control",
-        arch: "32",
-        platform: "win"
-      })
-    ]
+  output: {
+    path: path.join(__dirname, "build", "display-control"),
+    filename: "index.js"
   },
-  {
-    entry: "./src/index.js",
-    target: "node",
-    externals: [nodeExternals()],
-    output: {
-      path: path.join(__dirname, "build-win-64", "display-control"),
-      filename: "index.js"
-    },
-    plugins: [
-      new CopyWebpackPlugin([
-        {from: "./build-win-x64/node_modules", to: "node_modules"},
-        {from: "./package.json"}
-      ]),
-      new MinifyPlugin(),
-      new ZipPlugin({
-        path: path.join(__dirname, "build-win-64"),
-        filename: "display-control-win-64"
-      }),
-      new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-win-64"),
-        outputFilename: "display-control",
-        arch: "64",
-        platform: "win"
-      })
-    ]
-  },
-  {
-    entry: "./src/index.js",
-    target: "node",
-    externals: [nodeExternals()],
-    output: {
-      path: path.join(__dirname, "build-lnx-32", "display-control"),
-      filename: "index.js"
-    },
-    plugins: [
-      new CopyWebpackPlugin([
-        {from: "./build-lnx-x32/node_modules", to: "node_modules"},
-        {from: "./package.json"}
-      ]),
-      new MinifyPlugin(),
-      new ZipPlugin({
-        path: path.join(__dirname, "build-lnx-32"),
-        filename: "display-control-lnx-32"
-      }),
-      new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-lnx-32"),
-        outputFilename: "display-control",
-        arch: "32",
-        platform: "lnx"
-      })
-    ]
-  },
-  {
-    entry: "./src/index.js",
-    target: "node",
-    externals: [nodeExternals()],
-    output: {
-      path: path.join(__dirname, "build-lnx-64", "display-control"),
-      filename: "index.js"
-    },
-    plugins: [
-      new CopyWebpackPlugin([
-        {from: "./build-lnx-x64/node_modules", to: "node_modules"},
-        {from: "./package.json"}
-      ]),
-      new MinifyPlugin(),
-      new ZipPlugin({
-        path: path.join(__dirname, "build-lnx-64"),
-        filename: "display-control-lnx-64"
-      }),
-      new UnzipsfxPlugin({
-        outputPath: path.join(__dirname, "build-lnx-64"),
-        outputFilename: "display-control",
-        arch: "64",
-        platform: "lnx"
-      })
-    ]
+  plugins: [
+    new webpack.IgnorePlugin(/vertx/),
+    new CopyWebpackPlugin([{from: "package.json"}]),
+    new MinifyPlugin(),
+    new ZipPlugin({
+      path: path.join(__dirname, "build"),
+      filename: "display-control"
+    }),
+    new UnzipsfxPlugin({
+      outputPath: path.join(__dirname, "build"),
+      outputFilename: "display-control"
+    })
+  ],
+  stats: {
+    warningsFilter: /bq-controller[\s\S]*dependency is an expression.*/
   }
-];
+};

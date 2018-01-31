@@ -4,7 +4,7 @@
   "description": "Display Control Module",
   "main": "src/index.js",
   "scripts": {
-    "build": "eslint src && ./pre-build.sh && webpack --config webpack.config.js && ./post-build.sh",
+    "build": "eslint src && ./build.sh",
     "test": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/unit/** test/integration/**",
     "test-unit": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/unit/**",
     "test-integration": "eslint test && eslint src && mocha -r test/mocha-env.js -t 20000 --recursive --exit test/integration/**"
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Rise-Vision/display-control-module#readme",
   "devDependencies": {
     "babel-minify-webpack-plugin": "^0.2.0",
+    "clean-webpack-plugin": "^0.1.18",
     "copy-webpack-plugin": "^4.3.1",
     "istanbul": "^0.4.5",
     "eslint": "^4.10.0",
@@ -35,7 +36,6 @@
     "source-map-support": "^0.5.0",
     "unzipsfx-webpack-plugin": "git://github.com/Rise-Vision/unzipsfx-webpack-plugin.git#v1.3.0",
     "webpack": "^3.7.1",
-    "webpack-node-externals": "^1.6.0",
     "zip-webpack-plugin": "^2.0.0"
   },
   "dependencies": {
