@@ -13,17 +13,15 @@ module.exports = {
 };
 
 function runCheck(date = null) {
-  logger.file("attempting to run display control check");
-
   try {
+    logger.debug("running display control check");
+
     if (!config.isDisplayControlEnabled()) {
       return Promise.resolve();
     }
 
     const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
     const suppressLog = lastCommand === command;
-
-    logger.file(command);
 
     // Promise returned for testing purposes
     return screen[command]({suppressLog})
