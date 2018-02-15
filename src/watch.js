@@ -75,7 +75,7 @@ function loadCurrentConfiguration(configurationPath) {
 }
 
 function receiveConfigurationFile(message) {
-  logger.file(message, "receiving configuration file message");
+  logger.file(JSON.stringify(message), "receiving configuration file message");
 
   switch (message.status) {
     case "DELETED": case "NOEXIST":
@@ -90,7 +90,7 @@ function receiveConfigurationFile(message) {
 }
 
 function receiveContentFile(message) {
-  logger.file(message, "receiving content file message");
+  logger.file(JSON.stringify(message), "receiving content file message");
 
   if (["DELETED", "NOEXIST"].includes(message.status)) {return;}
 
