@@ -11,6 +11,8 @@ function requestLicensingData() {
 }
 
 function updateLicensingData(data) {
+  logger.file("receiving licensing data");
+
   if (licensing.containsSubscriptionDataForRisePlayerProfessional(data)) {
     const previousAuthorized = config.isAuthorized();
     const currentAuthorized = licensing.isRisePlayerProfessionalSubscriptionActive(data);

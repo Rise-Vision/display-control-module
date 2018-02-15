@@ -33,4 +33,7 @@ messaging.receiveMessages(config.moduleName).then(receiver =>
   licensing.requestLicensingData();
 
   if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
-});
+})
+.catch(error =>
+  logger.file(error.stack, 'Unexpected error while starting the module')
+);

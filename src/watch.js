@@ -35,6 +35,8 @@ function sendWatchMessages() {
   .then(displayId =>
     ['screen-control.txt', 'content.json'].forEach(name =>
     {
+      logger.file("sending watch message", name);
+
       const filePath = `risevision-display-notifications/${displayId}/${name}`;
 
       messaging.broadcastMessage({
@@ -73,6 +75,8 @@ function loadCurrentConfiguration(configurationPath) {
 }
 
 function receiveConfigurationFile(message) {
+  logger.file("receiving configuration file message", message);
+
   switch (message.status) {
     case "DELETED": case "NOEXIST":
       // if we don't have a file set empty configuration.
@@ -86,6 +90,8 @@ function receiveConfigurationFile(message) {
 }
 
 function receiveContentFile(message) {
+  logger.file("receiving content file message", message);
+
   if (["DELETED", "NOEXIST"].includes(message.status)) {return;}
 
   return platform.readTextFile(message.ospath)
