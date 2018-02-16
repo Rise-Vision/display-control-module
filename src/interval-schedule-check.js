@@ -14,6 +14,8 @@ module.exports = {
 
 function runCheck(date = null) {
   try {
+    logger.debug("running display control check");
+
     if (!config.isDisplayControlEnabled()) {
       return Promise.resolve();
     }
