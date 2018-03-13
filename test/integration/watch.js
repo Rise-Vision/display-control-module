@@ -41,6 +41,12 @@ describe("Watch - Integration", ()=>
 
           // other non-local-storage clients
           return handler({
+            msg: "non-topic-message"
+          })
+        })
+        .then(() => {
+          // other non-local-storage clients
+          return handler({
             topic: "client-list",
             clients: ["logging", "system-metrics"]
           })
