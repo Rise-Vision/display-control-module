@@ -11,6 +11,7 @@ interval.startInterval();
 messaging.receiveMessages(config.moduleName).then(receiver =>
 {
   receiver.on("message", message => {
+    if (!message.topic) {return;}
     switch (message.topic.toUpperCase()) {
       case "CLIENT-LIST":
         return watch.sendWatchMessagesIfLocalStorageIsAvailable(message);
