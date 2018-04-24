@@ -70,9 +70,13 @@ function setDisplayControlSettings(settings) {
 }
 
 function isDisplayControlEnabled() {
+  return isAuthorized() && hasValidStrategy();
+}
+
+function hasValidStrategy() {
   const strategy = getDisplayControlStrategy();
 
-  return isAuthorized() && VALID_STRATEGIES.includes(strategy);
+  return VALID_STRATEGIES.includes(strategy);
 }
 
 function setTimeline(schedule) {
@@ -119,6 +123,7 @@ module.exports = {
   getDisplayControlStrategy,
   getDisplayControlSettings,
   setDisplayControlSettings,
+  hasValidStrategy,
   isDisplayControlEnabled,
   setTimeline,
   getTimeline,
