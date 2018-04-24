@@ -49,11 +49,11 @@ function init() {
   })
 }
 
-/**
- * For test purposes, or when configuration changes.
- */
 function clear() {
-  strategy = null;
+  // reuse the monitor object if we are not testing
+  if (process.env.NODE_ENV === "test") {
+    strategy = null;
+  }
 
   return Promise.resolve();
 }
