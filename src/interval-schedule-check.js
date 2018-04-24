@@ -3,7 +3,6 @@ const logger = require("./logger.js");
 const scheduleCheckInterval = 60000;
 const screen = require("./screen.js");
 
-let alreadyLoggedNotAuthorized = false;
 let lastCommand = null;
 
 module.exports = {
@@ -13,25 +12,15 @@ module.exports = {
   runCheck
 };
 
-function checkAuthorized() {
-  if (!alreadyLoggedNotAuthorized && config.hasValidStrategy()) {
-    logger.all("not_authorized", "Display control is not authorized to run even though it has a valid strategy configured.");
-
-    alreadyLoggedNotAuthorized = true;
-  }
-
-  return Promise.resolve();
-}
-
 function runCheck(date = null) {
   try {
     logger.debug("running display control check");
 
     if (!config.isDisplayControlEnabled()) {
-      return checkAuthorized();
+      return logger.logNotAuthorizedIfHasValidStrategy();
     }
 
-    alreadyLoggedNotAuthorized = false;
+    logger.clearLoggedNotAuthorizedFlag();
 
     const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
     const suppressLog = lastCommand === command;
