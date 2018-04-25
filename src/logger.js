@@ -1,12 +1,14 @@
 /* eslint-disable space-in-parens */
 const common = require("common-display-module");
 const {
-  bqProjectName, bqDataset, bqTable, failedEntryFile, logFolder,
-  moduleName, getModuleVersion
+  bqProjectName, bqDataset, bqTable, failedEntryFile, hasValidStrategy,
+  logFolder, moduleName, getModuleVersion
 } = require("./config");
 
 const externalLogger = require("common-display-module/external-logger")(bqProjectName, bqDataset, failedEntryFile);
 const logger = require("rise-common-electron/logger")(externalLogger, logFolder, moduleName);
+
+let alreadyLoggedNotAuthorized = false;
 
 // Creates the detail data structure that the logging functions expect.
 // Assigns "event_details" and "display_id", that are expected in the events table
@@ -60,12 +62,28 @@ function logResult(result) {
   )
 }
 
+function logNotAuthorizedIfHasValidStrategy() {
+  if (!alreadyLoggedNotAuthorized && hasValidStrategy()) {
+    module.exports.all("not_authorized", "Display control is not authorized to run even though it has a valid strategy configured.");
+
+    alreadyLoggedNotAuthorized = true;
+  }
+
+  return Promise.resolve();
+}
+
+function clearLoggedNotAuthorizedFlag() {
+  alreadyLoggedNotAuthorized = false;
+}
+
 module.exports = {
   file: logger.file,
   debug: logger.debug,
   error,
   external,
   all,
+  clearLoggedNotAuthorizedFlag,
+  logNotAuthorizedIfHasValidStrategy,
   logResult,
   sendCommandAttempt,
   sendCommandFailure

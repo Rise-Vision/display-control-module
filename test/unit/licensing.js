@@ -2,6 +2,7 @@
 /* eslint-disable max-statements, no-magic-numbers */
 const assert = require("assert");
 const simple = require("simple-mock");
+const licensingCommon = require("common-display-module/licensing");
 
 const config = require("../../src/config");
 const licensing = require("../../src/licensing");
@@ -11,9 +12,13 @@ describe("Licensing - Unit", ()=> {
 
   beforeEach(() => {
     simple.mock(logger, "all").returnWith();
+    simple.mock(licensingCommon, "requestLicensingData").resolveWith();
   });
 
-  afterEach(()=> config.clear());
+  afterEach(() => {
+    config.clear();
+    licensing.clear();
+  });
 
   it("should be authorized if Rise Player Professional is active", () => {
     const message = {
@@ -154,6 +159,34 @@ describe("Licensing - Unit", ()=> {
       // should not be logged again
       assert.equal(logger.all.callCount, 2);
     }
+  });
+
+  it("should not send LICENSING-REQUEST message if no module is available", () => {
+    return licensing.requestLicensingDataIfLicensingIsAvailable({clients: []})
+    .then(() => {
+      // no clients, so requestLicensingData shouldn't have been sent
+      assert(!licensingCommon.requestLicensingData.called);
+    });
+  });
+
+  it("should not send LICENSING-REQUEST message if licensing modules is not available", () => {
+    return licensing.requestLicensingDataIfLicensingIsAvailable({
+      clients: ["logging", "system-metrics"]
+    })
+    .then(() => {
+      // no clients, so requestLicensingData shouldn't have been sent
+      assert(!licensingCommon.requestLicensingData.called);
+    });
+  });
+
+  it("should send LICENSING-REQUEST message if licensing module is available", () => {
+    return licensing.requestLicensingDataIfLicensingIsAvailable({
+      clients: ["logging", "system-metrics", "licensing"]
+    })
+    .then(() => {
+      // so requestLicensingData should have been called
+      assert.equal(1, licensingCommon.requestLicensingData.callCount);
+    });
   });
 
 });

@@ -3,11 +3,26 @@ const licensing = require("common-display-module/licensing");
 const config = require("./config");
 const logger = require("./logger");
 
+let initialRequestAlreadySent = false;
+
 function requestLicensingData() {
   return licensing.requestLicensingData(config.moduleName)
   .catch(error => {
     logger.error(error.stack, 'Error while requesting licensing data');
   });
+}
+
+function requestLicensingDataIfLicensingIsAvailable(message) {
+  if (!initialRequestAlreadySent) {
+    const clients = message.clients;
+
+    if (clients.includes("licensing")) {
+      return module.exports.requestLicensingData()
+      .then(() => initialRequestAlreadySent = true);
+    }
+  }
+
+  return Promise.resolve();
 }
 
 function updateLicensingData(data) {
@@ -28,4 +43,14 @@ function updateLicensingData(data) {
   return Promise.resolve();
 }
 
-module.exports = {requestLicensingData, updateLicensingData};
+// for test purposes
+function clear() {
+  initialRequestAlreadySent = false;
+}
+
+module.exports = {
+  clear,
+  requestLicensingData,
+  requestLicensingDataIfLicensingIsAvailable,
+  updateLicensingData
+};

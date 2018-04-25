@@ -6,6 +6,14 @@ const interval = require("./interval-schedule-check");
 const displayConfigBucket = "risevision-display-notifications";
 const logger = require("./logger");
 
+function handleClientListUpdate(message)
+{
+  return Promise.all([
+    licensing.requestLicensingDataIfLicensingIsAvailable(message),
+    watch.sendWatchMessagesIfLocalStorageIsAvailable(message)
+  ]);
+}
+
 interval.startInterval();
 
 messaging.receiveMessages(config.moduleName).then(receiver =>
@@ -14,7 +22,7 @@ messaging.receiveMessages(config.moduleName).then(receiver =>
     if (!message.topic) {return;}
     switch (message.topic.toUpperCase()) {
       case "CLIENT-LIST":
-        return watch.sendWatchMessagesIfLocalStorageIsAvailable(message);
+        return handleClientListUpdate(message);
       case "LICENSING-UPDATE":
         return licensing.updateLicensingData(message);
       case "FILE-UPDATE":
@@ -31,7 +39,6 @@ messaging.receiveMessages(config.moduleName).then(receiver =>
   });
 
   messaging.getClientList(config.moduleName);
-  licensing.requestLicensingData();
 
   if (process.env.NODE_ENV !== "test") {logger.all("started", "")}
 })

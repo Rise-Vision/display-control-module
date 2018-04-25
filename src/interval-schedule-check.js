@@ -17,8 +17,10 @@ function runCheck(date = null) {
     logger.debug("running display control check");
 
     if (!config.isDisplayControlEnabled()) {
-      return Promise.resolve();
+      return logger.logNotAuthorizedIfHasValidStrategy();
     }
+
+    logger.clearLoggedNotAuthorizedFlag();
 
     const command = config.checkTimelineNow(date) ? "turnOn" : "turnOff";
     const suppressLog = lastCommand === command;
