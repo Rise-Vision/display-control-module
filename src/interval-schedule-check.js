@@ -1,8 +1,9 @@
 const config = require("./config");
-const logger = require("./logger.js");
-const scheduleCheckInterval = 60000;
-const screen = require("./screen.js");
+const licensing = require("./licensing");
+const logger = require("./logger");
+const screen = require("./screen");
 
+const scheduleCheckInterval = 60000;
 let lastCommand = null;
 
 module.exports = {
@@ -12,12 +13,24 @@ module.exports = {
   runCheck
 };
 
+function ensureLicenseHasBeenRequested() {
+  if (config.hasValidStrategy()) {
+    logger.logNotAuthorizedWithValidStrategy();
+
+    if (!config.hasReceivedAuthorization()) {
+      return licensing.requestLicensingData();
+    }
+  }
+
+  return Promise.resolve();
+}
+
 function runCheck(date = null) {
   try {
     logger.debug("running display control check");
 
     if (!config.isDisplayControlEnabled()) {
-      return logger.logNotAuthorizedIfHasValidStrategy();
+      return ensureLicenseHasBeenRequested();
     }
 
     logger.clearLoggedNotAuthorizedFlag();
