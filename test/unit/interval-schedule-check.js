@@ -4,6 +4,8 @@
 const assert = require("assert");
 const simple = require("simple-mock");
 const config = require("../../src/config");
+const licensing = require("../../src/licensing");
+const logger = require("../../src/logger");
 const screen = require("../../src/screen");
 const interval = require("../../src/interval-schedule-check");
 
@@ -12,6 +14,8 @@ describe("Interval Schedule Check - Unit", ()=>{
     simple.mock(config, "isDisplayControlEnabled").returnWith(true);
     simple.mock(screen, "turnOn").resolveWith();
     simple.mock(screen, "turnOff").resolveWith();
+    simple.mock(licensing, "requestLicensingData").resolveWith();
+    simple.mock(logger, "logNotAuthorizedWithValidStrategy").returnWith();
   });
 
   afterEach(()=>{
@@ -21,9 +25,36 @@ describe("Interval Schedule Check - Unit", ()=>{
   it("should not send any command if display control is not enabled", ()=>{
     simple.mock(config, "isDisplayControlEnabled").returnWith(false);
     simple.mock(config, "checkTimelineNow").returnWith(true);
+    simple.mock(config, "hasValidStrategy").returnWith(false);
 
     return interval.runCheck()
     .then(() => assert(!screen.turnOn.called));
+  });
+
+  it("should log not authorized if display control is not enabled but has valid strategy", ()=>{
+    simple.mock(config, "isDisplayControlEnabled").returnWith(false);
+    simple.mock(config, "checkTimelineNow").returnWith(true);
+    simple.mock(config, "hasValidStrategy").returnWith(true);
+    simple.mock(config, "hasReceivedAuthorization").returnWith(true);
+
+    return interval.runCheck()
+    .then(() => {
+      assert(!screen.turnOn.called);
+      assert(!licensing.requestLicensingData.called);
+    });
+  });
+
+  it("should log not authorized and request licensing data if display control is not enabled but has valid strategy and no authorization has been received", ()=>{
+    simple.mock(config, "isDisplayControlEnabled").returnWith(false);
+    simple.mock(config, "checkTimelineNow").returnWith(true);
+    simple.mock(config, "hasValidStrategy").returnWith(true);
+    simple.mock(config, "hasReceivedAuthorization").returnWith(false);
+
+    return interval.runCheck()
+    .then(() => {
+      assert(!screen.turnOn.called);
+      assert.equal(licensing.requestLicensingData.callCount, 1);
+    });
   });
 
   it("should turn the screen on if timeline is now valid for play", ()=>{

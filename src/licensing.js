@@ -6,6 +6,8 @@ const logger = require("./logger");
 let initialRequestAlreadySent = false;
 
 function requestLicensingData() {
+  logger.file('requesting licensing data');
+
   return licensing.requestLicensingData(config.moduleName)
   .catch(error => {
     logger.error(error.stack, 'Error while requesting licensing data');

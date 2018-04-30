@@ -1,7 +1,7 @@
 /* eslint-disable space-in-parens */
 const common = require("common-display-module");
 const {
-  bqProjectName, bqDataset, bqTable, failedEntryFile, hasValidStrategy,
+  bqProjectName, bqDataset, bqTable, failedEntryFile,
   logFolder, moduleName, getModuleVersion
 } = require("./config");
 
@@ -62,14 +62,12 @@ function logResult(result) {
   )
 }
 
-function logNotAuthorizedIfHasValidStrategy() {
-  if (!alreadyLoggedNotAuthorized && hasValidStrategy()) {
+function logNotAuthorizedWithValidStrategy() {
+  if (!alreadyLoggedNotAuthorized) {
     module.exports.all("not_authorized", "Display control is not authorized to run even though it has a valid strategy configured.");
 
     alreadyLoggedNotAuthorized = true;
   }
-
-  return Promise.resolve();
 }
 
 function clearLoggedNotAuthorizedFlag() {
@@ -83,7 +81,7 @@ module.exports = {
   external,
   all,
   clearLoggedNotAuthorizedFlag,
-  logNotAuthorizedIfHasValidStrategy,
+  logNotAuthorizedWithValidStrategy,
   logResult,
   sendCommandAttempt,
   sendCommandFailure

@@ -103,6 +103,10 @@ function isAuthorized() {
   return authorized;
 }
 
+function hasReceivedAuthorization() {
+  return authorized !== null;
+}
+
 // Clear all state, for testing purposes only
 function clear() {
   setDisplayControlSettings(null);
@@ -130,5 +134,6 @@ module.exports = {
   checkTimelineNow,
   setAuthorized,
   isAuthorized,
+  hasReceivedAuthorization,
   clear
 };
