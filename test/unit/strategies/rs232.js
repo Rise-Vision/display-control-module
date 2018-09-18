@@ -17,7 +17,8 @@ describe("RS232 Strategy - Unit", () => {
       interface: "RS232",
       "serial-port": "/dev/mock",
       "serial-screen-on-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 31 03 73 0d",
-      "serial-screen-off-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d"
+      "serial-screen-off-cmd": "01 30 41 30 41 30 43 02 43 32 30 33 44 36 30 30 30 34 03 76 0d",
+      "serial-flow-control": "none"
     });
   });
 
