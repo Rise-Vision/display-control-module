@@ -23,7 +23,7 @@ function asSerialPortOptions(settings) {
   const flowControl = settings['serial-flow-control'];
   if (flowControl) {
     flowControl.toLowerCase().split(',')
-    .filter(['rtscts', 'xon', 'xoff', 'xany'].includes)
+    .filter(it => ['rtscts', 'xon', 'xoff', 'xany'].includes(it))
     .forEach(consider);
   }
 
