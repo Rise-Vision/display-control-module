@@ -10,3 +10,4 @@ build-*/
 !serialport/win/x64/build/
 *.zip
 npm-debug.log
+.DS_Store
