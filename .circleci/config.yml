@@ -77,7 +77,7 @@ jobs:
           key: node-cache-v2{{ checksum "package.json" }}
       - run: npm install common-display-module
       - run:
-          name: Deploy to beta
+          name: Deploy to stable
           command: node_modules/common-display-module/deploy.sh
           environment:
             MODULENAME: display-control
