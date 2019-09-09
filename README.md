@@ -269,3 +269,19 @@ Run the following command to turn the screen on:
 ```bash
 node test/manual/turn_on.js /path/to/config/file
 ```
+
+### Updating serialport binaries
+
+The `serialport` directory includes pre-built binaries of the `serialport` dependency for Linux and Windows (32 and 64-bit). Raspberry Pi doesn't support Display Control over serial port so its binaries are not included.
+
+These files are built for a specific Electron and node version and bundled together in the module distribution file.
+
+Do the following for each OS/Architecture in order to update the binaries:
+
+1. Install the same node version included in the electron version used by [`rise-launcher-electron`](https://github.com/Rise-Vision/rise-launcher-electron/blob/master/package.json#L9)
+1. On Windows, install the build tools (Run as Administrator): `npm install --global --production windows-build-tools`
+1. Clone this repository
+1. Run `npm install`
+1. Install `electron-rebuild`: `npm install --global electron-rebuild`
+1. Under the project directory, run: `electron-rebuild -v 4.2.9 -w serialport`. The version passed should be the same electron version used on [`rise-launcher-electron`](https://github.com/Rise-Vision/rise-launcher-electron/blob/master/package.json#L9)
+1. Copy the file `node_modules/serialport/build/Release/serialport.node` to the related directory in the project `serialport` folder
