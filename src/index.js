@@ -7,13 +7,13 @@ const displayConfigBucket = "risevision-display-notifications";
 const logger = require("./logger");
 
 process.on("uncaughtException", (err)=>{
-  logger.file(err.stack);
-  process.exit(); // eslint-disable-line no-process-exit
+  logger.error(err.stack, 'Uncaught exception');
+  process.exit(1); // eslint-disable-line no-process-exit
 });
 
 process.on("unhandledRejection", (reason)=>{
-  logger.file(reason.stack || reason);
-  process.exit(); // eslint-disable-line no-process-exit
+  logger.error(reason.stack || reason, 'Unhandled rejection');
+  process.exit(1); // eslint-disable-line no-process-exit
 });
 
 process.on("SIGPIPE", () => logger.external("SIGPIPE received"));
