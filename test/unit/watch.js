@@ -154,7 +154,7 @@ serial-screen-off-cmd=`);
     });
   });
 
-  it("should catch invalid content file", () => {
+  it("should catch incomplete content file", () => {
     const mockScheduleText = '{{';
     simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
 
@@ -167,4 +167,53 @@ serial-screen-off-cmd=`);
       assert(logger.error.lastCall.args[1].startsWith("Could not parse"));
     });
   });
+
+  it("should skip DELETED content file message", () => {
+    const mockScheduleText = '{"content": {"schedule": {"timeDefined": true}}}';
+    simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
+    simple.mock(config, "setTimeline").returnWith();
+
+    return watch.receiveContentFile({
+      topic: "file-update",
+      status: "DELETED",
+      ospath: "xxxxxxx"
+    })
+    .then(() => {
+      assert.equal(config.setTimeline.called, false);
+      assert.equal(platform.readTextFile.called, false);
+    });
+  });
+
+  it("should skip NOEXIST content file message", () => {
+    const mockScheduleText = '{"content": {"schedule": {"timeDefined": true}}}';
+    simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
+    simple.mock(config, "setTimeline").returnWith();
+
+    return watch.receiveContentFile({
+      topic: "file-update",
+      status: "NOEXIST",
+      ospath: "xxxxxxx"
+    })
+    .then(() => {
+      assert.equal(config.setTimeline.called, false);
+      assert.equal(platform.readTextFile.called, false);
+    });
+  });
+
+  it("should skip STALE content file message", () => {
+    const mockScheduleText = '{"content": {"schedule": {"timeDefined": true}}}';
+    simple.mock(platform, "readTextFile").resolveWith(mockScheduleText);
+    simple.mock(config, "setTimeline").returnWith();
+
+    return watch.receiveContentFile({
+      topic: "file-update",
+      status: "STALE",
+      ospath: "xxxxxxx"
+    })
+    .then(() => {
+      assert.equal(config.setTimeline.called, false);
+      assert.equal(platform.readTextFile.called, false);
+    });
+  });
+
 });
