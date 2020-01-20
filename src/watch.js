@@ -92,7 +92,7 @@ function receiveConfigurationFile(message) {
 function receiveContentFile(message) {
   logger.file(JSON.stringify(message), "receiving content file message");
 
-  if (["DELETED", "NOEXIST"].includes(message.status)) {return;}
+  if (["DELETED", "NOEXIST", "STALE"].includes(message.status)) {return Promise.resolve();}
 
   return platform.readTextFile(message.ospath)
   .then(fileData=>{
